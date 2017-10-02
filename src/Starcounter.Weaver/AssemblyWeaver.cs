@@ -39,7 +39,7 @@ namespace Starcounter.Weaver {
 
         void WeaveDatabaseClass(TypeDefinition type) {
             var module = type.Module;
-            var int64Type = module.Import(typeof(ulong));
+            var int64Type = module.ImportReference(typeof(ulong));
             var crudCreateHandle = new FieldDefinition("crudCreateHandle", FieldAttributes.Static, int64Type);
             type.Fields.Add(crudCreateHandle);
 
