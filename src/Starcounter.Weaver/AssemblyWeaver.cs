@@ -28,8 +28,7 @@ namespace Starcounter.Weaver {
         public void Weave() {
             var module = ModuleDefinition.ReadModule(AssemblyPath);
             foreach (var type in module.Types) {
-                var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(Starcounter.DatabaseAttribute).FullName);
-                if (hasDatabaseAttribute) {
+                if (type.IsDatabaseType()) {
                     Trace.WriteLine($"Found database class {type.FullName}");
                     WeaveDatabaseClass(type);
                 }
@@ -65,6 +64,18 @@ namespace Starcounter.Weaver {
             // datatype in starcounter, if it's a datatype not supported, maybe issue
             // some information about that, etc. If it's a code property, denote
             // that, etc.
+        }
+
+        public static bool IsDatabaseType(this TypeDefinition type) {
+            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(Starcounter.DatabaseAttribute).FullName);
+            if (!hasDatabaseAttribute) {
+                var tb = type.BaseType;
+                if (tb != null) {
+                    var baseDefinition = tb.Resolve();
+                    return IsDatabaseType(baseDefinition);
+                }
+            }
+            return hasDatabaseAttribute;
         }
     }
 }
