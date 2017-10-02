@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Starcounter.Weaver\Starcounter.Weaver.csproj">
-      <Project>{abf5304a-4f89-436b-973b-a5cb083f5a5b}</Project>
+      <Project>{38c3cff2-5fec-4284-8276-396fe3101b0d}</Project>
       <Name>Starcounter.Weaver</Name>
     </ProjectReference>
   </ItemGroup>

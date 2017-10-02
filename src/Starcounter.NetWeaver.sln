@@ -10,11 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ReadMe.txt = ReadMe.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Weaver", "Starcounter.Weaver\Starcounter.Weaver.csproj", "{ABF5304A-4F89-436B-973B-A5CB083F5A5B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BC780D5E-A07F-4E7B-86E3-62B91B24335A} = {BC780D5E-A07F-4E7B-86E3-62B91B24335A}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "starweave", "starweave\starweave.csproj", "{98E72B20-9B40-442E-87C0-93A15B6BABEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{D94C1BB8-3124-462D-B6FE-C04F1486B010}"
@@ -27,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetFramework", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetStandard", "TestProjects\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj", "{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Weaver", "Starcounter.Weaver\Starcounter.Weaver.csproj", "{38C3CFF2-5FEC-4284-8276-396FE3101B0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +34,6 @@ Global
 		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABF5304A-4F89-436B-973B-A5CB083F5A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABF5304A-4F89-436B-973B-A5CB083F5A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABF5304A-4F89-436B-973B-A5CB083F5A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABF5304A-4F89-436B-973B-A5CB083F5A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98E72B20-9B40-442E-87C0-93A15B6BABEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98E72B20-9B40-442E-87C0-93A15B6BABEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98E72B20-9B40-442E-87C0-93A15B6BABEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -61,6 +54,10 @@ Global
 		{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C3CFF2-5FEC-4284-8276-396FE3101B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C3CFF2-5FEC-4284-8276-396FE3101B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C3CFF2-5FEC-4284-8276-396FE3101B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C3CFF2-5FEC-4284-8276-396FE3101B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
