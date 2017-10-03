@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+  <Import Project="..\..\global-library.props" />
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />

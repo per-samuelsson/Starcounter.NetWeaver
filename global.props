@@ -1,0 +1,14 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LibFrameworks>netstandard1.6</LibFrameworks>
+    <LibFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(LibFrameworks);net461</LibFrameworks>
+    <ExeFrameworks>netcoreapp2.0</ExeFrameworks>
+    <ExeFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(ExeFrameworks);net461</ExeFrameworks>
+    <ExeFramework>netcoreapp2.0</ExeFramework>
+    <TargetFrameworks>$(LibFrameworks)</TargetFrameworks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <RuntimeIdentifiers>win7-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+</Project>

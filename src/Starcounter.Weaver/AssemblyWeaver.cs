@@ -32,7 +32,7 @@ namespace Starcounter.Weaver {
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
             foreach (var type in module.Types) {
                 if (type.IsDatabaseType()) {
-                    Trace.WriteLine($"Found database class {type.FullName}");
+                    // Trace.WriteLine($"Found database class {type.FullName}");
                     WeaveDatabaseClass(type);
                 }
             }
@@ -46,7 +46,7 @@ namespace Starcounter.Weaver {
             type.Fields.Add(crudCreateHandle);
 
             foreach (var prop in type.Properties.Where(p => p.IsAutoImplemented())) {
-                Trace.WriteLine($"Weaving property {type.FullName}.{prop.Name}");
+                // Trace.WriteLine($"Weaving property {type.FullName}.{prop.Name}");
             }
         }
     }
