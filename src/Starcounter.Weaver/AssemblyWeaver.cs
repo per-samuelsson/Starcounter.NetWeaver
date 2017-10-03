@@ -9,7 +9,7 @@ using Mono.Cecil.Cil;
 using System.Diagnostics;
 
 namespace Starcounter.Weaver {
-
+    
     public class AssemblyWeaver {
         public readonly string AssemblyPath;
 
@@ -26,7 +26,10 @@ namespace Starcounter.Weaver {
         }
 
         public void Weave() {
-            var module = ModuleDefinition.ReadModule(AssemblyPath);
+            var readParameters = new ReaderParameters();
+            readParameters.InMemory = true;
+
+            var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
             foreach (var type in module.Types) {
                 if (type.IsDatabaseType()) {
                     Trace.WriteLine($"Found database class {type.FullName}");
