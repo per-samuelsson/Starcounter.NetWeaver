@@ -5,6 +5,10 @@
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
   </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6'  ">
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Starcounter">

@@ -28,6 +28,9 @@ namespace Starcounter.Weaver {
         public void Weave() {
             var readParameters = new ReaderParameters();
             readParameters.InMemory = true;
+#if NET_CORE
+            readParameters = new DotNetCoreAssemblyResolver();
+#endif
 
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
             foreach (var type in module.Types) {
