@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppNet", "AppNet\AppNet.csproj", "{BC780D5E-A07F-4E7B-86E3-62B91B24335A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DEE98D44-7140-4CF7-99EF-F7F0A8BAB81C}"
 	ProjectSection(SolutionItems) = preProject
 		ReadMe.txt = ReadMe.txt
@@ -14,15 +12,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFramework", "TestProjects\ConsoleAppNetFramework\ConsoleAppNetFramework.csproj", "{A44B2224-C17C-4106-9AD3-A83CF66403CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetCore", "TestProjects\ConsoleAppNetCore\ConsoleAppNetCore.csproj", "{BAF377ED-E772-4EA1-B0BD-3FCCFC297E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCore", "TestProjects\ConsoleAppNetCore\ConsoleAppNetCore.csproj", "{BAF377ED-E772-4EA1-B0BD-3FCCFC297E89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetFramework", "TestProjects\ClassLibraryNetFramework\ClassLibraryNetFramework.csproj", "{0E121AAA-281B-4D79-9712-9ED1393AE4BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetStandard", "TestProjects\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj", "{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryNetStandard", "TestProjects\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj", "{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Weaver", "Starcounter.Weaver\Starcounter.Weaver.csproj", "{38C3CFF2-5FEC-4284-8276-396FE3101B0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver", "Starcounter.Weaver\Starcounter.Weaver.csproj", "{38C3CFF2-5FEC-4284-8276-396FE3101B0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "starweave", "starweave\starweave.csproj", "{A6012A76-87BB-4077-99AA-8958DD172F6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave", "starweave\starweave.csproj", "{A6012A76-87BB-4077-99AA-8958DD172F6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC780D5E-A07F-4E7B-86E3-62B91B24335A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A44B2224-C17C-4106-9AD3-A83CF66403CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A44B2224-C17C-4106-9AD3-A83CF66403CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A44B2224-C17C-4106-9AD3-A83CF66403CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
