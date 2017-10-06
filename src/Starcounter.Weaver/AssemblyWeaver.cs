@@ -45,6 +45,7 @@ namespace Starcounter.Weaver {
             readParameters.AssemblyResolver = netFrameworkResolver;
 #endif
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
+
             foreach (var type in module.Types) {
                 if (type.IsDatabaseType()) {
                     WeaveDatabaseClass(type);
@@ -85,7 +86,7 @@ namespace Starcounter.Weaver {
         }
 
         public static bool IsDatabaseType(this TypeDefinition type) {
-            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == "Starcounter.DatabaseAttribute"/*typeof(Starcounter.DatabaseAttribute).FullName*/);
+            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(Starcounter2.DatabaseAttribute).FullName);
             if (!hasDatabaseAttribute) {
                 var tb = type.BaseType;
                 if (tb != null) {

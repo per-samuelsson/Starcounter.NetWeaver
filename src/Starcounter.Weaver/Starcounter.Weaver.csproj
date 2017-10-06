@@ -14,11 +14,9 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6'  ">
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.0" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Reference Include="Starcounter">
-      <HintPath>..\..\..\..\Starcounter\Develop\Level1\bin\Debug\Starcounter.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
-
+  
 </Project>
