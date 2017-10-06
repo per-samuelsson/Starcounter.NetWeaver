@@ -39,6 +39,10 @@ namespace Starcounter.Weaver {
             readParameters.InMemory = true;
 #if NET_STANDARD
             readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(AssemblyPath);
+#else
+            var netFrameworkResolver = new DefaultAssemblyResolver();
+            netFrameworkResolver.AddSearchDirectory(Path.GetDirectoryName(AssemblyPath));
+            readParameters.AssemblyResolver = netFrameworkResolver;
 #endif
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
             foreach (var type in module.Types) {
