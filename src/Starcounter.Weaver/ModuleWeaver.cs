@@ -6,18 +6,19 @@ using System.Linq;
 namespace Starcounter.Weaver {
 
     internal class ModuleWeaver {
-        public readonly ModuleDefinition Module;
+        readonly ModuleDefinition module;
 
         public ModuleWeaver(ModuleDefinition module) {
-            Module = module;
+            this.module = module;
         }
 
-        public void Weave() {
-            foreach (var type in Module.Types) {
+        public ModuleDefinition Weave() {
+            foreach (var type in module.Types) {
                 if (type.HasCustomAttribute(typeof(DatabaseAttribute))) {
                     WeaveDatabaseClass(type);
                 }
             }
+            return module;
         }
 
         void WeaveDatabaseClass(TypeDefinition type) {
