@@ -8,38 +8,51 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.Diagnostics;
 
+#if NET_STANDARD
+using Starcounter.Weaver.NetCoreAssemblyResolver;
+#endif
+
 namespace Starcounter.Weaver {
     
     public class AssemblyWeaver {
-        public readonly string AssemblyPath;
+        public string AssemblyPath { get; private set; }
+        public string WeavedAssemblyPath { get; private set; }
 
-        public AssemblyWeaver(string assemblyFilePath) {
+        public AssemblyWeaver(string assemblyFilePath, string outputDirectory) {
             if (string.IsNullOrEmpty(assemblyFilePath)) {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(assemblyFilePath));
             }
 
             if (!File.Exists(assemblyFilePath)) {
                 throw new FileNotFoundException("Assembly not found", assemblyFilePath);
             }
 
+            if (string.IsNullOrEmpty(outputDirectory)) {
+                throw new ArgumentNullException(nameof(outputDirectory));
+            }
+
+            if (!Directory.Exists(outputDirectory)) {
+                throw new DirectoryNotFoundException($"Directory not found: {outputDirectory}");
+            }
+
             AssemblyPath = assemblyFilePath;
+            WeavedAssemblyPath = Path.Combine(outputDirectory, Path.GetFileName(AssemblyPath));
         }
 
         public void Weave() {
             var readParameters = new ReaderParameters();
             readParameters.InMemory = true;
-#if NET_CORE
-            readParameters = new DotNetCoreAssemblyResolver();
+#if NET_STANDARD
+            readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(AssemblyPath);
 #endif
-
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
             foreach (var type in module.Types) {
                 if (type.IsDatabaseType()) {
-                    // Trace.WriteLine($"Found database class {type.FullName}");
                     WeaveDatabaseClass(type);
                 }
             }
-            module.Write(AssemblyPath);
+            
+            module.Write(WeavedAssemblyPath);
         }
 
         void WeaveDatabaseClass(TypeDefinition type) {
@@ -49,7 +62,7 @@ namespace Starcounter.Weaver {
             type.Fields.Add(crudCreateHandle);
 
             foreach (var prop in type.Properties.Where(p => p.IsAutoImplemented())) {
-                // Trace.WriteLine($"Weaving property {type.FullName}.{prop.Name}");
+                // TODO
             }
         }
     }
@@ -73,7 +86,7 @@ namespace Starcounter.Weaver {
         }
 
         public static bool IsDatabaseType(this TypeDefinition type) {
-            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(Starcounter.DatabaseAttribute).FullName);
+            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == "Starcounter.DatabaseAttribute"/*typeof(Starcounter.DatabaseAttribute).FullName*/);
             if (!hasDatabaseAttribute) {
                 var tb = type.BaseType;
                 if (tb != null) {
