@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
-using System.Diagnostics;
 
 #if NET_STANDARD
 using Starcounter.Weaver.NetCoreAssemblyResolver;
 #endif
 
 namespace Starcounter.Weaver {
-    
+
     public class AssemblyWeaver {
         public string AssemblyPath { get; private set; }
         public string WeavedAssemblyPath { get; private set; }
