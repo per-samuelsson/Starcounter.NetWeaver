@@ -2,10 +2,6 @@
 using System.IO;
 using Mono.Cecil;
 
-#if NET_STANDARD
-using Starcounter.Weaver.NetCoreAssemblyResolver;
-#endif
-
 namespace Starcounter.Weaver {
 
     public class AssemblyWeaver {
@@ -34,15 +30,7 @@ namespace Starcounter.Weaver {
         }
 
         public void Weave() {
-            var readParameters = new ReaderParameters();
-#if NET_STANDARD
-            readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(AssemblyPath);
-#else
-            var netFrameworkResolver = new DefaultAssemblyResolver();
-            netFrameworkResolver.AddSearchDirectory(Path.GetDirectoryName(AssemblyPath));
-            readParameters.AssemblyResolver = netFrameworkResolver;
-#endif
-            var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
+            var module = ModuleDefinition.ReadModule(AssemblyPath, new DefaultModuleReaderParameters(AssemblyPath).Parameters);
 
             // Pass in autority that can decide if module need to be weaved and that can
             // decide of types qualify for being database classes.
