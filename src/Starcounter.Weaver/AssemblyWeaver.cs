@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
 using Mono.Cecil;
 
@@ -36,7 +35,6 @@ namespace Starcounter.Weaver {
 
         public void Weave() {
             var readParameters = new ReaderParameters();
-            readParameters.InMemory = true;
 #if NET_STANDARD
             readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(AssemblyPath);
 #else
@@ -46,55 +44,15 @@ namespace Starcounter.Weaver {
 #endif
             var module = ModuleDefinition.ReadModule(AssemblyPath, readParameters);
 
-            foreach (var type in module.Types) {
-                if (type.IsDatabaseType()) {
-                    WeaveDatabaseClass(type);
-                }
-            }
-            
-            module.Write(WeavedAssemblyPath);
-        }
-
-        void WeaveDatabaseClass(TypeDefinition type) {
-            var module = type.Module;
-            var int64Type = module.ImportReference(typeof(ulong));
-            var crudCreateHandle = new FieldDefinition("crudCreateHandle", FieldAttributes.Static, int64Type);
-            type.Fields.Add(crudCreateHandle);
-
-            foreach (var prop in type.Properties.Where(p => p.IsAutoImplemented())) {
-                // TODO
-            }
-        }
-    }
-
-    static class ExtensionMethods {
-        public static bool IsAutoImplemented(this PropertyDefinition p) {
-            var type = p.DeclaringType;
-            var name = $"<{p.Name}>k__BackingField";
-            return type.HasFields && type.Fields.Any(f => f.Name == name);
-
+            // Pass in autority that can decide if module need to be weaved and that can
+            // decide of types qualify for being database classes.
             // TODO:
-            // Make it more like "ShouldTransform" / Discover and check:
-            //   1. It's an auto-implemented property
-            //   2. Has a data type we support.
-            //   3. Etc.
-            //
-            // We should return a materialization, including name of column,
-            // datatype in starcounter, if it's a datatype not supported, maybe issue
-            // some information about that, etc. If it's a code property, denote
-            // that, etc.
-        }
-
-        public static bool IsDatabaseType(this TypeDefinition type) {
-            var hasDatabaseAttribute = type.HasCustomAttributes && type.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(Starcounter2.DatabaseAttribute).FullName);
-            if (!hasDatabaseAttribute) {
-                var tb = type.BaseType;
-                if (tb != null) {
-                    var baseDefinition = tb.Resolve();
-                    return IsDatabaseType(baseDefinition);
-                }
-            }
-            return hasDatabaseAttribute;
+            var weaver = new ModuleWeaver(module);
+            weaver.Weave();
+            
+            // TODO:
+            // moduleWriter.WriteModule(...);
+            module.Write(WeavedAssemblyPath);
         }
     }
 }
