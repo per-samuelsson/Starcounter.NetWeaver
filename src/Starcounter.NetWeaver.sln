@@ -24,7 +24,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave", "starweave\star
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "starweavenet", "starweavenet\starweavenet.csproj", "{75846645-8AEE-45A5-9DB0-5DD391EB83DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter2", "Starcounter2\Starcounter2.csproj", "{E9047C42-03CF-4B46-9A4D-62960C7259ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter2", "Starcounter2\Starcounter2.csproj", "{E9047C42-03CF-4B46-9A4D-62960C7259ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prototypes", "Prototypes", "{D7941FBA-ED13-45B3-9754-55FAB709E8D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeaverOutputToMsBuildErrorsAndWarnings", "Prototypes\WeaverOutputToMsBuildErrorsAndWarnings\WeaverOutputToMsBuildErrorsAndWarnings.csproj", "{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeaverOutputToMsBuildErrorsAndWarningsCore", "Prototypes\WeaverOutputToMsBuildErrorsAndWarningsCore\WeaverOutputToMsBuildErrorsAndWarningsCore.csproj", "{FD93F475-647B-4F28-B447-0BAB8042842F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +70,14 @@ Global
 		{E9047C42-03CF-4B46-9A4D-62960C7259ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9047C42-03CF-4B46-9A4D-62960C7259ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9047C42-03CF-4B46-9A4D-62960C7259ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD93F475-647B-4F28-B447-0BAB8042842F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD93F475-647B-4F28-B447-0BAB8042842F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD93F475-647B-4F28-B447-0BAB8042842F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD93F475-647B-4F28-B447-0BAB8042842F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +87,8 @@ Global
 		{BAF377ED-E772-4EA1-B0BD-3FCCFC297E89} = {D94C1BB8-3124-462D-B6FE-C04F1486B010}
 		{0E121AAA-281B-4D79-9712-9ED1393AE4BF} = {D94C1BB8-3124-462D-B6FE-C04F1486B010}
 		{774B2B4B-9AD5-4546-AE55-9BCA79F2E7D9} = {D94C1BB8-3124-462D-B6FE-C04F1486B010}
+		{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F} = {D7941FBA-ED13-45B3-9754-55FAB709E8D7}
+		{FD93F475-647B-4F28-B447-0BAB8042842F} = {D7941FBA-ED13-45B3-9754-55FAB709E8D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F4749F5-CEF3-4494-88C3-49FD5A0FF0BC}

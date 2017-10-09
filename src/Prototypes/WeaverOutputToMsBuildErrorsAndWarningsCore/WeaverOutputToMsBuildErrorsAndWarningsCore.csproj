@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  
+  <Target Name="Weave" AfterTargets="Build">
+    <Message Text="Hello there!!" Importance="high" />
+    <Exec Command="dotnet $(TargetPath)" />
+  </Target>
+
+</Project>
