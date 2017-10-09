@@ -1,4 +1,5 @@
 ﻿using Ninject.Modules;
+using Starcounter2;
 using System;
 
 namespace ClassLibraryNetStandard
@@ -13,7 +14,7 @@ namespace ClassLibraryNetStandard
         }
     }
 
-    public class Class1
+    [Database] public class Class1
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ninject.Modules;
+using Starcounter2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace ClassLibraryNetFramework
         }
     }
 
-    public class Class1
+    [Database] public class Class1
     {
     }
 }
