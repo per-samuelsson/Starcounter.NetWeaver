@@ -4,11 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DEE98D44-7140-4CF7-99EF-F7F0A8BAB81C}"
-	ProjectSection(SolutionItems) = preProject
-		ReadMe.txt = ReadMe.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{D94C1BB8-3124-462D-B6FE-C04F1486B010}"
+	ProjectSection(SolutionItems) = preProject
+		TestProjects\ReadMe.txt = TestProjects\ReadMe.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFramework", "TestProjects\ConsoleAppNetFramework\ConsoleAppNetFramework.csproj", "{A44B2224-C17C-4106-9AD3-A83CF66403CB}"
 EndProject
