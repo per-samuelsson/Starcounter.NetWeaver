@@ -6,9 +6,7 @@ namespace Starcounter.Weaver {
 
     public class AssemblyWeaver {
         public string AssemblyPath { get; private set; }
-        public string WeavedAssemblyPath { get; private set; }
-
-        public AssemblyWeaver(string assemblyFilePath, string outputDirectory) {
+        public AssemblyWeaver(string assemblyFilePath) {
             if (string.IsNullOrEmpty(assemblyFilePath)) {
                 throw new ArgumentNullException(nameof(assemblyFilePath));
             }
@@ -16,7 +14,11 @@ namespace Starcounter.Weaver {
             if (!File.Exists(assemblyFilePath)) {
                 throw new FileNotFoundException("Assembly not found", assemblyFilePath);
             }
+            
+            AssemblyPath = assemblyFilePath;
+        }
 
+        public void Weave(string outputDirectory) {
             if (string.IsNullOrEmpty(outputDirectory)) {
                 throw new ArgumentNullException(nameof(outputDirectory));
             }
@@ -25,11 +27,6 @@ namespace Starcounter.Weaver {
                 throw new DirectoryNotFoundException($"Directory not found: {outputDirectory}");
             }
 
-            AssemblyPath = assemblyFilePath;
-            WeavedAssemblyPath = Path.Combine(outputDirectory, Path.GetFileName(AssemblyPath));
-        }
-
-        public void Weave() {
             var module = ModuleDefinition.ReadModule(AssemblyPath, new DefaultModuleReaderParameters(AssemblyPath).Parameters);
 
             // Pass in autority that can decide if module need to be weaved and that can
@@ -41,10 +38,11 @@ namespace Starcounter.Weaver {
             // var result = weaver.Weave();
             var weaver = new ModuleWeaver(module);
             var weavedModule = weaver.Weave();
-            
+
             // TODO:
             // moduleWriter.WriteModule(...);
-            weavedModule.Write(WeavedAssemblyPath);
+            var targetPath = Path.Combine(outputDirectory, Path.GetFileName(AssemblyPath));
+            weavedModule.Write(targetPath);
         }
     }
 }

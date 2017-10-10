@@ -16,10 +16,10 @@ namespace starweavenet {
                 Directory.CreateDirectory(dir);
             }
 
-            var w = new AssemblyWeaver(args[0], dir);
-            w.Weave();
+            var w = new AssemblyWeaver(args[0]);
+            w.Weave(dir);
 
-            Console.WriteLine($"Weaved {w.AssemblyPath} -> {w.WeavedAssemblyPath}");
+            Console.WriteLine($"Weaved {w.AssemblyPath} -> {dir}");
 
             return 0;
         }
