@@ -3,6 +3,8 @@ using Mono.Cecil;
 
 #if NET_STANDARD
 using Starcounter.Weaver.NetCoreAssemblyResolver;
+#else
+using Starcounter.Weaver.NetFrameworkAssemblyResolver;
 #endif
 
 namespace Starcounter.Weaver {
@@ -15,9 +17,7 @@ namespace Starcounter.Weaver {
 #if NET_STANDARD
             readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(assemblyFile);
 #else
-            var netFrameworkResolver = new DefaultAssemblyResolver();
-            netFrameworkResolver.AddSearchDirectory(System.IO.Path.GetDirectoryName(assemblyFile));
-            readParameters.AssemblyResolver = netFrameworkResolver;
+            readParameters.AssemblyResolver = new DotNetFrameworkAssemblyResolver(assemblyFile);
 #endif
             Parameters = readParameters;
         }
