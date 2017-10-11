@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Starcounter.Hosting.Schema {
 
-    class JsonNETSchemaSerializer : ISchemaSerializer {
+    public class JsonNETSchemaSerializer : ISchemaSerializer {
 
         DatabaseSchema ISchemaSerializer.Deserialize(byte[] schema) {
             var s = Encoding.UTF8.GetString(schema);
