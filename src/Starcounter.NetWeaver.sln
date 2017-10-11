@@ -38,6 +38,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCoreIndirectRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFrameworkIndirectReference", "TestProjects\ConsoleAppNetFrameworkIndirectReference\ConsoleAppNetFrameworkIndirectReference.csproj", "{3A5E9918-20CB-4618-8113-AED4915E5FF6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Hosting", "Starcounter.Hosting\Starcounter.Hosting.csproj", "{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Hosting.Tests", "..\test\Starcounter.Hosting.Tests\Starcounter.Hosting.Tests.csproj", "{626B9A5A-6E40-4837-BB12-4640F2F1E39D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +100,14 @@ Global
 		{3A5E9918-20CB-4618-8113-AED4915E5FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A5E9918-20CB-4618-8113-AED4915E5FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A5E9918-20CB-4618-8113-AED4915E5FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{626B9A5A-6E40-4837-BB12-4640F2F1E39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{626B9A5A-6E40-4837-BB12-4640F2F1E39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{626B9A5A-6E40-4837-BB12-4640F2F1E39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{626B9A5A-6E40-4837-BB12-4640F2F1E39D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
