@@ -12,10 +12,10 @@ namespace Starcounter.Weaver.Tests {
         public void AdvisoryAdvicingNoneYieldZeroCalls() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
             var diag = WeaverDiagnostics.Quiet;
-            var discovery = new ModuleReferenceDiscovery(module, new AdviceNoneAdvisor(diag), diag);
+            var discovery = new ModuleReferenceDiscovery(new AdviceNoneAdvisor(diag), diag);
 
             int count = 0;
-            discovery.DiscoverReferences((m) => {
+            discovery.DiscoverReferences(module, (m) => {
                 count++;
                 return true;
             });
@@ -27,17 +27,17 @@ namespace Starcounter.Weaver.Tests {
         public void StopWhenCallbackInstructToDoSo() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
             var diag = WeaverDiagnostics.Quiet;
-            var discovery = new ModuleReferenceDiscovery(module, new AdviceAllAdvisor(diag), diag);
+            var discovery = new ModuleReferenceDiscovery(new AdviceAllAdvisor(diag), diag);
 
             int count = 0;
-            discovery.DiscoverReferences((m) => {
+            discovery.DiscoverReferences(module, (m) => {
                 count++;
                 return false;
             });
             Assert.Equal(1, count);
 
             count = 0;
-            discovery.DiscoverReferences((m) => {
+            discovery.DiscoverReferences(module, (m) => {
                 count++;
                 return count == 3 ? false : true;
             });
@@ -48,11 +48,11 @@ namespace Starcounter.Weaver.Tests {
         public void FindXUnitReferenceAndStopWhenDoingSo() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
             var diag = WeaverDiagnostics.Quiet;
-            var discovery = new ModuleReferenceDiscovery(module, new AdviceAllAdvisor(diag), diag);
+            var discovery = new ModuleReferenceDiscovery(new AdviceAllAdvisor(diag), diag);
 
             int count = 0;
             int countWhenXUnitIsFound = 0;
-            discovery.DiscoverReferences((m) => {
+            discovery.DiscoverReferences(module, (m) => {
                 count++;
                 if (m.Name.Equals("xunit.core.dll", StringComparison.InvariantCultureIgnoreCase)) {
                     countWhenXUnitIsFound = count;

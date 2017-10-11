@@ -8,19 +8,17 @@ namespace Starcounter.Weaver.Analysis {
     
     public class ModuleReferenceDiscovery {
         readonly WeaverDiagnostics diagnostics;
-        readonly ModuleDefinition module;
         readonly ModuleReferenceDiscoveryAdvisor advisor;
         
-        public ModuleReferenceDiscovery(ModuleDefinition m, ModuleReferenceDiscoveryAdvisor advice, WeaverDiagnostics diag) {
-            Guard.NotNull(m, nameof(m));
+        public ModuleReferenceDiscovery(ModuleReferenceDiscoveryAdvisor advice, WeaverDiagnostics diag) {
             Guard.NotNull(advice, nameof(advice));
             Guard.NotNull(diag, nameof(diag));
-            module = m;
             advisor = advice;
             diagnostics = diag;
         }
 
-        public void DiscoverReferences(Func<ModuleDefinition, bool> func) {
+        public void DiscoverReferences(ModuleDefinition module, Func<ModuleDefinition, bool> func) {
+            Guard.NotNull(module, nameof(module));
             Guard.NotNull(func, nameof(func));
 
             var referencedModules = new List<ModuleDefinition>();
