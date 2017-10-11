@@ -33,15 +33,6 @@ namespace Starcounter.Weaver.Tests {
             );
             Assert.NotNull(preAnalysis);
             Assert.Null(preAnalysis.TargetModule);
-            
-            preAnalysis = PreAnalysis.Execute<DefaultPreAnalysis>(
-                thisAssembly,
-                TestUtilities.AdviceAllReferenceDiscovery,
-                new JsonNETSchemaSerializer(),
-                TestUtilities.QuietDiagnostics
-            );
-            Assert.NotNull(preAnalysis);
-            Assert.NotNull(preAnalysis.TargetModule);
         }
 
         [Fact]
