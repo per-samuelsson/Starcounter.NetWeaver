@@ -1,7 +1,8 @@
 ﻿
-namespace Starcounter.Hosting.Schema {
+using System.Collections.Generic;
 
-    public class DatabaseSchema {
-      
+namespace Starcounter.Hosting.Schema {
+    public sealed class DatabaseSchema {
+        public IEnumerable<DatabaseAssembly> Assemblies { get; }
     }
 }
