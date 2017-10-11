@@ -26,5 +26,17 @@ namespace Starcounter.Weaver {
             }
             return hasDatabaseAttribute;
         }
+
+        public static byte[] ReadEmbeddedResource(this ModuleDefinition module, string name) {
+            if (!module.HasResources) {
+                return null;
+            }
+
+            var resource = module.Resources.FirstOrDefault((r) => {
+                return r.ResourceType == ResourceType.Embedded && r.Name == name;
+            }) as EmbeddedResource;
+
+            return resource?.GetResourceData();
+        }
     }
 }
