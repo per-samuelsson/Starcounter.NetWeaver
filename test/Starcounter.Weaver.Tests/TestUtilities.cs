@@ -10,6 +10,7 @@ namespace Starcounter.Weaver.Tests {
         static ModuleDefinition currentAssemblyModule;
         static WeaverDiagnostics quietDiagnostics;
         static ModuleReferenceDiscovery adviceAllReferenceDiscovery;
+        static ModuleReferenceDiscovery adviceNoneReferenceDiscovery;
 
         public static WeaverDiagnostics QuietDiagnostics {
             // Use this. We don't now if we want to keep WeaverDiagnostics.Quiet.
@@ -28,6 +29,16 @@ namespace Starcounter.Weaver.Tests {
                     adviceAllReferenceDiscovery = new ModuleReferenceDiscovery(new AdviceAllAdvisor(diag), diag);
                 }
                 return adviceAllReferenceDiscovery;
+            }
+        }
+
+        public static ModuleReferenceDiscovery AdviceNoneReferenceDiscovery {
+            get {
+                if (adviceNoneReferenceDiscovery == null) {
+                    var diag = TestUtilities.QuietDiagnostics;
+                    adviceNoneReferenceDiscovery = new ModuleReferenceDiscovery(new AdviceNoneAdvisor(diag), diag);
+                }
+                return adviceNoneReferenceDiscovery;
             }
         }
 
