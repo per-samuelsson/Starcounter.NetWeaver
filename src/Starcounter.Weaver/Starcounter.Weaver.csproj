@@ -16,6 +16,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Starcounter.Hosting\Starcounter.Hosting.csproj" />
     <ProjectReference Include="..\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
   
