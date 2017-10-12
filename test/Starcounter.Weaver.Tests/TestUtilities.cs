@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using Starcounter.Hosting.Schema;
 using Starcounter.Weaver.Analysis;
 using System.Reflection;
 using Xunit;
@@ -40,6 +41,10 @@ namespace Starcounter.Weaver.Tests {
                 }
                 return adviceNoneReferenceDiscovery;
             }
+        }
+
+        public static ISchemaSerializer DefaultSchemaSerializer {
+            get { return SchemaSerialization.CreateDefaultSerializer(); }
         }
 
         public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null) {

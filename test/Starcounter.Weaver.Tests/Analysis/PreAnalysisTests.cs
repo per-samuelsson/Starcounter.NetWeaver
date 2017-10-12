@@ -31,7 +31,10 @@ namespace Starcounter.Weaver.Tests {
         [Fact]
         public void AdvicingNoneShouldRenderNoTarget() {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
-            var preAnalyser = new DefaultPreAnalysis(TestUtilities.AdviceNoneReferenceDiscovery, new JsonNETSchemaSerializer(), TestUtilities.QuietDiagnostics);
+            var preAnalyser = new DefaultPreAnalysis(
+                TestUtilities.AdviceNoneReferenceDiscovery, 
+                TestUtilities.DefaultSchemaSerializer, 
+                TestUtilities.QuietDiagnostics);
 
             ModuleDefinition target;
             DatabaseSchema schema;
@@ -45,7 +48,7 @@ namespace Starcounter.Weaver.Tests {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
             var preAnalyser = new CustomPreAnalysisNoSchemaFirstIsTarget(
                 TestUtilities.AdviceAllReferenceDiscovery, 
-                new JsonNETSchemaSerializer(),
+                TestUtilities.DefaultSchemaSerializer,
                 TestUtilities.QuietDiagnostics);
 
             ModuleDefinition target;
@@ -60,7 +63,7 @@ namespace Starcounter.Weaver.Tests {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
             var preAnalyser = new DefaultPreAnalysis(
                 TestUtilities.AdviceAllReferenceDiscovery, 
-                new JsonNETSchemaSerializer(), 
+                TestUtilities.DefaultSchemaSerializer, 
                 TestUtilities.QuietDiagnostics
             );
 

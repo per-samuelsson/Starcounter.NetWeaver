@@ -6,7 +6,7 @@ namespace Starcounter.Hosting.Schema {
 
     public sealed class DatabaseSchema {
         Dictionary<string, DatabaseAssembly> assemblies = new Dictionary<string, DatabaseAssembly>();
-
+        
         public IEnumerable<DatabaseAssembly> Assemblies {
             get {
                 return assemblies.Values;

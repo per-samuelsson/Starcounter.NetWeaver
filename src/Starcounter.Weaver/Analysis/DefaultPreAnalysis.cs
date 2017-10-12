@@ -22,7 +22,7 @@ namespace Starcounter.Weaver.Analysis {
         }
 
         protected override DatabaseSchema DiscoverSchema(ModuleDefinition candidate, ISchemaSerializer serializer) {
-            var embeddedSchemaData = candidate.ReadEmbeddedResource(ModuleAnalyzer.SchemaResourceName);
+            var embeddedSchemaData = candidate.ReadEmbeddedResource(SchemaSerialization.EmbeddedResourceStreamName);
             return embeddedSchemaData != null ? serializer.Deserialize(embeddedSchemaData) : null;
         }
     }
