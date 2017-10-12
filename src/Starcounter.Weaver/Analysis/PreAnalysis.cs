@@ -4,45 +4,41 @@ using Starcounter.Hosting.Schema;
 namespace Starcounter.Weaver.Analysis {
 
     public abstract class PreAnalysis {
-
-        public ModuleDefinition TargetModule { get; private set; }
-
-        public DatabaseSchema ExternalSchema { get; private set; }
-
-        protected PreAnalysis() {
-            TargetModule = null;
-            ExternalSchema = null;
-        }
-
-        public static PreAnalysis Execute<T>(
-            ModuleDefinition module,
+        readonly ModuleReferenceDiscovery refDiscovery;
+        readonly ISchemaSerializer serializer;
+        readonly WeaverDiagnostics diag;
+        
+        protected PreAnalysis(
             ModuleReferenceDiscovery referenceDiscovery,
             ISchemaSerializer schemaSerializer,
-            WeaverDiagnostics diagnostics) where T : PreAnalysis, new() {
-            
-            var preAnalysis = new T();
+            WeaverDiagnostics diagnostics) {
 
-            var referenceFinder = SingleModuleReferenceFinder.Run(module, referenceDiscovery, (m) => {
-                return preAnalysis.IsTargetModule(m);
+            refDiscovery = referenceDiscovery;
+            serializer = schemaSerializer;
+            diag = diagnostics;
+        }
+
+        public void Execute(ModuleDefinition module, out ModuleDefinition target, out DatabaseSchema externalSchema) {
+            target = null;
+            externalSchema = null;
+
+            var referenceFinder = SingleModuleReferenceFinder.Run(module, refDiscovery, (m) => {
+                return IsTargetModule(m);
             });
 
             if (referenceFinder.Result == null) {
-                return preAnalysis;
+                return;
             }
 
-            preAnalysis.TargetModule = referenceFinder.Result;
-
-            var externalSchema = new DatabaseSchema();
+            target = referenceFinder.Result;
+            externalSchema = new DatabaseSchema();
 
             foreach (var referenceDiscovered in referenceFinder.ModulesConsidered) {
-                var moduleSchema = preAnalysis.DiscoverSchema(referenceDiscovered, schemaSerializer);
+                var moduleSchema = DiscoverSchema(referenceDiscovered, serializer);
                 if (moduleSchema != null) {
                     externalSchema = externalSchema.MergeWith(moduleSchema);
                 }
             }
-
-            preAnalysis.ExternalSchema = externalSchema;
-            return preAnalysis;
         }
 
         protected abstract bool IsTargetModule(ModuleDefinition candidate);

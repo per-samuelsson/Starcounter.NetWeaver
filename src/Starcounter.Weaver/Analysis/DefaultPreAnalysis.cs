@@ -14,7 +14,7 @@ namespace Starcounter.Weaver.Analysis {
         //   2. still reference Starcounter
         // That could be an indication it's not weaved, but should have been.
 
-        public DefaultPreAnalysis() : base() {
+        public DefaultPreAnalysis(ModuleReferenceDiscovery moduleReferenceDiscovery, ISchemaSerializer schemaSerializer, WeaverDiagnostics diagnostics) : base(moduleReferenceDiscovery, schemaSerializer, diagnostics) {
         }
 
         protected override bool IsTargetModule(ModuleDefinition candidate) {

@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using Starcounter.Hosting.Schema;
 
 namespace Starcounter.Weaver.Analysis {
 
@@ -10,16 +11,16 @@ namespace Starcounter.Weaver.Analysis {
             diag = diagnostics;
         }
 
-        public IDatabaseTypeDiscovery ProvideDiscovery(ModuleDefinition module, PreAnalysis preAnalysis) {
-            if (preAnalysis.TargetModule == null) {
+        public IDatabaseTypeDiscovery ProvideDiscovery(ModuleDefinition module, ModuleDefinition preAnalysisTarget, DatabaseSchema preAnalysisSchema) {
+            if (preAnalysisTarget == null) {
                 diag.WriteWarning($"Assembly {module} does not reference given target.");
                 return null;
             }
 
-            return BeginDiscovery(module, preAnalysis);
+            return BeginDiscovery(module);
         }
 
-        protected virtual IDatabaseTypeDiscovery BeginDiscovery(ModuleDefinition module, PreAnalysis preAnalysis) {
+        protected virtual IDatabaseTypeDiscovery BeginDiscovery(ModuleDefinition module) {
             return new DefaultDatabaseTypeDiscovery();
         }
     }

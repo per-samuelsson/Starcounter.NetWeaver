@@ -3,6 +3,7 @@ using Starcounter.Hosting.Schema;
 using Starcounter.Weaver.Analysis;
 using Xunit;
 using Mono.Cecil;
+using System.Linq;
 
 namespace Starcounter.Weaver.Tests {
 
@@ -10,6 +11,12 @@ namespace Starcounter.Weaver.Tests {
 
         class CustomPreAnalysisNoSchemaFirstIsTarget : DefaultPreAnalysis {
             int count = 0;
+
+            public CustomPreAnalysisNoSchemaFirstIsTarget(
+                ModuleReferenceDiscovery moduleReferenceDiscovery, 
+                ISchemaSerializer schemaSerializer, 
+                WeaverDiagnostics diagnostics) : base(moduleReferenceDiscovery, schemaSerializer, diagnostics) {
+            }
 
             protected override DatabaseSchema DiscoverSchema(ModuleDefinition candidate, ISchemaSerializer serializer) {
                 return null;
@@ -24,44 +31,45 @@ namespace Starcounter.Weaver.Tests {
         [Fact]
         public void AdvicingNoneShouldRenderNoTarget() {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
+            var preAnalyser = new DefaultPreAnalysis(TestUtilities.AdviceNoneReferenceDiscovery, new JsonNETSchemaSerializer(), TestUtilities.QuietDiagnostics);
 
-            var preAnalysis = PreAnalysis.Execute<DefaultPreAnalysis>(
-                thisAssembly,
-                TestUtilities.AdviceNoneReferenceDiscovery,
-                null,
-                TestUtilities.QuietDiagnostics
-            );
-            Assert.NotNull(preAnalysis);
-            Assert.Null(preAnalysis.TargetModule);
+            ModuleDefinition target;
+            DatabaseSchema schema;
+            preAnalyser.Execute(thisAssembly, out target, out schema);
+            
+            Assert.Null(target);
         }
 
         [Fact]
         public void CustomWithNullSerializerShouldBeAccepted() {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
+            var preAnalyser = new CustomPreAnalysisNoSchemaFirstIsTarget(
+                TestUtilities.AdviceAllReferenceDiscovery, 
+                new JsonNETSchemaSerializer(),
+                TestUtilities.QuietDiagnostics);
 
-            var preAnalysis = PreAnalysis.Execute<CustomPreAnalysisNoSchemaFirstIsTarget>(
-                thisAssembly,
-                TestUtilities.AdviceAllReferenceDiscovery,
-                null,
-                TestUtilities.QuietDiagnostics
-            );
-            Assert.NotNull(preAnalysis);
-            Assert.NotNull(preAnalysis.TargetModule);
+            ModuleDefinition target;
+            DatabaseSchema schema;
+            preAnalyser.Execute(thisAssembly, out target, out schema);
+            
+            Assert.NotNull(target);
         }
 
         [Fact]
         public void ModuleWithReferencesWithoutSchemasShouldPass() {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
-
-            var preAnalysis = PreAnalysis.Execute<DefaultPreAnalysis>(
-                thisAssembly,
-                TestUtilities.AdviceAllReferenceDiscovery,
-                new JsonNETSchemaSerializer(),
+            var preAnalyser = new DefaultPreAnalysis(
+                TestUtilities.AdviceAllReferenceDiscovery, 
+                new JsonNETSchemaSerializer(), 
                 TestUtilities.QuietDiagnostics
             );
-            Assert.NotNull(preAnalysis);
-            Assert.NotNull(preAnalysis.TargetModule);
-            Assert.Null(preAnalysis.ExternalSchema.Assemblies);
+
+            ModuleDefinition target;
+            DatabaseSchema schema;
+            preAnalyser.Execute(thisAssembly, out target, out schema);
+
+            Assert.NotNull(target);
+            Assert.Equal(0, schema.Assemblies.Count());
         }
     }
 }
