@@ -7,7 +7,7 @@ namespace Starcounter.Weaver {
         protected readonly IDiagnosticsFormatter formatter;
 
         public TextWriterWeaverDiagnostics(TextWriter textWriter, IDiagnosticsFormatter errorAndWarningFormatter) {
-            Guard.NotNull(writer, nameof(writer));
+            Guard.NotNull(textWriter, nameof(textWriter));
             Guard.NotNull(errorAndWarningFormatter, nameof(errorAndWarningFormatter));
             writer = textWriter;
             formatter = errorAndWarningFormatter;

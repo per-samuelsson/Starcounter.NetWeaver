@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using System.IO;
 
 namespace Starcounter.Weaver {
 
@@ -8,7 +9,7 @@ namespace Starcounter.Weaver {
         protected readonly WriterParameters writeParameters;
 
         public AssemblyFileModuleWriter(string assemblyFile, WeaverDiagnostics weaverDiagnostics, WriterParameters writerParameters = null) : base(weaverDiagnostics) {
-            Guard.FileExists(assemblyFile, nameof(assemblyFile));
+            Guard.DirectoryExists(Path.GetDirectoryName(assemblyFile), nameof(assemblyFile));
             assemblyPath = assemblyFile;
             writeParameters = writerParameters;
         }
