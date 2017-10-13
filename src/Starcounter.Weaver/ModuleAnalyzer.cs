@@ -24,7 +24,7 @@ namespace Starcounter.Weaver {
             databaseDiscoveryProvider = databaseTypeDiscovery;
         }
         
-        public DatabaseSchema DiscoverAssembly(ModuleDefinition module) {
+        public DatabaseAssembly DiscoverAssembly(ModuleDefinition module) {
             ModuleDefinition targetReference;
             DatabaseSchema schema;
             preAnalysis.Execute(module, out targetReference, out schema);
@@ -36,7 +36,9 @@ namespace Starcounter.Weaver {
             
             var assembly = schema.DefineAssembly(module.Name);
 
-            return databaseDiscovery.DiscoverAssembly(module, assembly);
+            databaseDiscovery.DiscoverAssembly(module, assembly);
+
+            return assembly;
         }
     }
 }
