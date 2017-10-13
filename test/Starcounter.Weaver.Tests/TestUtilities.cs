@@ -47,6 +47,14 @@ namespace Starcounter.Weaver.Tests {
             get { return SchemaSerialization.CreateDefaultSerializer(); }
         }
 
+        public static SchemaSerializationContext DefaultSchemaSerializationContext {
+            get { return new EmbeddedResourceSchemaSerializationContext(
+                DefaultSchemaSerializer, 
+                EmbeddedResourceSchemaSerializationContext.DefaultResourceStreamName,
+                QuietDiagnostics);
+            }
+        }
+
         public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null) {
             if (currentAssemblyModule == null) {
                 var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
