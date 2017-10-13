@@ -24,6 +24,10 @@ namespace Starcounter.Hosting.Schema {
             }
 
             bool ResolveBaseTypeName(string name, DatabaseSchema schema, Tuple<string, string>[] registrars) {
+                if (name.Equals(typeof(object).FullName)) {
+                    return true;
+                }
+
                 if (registrars.Any(t => t.Item1.Equals(name))) {
                     return true;
                 }
