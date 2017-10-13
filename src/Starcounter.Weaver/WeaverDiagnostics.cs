@@ -11,11 +11,11 @@ namespace Starcounter.Weaver {
             }
         }
 
-        public virtual void WriteError(string msg) {
+        public virtual void WriteError(string msg, string code = null) {
 
         }
 
-        public virtual void WriteWarning(string msg) {
+        public virtual void WriteWarning(string msg, string code = null) {
 
         }
 
