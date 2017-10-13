@@ -1,5 +1,6 @@
 ﻿using Starcounter.Hosting.Schema;
 using Starcounter.Weaver.Analysis;
+using System;
 using System.IO;
 
 namespace Starcounter.Weaver {
@@ -17,7 +18,9 @@ namespace Starcounter.Weaver {
             Guard.FileExists(assemblyFile, nameof(assemblyFile));
             Guard.DirectoryExists(outputDirectory, nameof(outputDirectory));
 
-            var diagnostics = WeaverDiagnostics.Quiet; // TODO:
+            var diagnosticFormatter = new MsBuildAdheringFormatter("Starcounter.Postcompiler");
+            var diagnostics = new TextWriterWeaverDiagnostics(Console.Error, diagnosticFormatter);
+
             var readerParameters = new DefaultModuleReaderParameters(assemblyFile);
             var moduleReader = new AssemblyFileModuleReader(assemblyFile, diagnostics, readerParameters.Parameters);
 
