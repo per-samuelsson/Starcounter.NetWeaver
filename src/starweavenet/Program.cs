@@ -10,16 +10,18 @@ namespace starweavenet {
                 return 1;
             }
 
-            var dir = Path.GetDirectoryName(args[0]);
+            var assemblyFile = args[0];
+            var dir = Path.GetDirectoryName(assemblyFile);
             dir = Path.Combine(dir, ".starcounter");
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
 
-            var w = new AssemblyWeaver(args[0]);
-            w.Weave(dir);
 
-            Console.WriteLine($"Weaved {w.AssemblyPath} -> {dir}");
+            var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir);
+            weaver.Weave();
+
+            Console.WriteLine($"Weaved {assemblyFile} -> {dir}");
 
             return 0;
         }
