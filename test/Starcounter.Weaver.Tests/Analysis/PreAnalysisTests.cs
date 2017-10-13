@@ -13,12 +13,12 @@ namespace Starcounter.Weaver.Tests {
             int count = 0;
 
             public CustomPreAnalysisNoSchemaFirstIsTarget(
-                ModuleReferenceDiscovery moduleReferenceDiscovery, 
-                ISchemaSerializer schemaSerializer, 
-                WeaverDiagnostics diagnostics) : base(moduleReferenceDiscovery, schemaSerializer, diagnostics) {
+                ModuleReferenceDiscovery moduleReferenceDiscovery,
+                SchemaSerializationContext serializationContext, 
+                WeaverDiagnostics diagnostics) : base(moduleReferenceDiscovery, serializationContext, diagnostics) {
             }
 
-            protected override DatabaseSchema DiscoverSchema(ModuleDefinition candidate, ISchemaSerializer serializer) {
+            protected override DatabaseSchema DiscoverSchema(ModuleDefinition candidate, SchemaSerializationContext serializationContext) {
                 return null;
             }
 
@@ -33,7 +33,7 @@ namespace Starcounter.Weaver.Tests {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
             var preAnalyser = new DefaultPreAnalysis(
                 TestUtilities.AdviceNoneReferenceDiscovery, 
-                TestUtilities.DefaultSchemaSerializer, 
+                TestUtilities.DefaultSchemaSerializationContext, 
                 TestUtilities.QuietDiagnostics);
 
             ModuleDefinition target;
@@ -48,7 +48,7 @@ namespace Starcounter.Weaver.Tests {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
             var preAnalyser = new CustomPreAnalysisNoSchemaFirstIsTarget(
                 TestUtilities.AdviceAllReferenceDiscovery, 
-                TestUtilities.DefaultSchemaSerializer,
+                TestUtilities.DefaultSchemaSerializationContext,
                 TestUtilities.QuietDiagnostics);
 
             ModuleDefinition target;
@@ -63,7 +63,7 @@ namespace Starcounter.Weaver.Tests {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
             var preAnalyser = new DefaultPreAnalysis(
                 TestUtilities.AdviceAllReferenceDiscovery, 
-                TestUtilities.DefaultSchemaSerializer, 
+                TestUtilities.DefaultSchemaSerializationContext, 
                 TestUtilities.QuietDiagnostics
             );
 

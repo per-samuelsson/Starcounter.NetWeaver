@@ -5,16 +5,19 @@ namespace Starcounter.Weaver.Analysis {
 
     public abstract class PreAnalysis {
         readonly ModuleReferenceDiscovery refDiscovery;
-        readonly ISchemaSerializer serializer;
+        readonly SchemaSerializationContext serializationContext;
         readonly WeaverDiagnostics diag;
         
         protected PreAnalysis(
             ModuleReferenceDiscovery referenceDiscovery,
-            ISchemaSerializer schemaSerializer,
+            SchemaSerializationContext schemaSerializationContext,
             WeaverDiagnostics diagnostics) {
+            Guard.NotNull(referenceDiscovery, nameof(referenceDiscovery));
+            Guard.NotNull(schemaSerializationContext, nameof(schemaSerializationContext));
+            Guard.NotNull(diagnostics, nameof(diagnostics));
 
             refDiscovery = referenceDiscovery;
-            serializer = schemaSerializer;
+            serializationContext = schemaSerializationContext;
             diag = diagnostics;
         }
 
@@ -34,7 +37,7 @@ namespace Starcounter.Weaver.Analysis {
             externalSchema = new DatabaseSchema();
 
             foreach (var referenceDiscovered in referenceFinder.ModulesConsidered) {
-                var moduleSchema = DiscoverSchema(referenceDiscovered, serializer);
+                var moduleSchema = DiscoverSchema(referenceDiscovered, serializationContext);
                 if (moduleSchema != null) {
                     externalSchema = externalSchema.MergeWith(moduleSchema);
                 }
@@ -43,6 +46,6 @@ namespace Starcounter.Weaver.Analysis {
 
         protected abstract bool IsTargetModule(ModuleDefinition candidate);
 
-        protected abstract DatabaseSchema DiscoverSchema(ModuleDefinition candidate, ISchemaSerializer serializer);
+        protected abstract DatabaseSchema DiscoverSchema(ModuleDefinition candidate, SchemaSerializationContext serializationContext);
     }
 }
