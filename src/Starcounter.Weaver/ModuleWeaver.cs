@@ -1,23 +1,28 @@
 ﻿
 using Mono.Cecil;
-using Starcounter2;
+using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Analysis;
 using System.Linq;
 
 namespace Starcounter.Weaver {
+    
+    public class ModuleWeaver {
+        readonly SchemaSerializationContext schemaSerializationContext;
 
-    internal class ModuleWeaver {
-        readonly ModuleDefinition module;
-
-        public ModuleWeaver(ModuleDefinition module) {
-            this.module = module;
+        public ModuleWeaver(SchemaSerializationContext serializationContext) {
+            Guard.NotNull(serializationContext, nameof(serializationContext));
+            schemaSerializationContext = serializationContext;
         }
 
-        public ModuleDefinition Weave() {
-            foreach (var type in module.Types) {
-                if (type.HasCustomAttribute(typeof(DatabaseAttribute))) {
-                    WeaveDatabaseClass(type);
-                }
-            }
+        public ModuleDefinition Weave(ModuleDefinition module, DatabaseAssembly assembly) {
+            Guard.NotNull(module, nameof(module));
+            Guard.NotNull(assembly, nameof(assembly));
+
+            // Run transformation first; serialize schema only when we know that has
+            // succeeded.
+            // TODO:
+
+            schemaSerializationContext.Write(module, assembly.DefiningSchema);
             return module;
         }
 
@@ -28,17 +33,6 @@ namespace Starcounter.Weaver {
             type.Fields.Add(crudCreateHandle);
 
             foreach (var prop in type.Properties.Where(p => p.IsAutoImplemented())) {
-                // TODO:
-                // Instead of simple IsAutoImplemented:
-                // Make it more like "ShouldTransform" / Discover and check:
-                //   1. It's an auto-implemented property
-                //   2. Has a data type we support.
-                //   3. Etc.
-                //
-                // We should return a materialization, including name of column,
-                // datatype in starcounter, if it's a datatype not supported, maybe issue
-                // some information about that, etc. If it's a code property, denote
-                // that, etc.
             }
         }
     }

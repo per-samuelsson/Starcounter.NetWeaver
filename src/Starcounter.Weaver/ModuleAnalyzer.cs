@@ -5,7 +5,7 @@ using Starcounter.Weaver.Analysis;
 
 namespace Starcounter.Weaver {
 
-    internal class ModuleAnalyzer {
+    public class ModuleAnalyzer {
         readonly PreAnalysis preAnalysis;
         readonly WeaverDiagnostics diag;
         readonly DatabaseTypeDiscoveryProvider databaseDiscoveryProvider;
