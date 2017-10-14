@@ -44,7 +44,7 @@ namespace Starcounter.Weaver.Tests {
         }
 
         public static ISchemaSerializer DefaultSchemaSerializer {
-            get { return SchemaSerialization.CreateDefaultSerializer(); }
+            get { return new JsonNETSchemaSerializer(); }
         }
 
         public static SchemaSerializationContext DefaultSchemaSerializationContext {
