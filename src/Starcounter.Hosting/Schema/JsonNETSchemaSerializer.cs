@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace Starcounter.Hosting.Schema {
 
@@ -37,11 +38,19 @@ namespace Starcounter.Hosting.Schema {
         }
         
         DatabaseSchema ISchemaSerializer.Deserialize(byte[] schema) {
+            if (schema == null) {
+                throw new ArgumentNullException(nameof(schema));
+            }
+
             var s = Encoding.UTF8.GetString(schema);
             return JsonConvert.DeserializeObject(s) as DatabaseSchema;
         }
 
         byte[] ISchemaSerializer.Serialize(DatabaseSchema schema) {
+            if (schema == null) {
+                throw new ArgumentNullException(nameof(schema));
+            }
+
             var s = JsonConvert.SerializeObject(schema.Assemblies, new JsonSerializerSettings() { ContractResolver = contractResolver });
             return Encoding.UTF8.GetBytes(s ?? "");
         }
