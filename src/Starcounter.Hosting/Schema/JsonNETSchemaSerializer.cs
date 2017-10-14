@@ -43,15 +43,15 @@ namespace Starcounter.Hosting.Schema {
             }
 
             var s = Encoding.UTF8.GetString(schema);
-            return JsonConvert.DeserializeObject(s) as DatabaseSchema;
+            return JsonConvert.DeserializeObject<DatabaseSchema>(s);
         }
 
         byte[] ISchemaSerializer.Serialize(DatabaseSchema schema) {
             if (schema == null) {
                 throw new ArgumentNullException(nameof(schema));
             }
-
-            var s = JsonConvert.SerializeObject(schema.Assemblies, new JsonSerializerSettings() { ContractResolver = contractResolver });
+            
+            var s = JsonConvert.SerializeObject(schema, new JsonSerializerSettings() { ContractResolver = contractResolver });
             return Encoding.UTF8.GetBytes(s ?? "");
         }
     }
