@@ -19,5 +19,17 @@ namespace Starcounter.Hosting.Tests {
             Assert.Contains("schema", npe.Message);
             Assert.Equal("schema", npe.ParamName);
         }
+
+        [Fact]
+        public void RoundtripWithEmptySchema() {
+            var serializer = new JsonNETSchemaSerializer() as ISchemaSerializer;
+            var schema = new DatabaseSchema();
+            var bytes = serializer.Serialize(schema);
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+            var schema2 = serializer.Deserialize(bytes);
+            Assert.NotNull(schema2);
+            Assert.Empty(schema2.Assemblies);
+        }
     }
 }
