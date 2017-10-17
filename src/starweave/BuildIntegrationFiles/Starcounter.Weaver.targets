@@ -9,12 +9,6 @@
 
   -->
 
-  <!--
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
-    
-  </PropertyGroup>
-  -->
-  
   <PropertyGroup>
     <BuildDependsOn>$(BuildDependsOn);WeaveProject</BuildDependsOn>
   </PropertyGroup>
@@ -22,6 +16,8 @@
   <Target Name="WeaveProject" Condition="'$(DisableWeaving)' != 'true'" AfterTargets="Build">
     <Message Text="WeaveProject: $(TargetFramework): Weaving $(TargetPath)" Importance="high" />
     <Error Condition="!Exists('$(TargetPath)')" Text="Weaving input file $(TargetPath) does not exist" />
+    <Error Condition="'$(WeaverExeCommand)' == ''" Text="Missing weaver tool command. Have you imported the .props file?" />
+    <Exec Command="$(WeaverExeCommand) $(TargetPath)" />
   </Target>
 
   <Target Name="CleanWeaverContent" AfterTargets="Clean">
