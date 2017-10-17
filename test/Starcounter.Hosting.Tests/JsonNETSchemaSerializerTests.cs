@@ -57,6 +57,7 @@ namespace Starcounter.Hosting.Tests {
             var testAssembly = schema.Assemblies.Single();
             Assert.NotNull(testAssembly);
             Assert.Equal("test", testAssembly.Name);
+            Assert.True(schema2.ContainSameAssemblies(testAssembly.DefiningSchema));
         }
 
         [Fact]
@@ -64,10 +65,15 @@ namespace Starcounter.Hosting.Tests {
             var serializer = CreateSerializer();
 
             var schema = new DatabaseSchema();
-            schema.DefineAssembly("test").DefineTypes(
+            var assembly = schema.DefineAssembly("test");
+            var types = assembly.DefineTypes(
                 new[] { Tuple.Create("test.test", typeof(System.Object).FullName) }
                 );
             Assert.Equal(1, schema.Assemblies.Count());
+            Assert.Equal(1, types.Count());
+            Assert.Equal("test.test", types.Single().FullName);
+            Assert.Equal(typeof(object).FullName, types.Single().BaseTypeName);
+            Assert.Empty(types.Single().Properties);
 
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
@@ -80,10 +86,13 @@ namespace Starcounter.Hosting.Tests {
             var testAssembly = schema2.Assemblies.Single();
             Assert.NotNull(testAssembly);
             Assert.Equal("test", testAssembly.Name);
+            Assert.True(schema2.ContainSameAssemblies(testAssembly.DefiningSchema));
 
             var testType = testAssembly.Types.Single();
             Assert.NotNull(testType);
             Assert.Equal("test.test", testType.FullName);
+            Assert.Empty(testType.Properties);
+            Assert.Equal(testAssembly, testType.DefiningAssembly);
         }
     }
 }
