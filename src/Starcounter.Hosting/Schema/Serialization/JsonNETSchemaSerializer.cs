@@ -29,7 +29,22 @@ namespace Starcounter.Hosting.Schema.Serialization {
             var settings = new JsonSerializerSettings() { ContractResolver = resolver };
 
             var s = Encoding.UTF8.GetString(schema);
-            return JsonConvert.DeserializeObject<DatabaseSchema>(s, settings);
+            var result = JsonConvert.DeserializeObject<DatabaseSchema>(s, settings);
+
+            return MaterializeAfterDeserialization(result);
+        }
+
+        DatabaseSchema MaterializeAfterDeserialization(DatabaseSchema schema) {
+            foreach (var assembly in schema.Assemblies) {
+                assembly.DefiningSchema = schema;
+                foreach (var type in assembly.Types) {
+                    type.DefiningAssembly = assembly;
+                    foreach (var property in type.Properties) {
+                        property.DeclaringType = type;
+                    }
+                }
+            }
+            return schema;
         }
 
         byte[] ISchemaSerializer.Serialize(DatabaseSchema schema) {
