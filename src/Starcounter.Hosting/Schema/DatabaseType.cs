@@ -9,9 +9,9 @@ namespace Starcounter.Hosting.Schema {
 
         public DatabaseAssembly DefiningAssembly { get; internal set; }
 
-        public string FullName { get; internal set; }
+        public string FullName { get; set; }
 
-        public string BaseTypeName { get; internal set; }
+        public string BaseTypeName { get; set; }
 
         public IEnumerable<DatabaseProperty> Properties {
             get {
