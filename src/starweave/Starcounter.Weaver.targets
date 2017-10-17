@@ -1,0 +1,30 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- 
+    About:
+      Integrate weaver in the build process.
+
+    Common customizations:
+      Any project can opt-out by setting <DisableWeaving> to 'true'.
+
+  -->
+  
+  <PropertyGroup>
+    <BuildDependsOn>$(BuildDependsOn);WeaveProject</BuildDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="WeaveProject" Condition="'$(DisableWeaving)' != 'true'" AfterTargets="Build">
+    <Message Text="WeaveProject: Weaving $(TargetPath)" Importance="high" />
+  </Target>
+
+  <Target Name="CleanWeaverContent" AfterTargets="Clean">
+    <!--TODO: Clean up any generated content as well -->
+    <!--
+    <ItemGroup>
+      <WeaverFilesToDelete Include="$(WeaverSetupFilesDirectory)$(WeaverSetupFilePattern)"/>
+    </ItemGroup>
+    <Delete Files="@(WeaverFilesToDelete)" />
+    -->
+  </Target>
+  
+</Project>
