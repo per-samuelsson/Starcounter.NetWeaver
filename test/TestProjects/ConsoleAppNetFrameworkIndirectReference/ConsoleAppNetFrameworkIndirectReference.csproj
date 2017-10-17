@@ -55,5 +55,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\TestProjects.props" />
   <Import Project="..\TestProjects.targets" />
 </Project>

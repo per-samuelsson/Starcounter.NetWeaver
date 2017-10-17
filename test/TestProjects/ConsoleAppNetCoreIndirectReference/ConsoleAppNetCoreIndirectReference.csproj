@@ -9,6 +9,7 @@
     <ProjectReference Include="..\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj" />
   </ItemGroup>
   
+  <Import Project="..\TestProjects.props" />
   <Import Project="..\TestProjects.targets" />
   
 </Project>

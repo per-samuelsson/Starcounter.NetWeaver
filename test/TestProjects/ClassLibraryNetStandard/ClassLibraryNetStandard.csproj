@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Ninject" Version="3.3.0" />
   </ItemGroup>
@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
   
+  <Import Project="..\TestProjects.props" />
   <Import Project="..\TestProjects.targets" />
 
 </Project>

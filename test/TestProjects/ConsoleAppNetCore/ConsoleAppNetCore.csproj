@@ -4,11 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Ninject" Version="3.3.0" />
   </ItemGroup>
   
+  <Import Project="..\TestProjects.props" />
   <Import Project="..\TestProjects.targets" />
 
 </Project>
