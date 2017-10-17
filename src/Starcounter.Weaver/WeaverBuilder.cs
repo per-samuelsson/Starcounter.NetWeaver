@@ -1,4 +1,5 @@
 ﻿using Starcounter.Hosting.Schema;
+using Starcounter.Hosting.Schema.Serialization;
 using Starcounter.Weaver.Analysis;
 using System;
 using System.IO;
@@ -27,7 +28,7 @@ namespace Starcounter.Weaver {
             var targetPath = Path.Combine(outputDirectory, Path.GetFileName(assemblyFile));
             var moduleWriter = new AssemblyFileModuleWriter(targetPath, diagnostics);
 
-            var schemaSerializer = new JsonNETSchemaSerializer();
+            var schemaSerializer = new JsonNETSchemaSerializer(new DefaultAdvicedContractResolver());
             var serializationContext = new EmbeddedResourceSchemaSerializationContext(
                 schemaSerializer,
                 EmbeddedResourceSchemaSerializationContext.DefaultResourceStreamName,

@@ -1,5 +1,6 @@
 ﻿
 using Starcounter.Hosting.Schema;
+using Starcounter.Hosting.Schema.Serialization;
 using System;
 
 namespace Starcounter.Weaver.Tests {

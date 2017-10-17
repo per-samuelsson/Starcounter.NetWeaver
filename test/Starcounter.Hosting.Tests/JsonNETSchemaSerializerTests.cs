@@ -1,15 +1,21 @@
 ﻿
 using Starcounter.Hosting.Schema;
+using Starcounter.Hosting.Schema.Serialization;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace Starcounter.Hosting.Tests {
 
     public class JsonNETSchemaSerializerTests {
 
+        static ISchemaSerializer CreateSerializer() {
+            return new JsonNETSchemaSerializer(new DefaultAdvicedContractResolver());
+        }
+
         [Fact]
         public void InvalidParametersTriggerMeaningfulErrors() {
-            var serializer = new JsonNETSchemaSerializer() as ISchemaSerializer;
+            var serializer = CreateSerializer();
 
             var npe = Assert.Throws<ArgumentNullException>(() => serializer.Serialize(null));
             Assert.Contains("schema", npe.Message);
@@ -22,7 +28,7 @@ namespace Starcounter.Hosting.Tests {
 
         [Fact]
         public void RoundtripWithEmptySchema() {
-            var serializer = new JsonNETSchemaSerializer() as ISchemaSerializer;
+            var serializer = CreateSerializer();
             var schema = new DatabaseSchema();
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
@@ -30,6 +36,54 @@ namespace Starcounter.Hosting.Tests {
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Empty(schema2.Assemblies);
+        }
+
+        [Fact]
+        public void RoundtripWithOneDefinedAssembly() {
+            var serializer = CreateSerializer();
+
+            var schema = new DatabaseSchema();
+            schema.DefineAssembly("test");
+            Assert.Equal(1, schema.Assemblies.Count());
+
+            var bytes = serializer.Serialize(schema);
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+
+            var schema2 = serializer.Deserialize(bytes);
+            Assert.NotNull(schema2);
+            Assert.Equal(1, schema2.Assemblies.Count());
+
+            var testAssembly = schema.Assemblies.Single();
+            Assert.NotNull(testAssembly);
+            Assert.Equal("test", testAssembly.Name);
+        }
+
+        [Fact]
+        public void RoundtripWithOneDefinedType() {
+            var serializer = CreateSerializer();
+
+            var schema = new DatabaseSchema();
+            schema.DefineAssembly("test").DefineTypes(
+                new[] { Tuple.Create("test.test", typeof(System.Object).FullName) }
+                );
+            Assert.Equal(1, schema.Assemblies.Count());
+
+            var bytes = serializer.Serialize(schema);
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+
+            var schema2 = serializer.Deserialize(bytes);
+            Assert.NotNull(schema2);
+            Assert.Equal(1, schema2.Assemblies.Count());
+
+            var testAssembly = schema2.Assemblies.Single();
+            Assert.NotNull(testAssembly);
+            Assert.Equal("test", testAssembly.Name);
+
+            var testType = testAssembly.Types.Single();
+            Assert.NotNull(testType);
+            Assert.Equal("test.test", testType.FullName);
         }
     }
 }

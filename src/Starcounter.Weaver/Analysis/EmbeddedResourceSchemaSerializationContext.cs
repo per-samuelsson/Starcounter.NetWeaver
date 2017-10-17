@@ -1,5 +1,7 @@
-﻿using Mono.Cecil;
+﻿
+using Mono.Cecil;
 using Starcounter.Hosting.Schema;
+using Starcounter.Hosting.Schema.Serialization;
 
 namespace Starcounter.Weaver.Analysis {
 

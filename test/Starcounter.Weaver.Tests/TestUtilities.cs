@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Starcounter.Hosting.Schema;
+using Starcounter.Hosting.Schema.Serialization;
 using Starcounter.Weaver.Analysis;
 using System.Reflection;
 using Xunit;
@@ -44,7 +45,7 @@ namespace Starcounter.Weaver.Tests {
         }
 
         public static ISchemaSerializer DefaultSchemaSerializer {
-            get { return new JsonNETSchemaSerializer(); }
+            get { return new JsonNETSchemaSerializer(new DefaultAdvicedContractResolver()); }
         }
 
         public static SchemaSerializationContext DefaultSchemaSerializationContext {
