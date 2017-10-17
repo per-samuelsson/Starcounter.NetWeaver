@@ -11,5 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
+  
+  <Import Project="..\TestProjects.targets" />
 
 </Project>
