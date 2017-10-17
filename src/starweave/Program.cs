@@ -9,11 +9,17 @@ namespace starweave {
 
         static int Main(string[] args) {
             if (args.Length == 0) {
-                Console.WriteLine("Usage: starweave <assembly>");
+                Console.Error.WriteLine("Usage: starweave <assembly>");
                 return 1;
             }
 
             var assemblyFile = args[0];
+            if (!File.Exists(assemblyFile)) {
+                Console.Error.WriteLine($"File not found: {assemblyFile}");
+                Console.Error.WriteLine("Usage: starweave <assembly>");
+                return 1;
+            }
+
             var dir = Path.GetDirectoryName(assemblyFile);
             dir = Path.Combine(dir, ".starcounter");
             if (!Directory.Exists(dir)) {
