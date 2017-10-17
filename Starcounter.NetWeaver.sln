@@ -24,16 +24,34 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{8A30569E-6858-4A3E-A383-29A7FB268BB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetFramework", "test\TestProjects\ClassLibraryNetFramework\ClassLibraryNetFramework.csproj", "{0E121AAA-281B-4D79-9712-9ED1393AE4BF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryNetStandard", "test\TestProjects\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj", "{78EAE163-E640-4553-B965-78B07A2B682E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCore", "test\TestProjects\ConsoleAppNetCore\ConsoleAppNetCore.csproj", "{43023EB2-4F7C-4779-BECC-C7B3DEB54941}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCoreIndirectReference", "test\TestProjects\ConsoleAppNetCoreIndirectReference\ConsoleAppNetCoreIndirectReference.csproj", "{5FB52AFD-6708-4435-98C8-10DACBE5B9F6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFramework", "test\TestProjects\ConsoleAppNetFramework\ConsoleAppNetFramework.csproj", "{A44B2224-C17C-4106-9AD3-A83CF66403CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFrameworkIndirectReference", "test\TestProjects\ConsoleAppNetFrameworkIndirectReference\ConsoleAppNetFrameworkIndirectReference.csproj", "{3A5E9918-20CB-4618-8113-AED4915E5FF6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
