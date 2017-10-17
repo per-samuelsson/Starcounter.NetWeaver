@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Starcounter2\Starcounter2.csproj" />
+    <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
 
 </Project>

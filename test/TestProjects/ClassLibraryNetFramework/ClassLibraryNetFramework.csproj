@@ -50,7 +50,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Starcounter2\Starcounter2.csproj">
+    <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj">
       <Project>{e9047c42-03cf-4b46-9a4d-62960c7259ed}</Project>
       <Name>Starcounter2</Name>
     </ProjectReference>
