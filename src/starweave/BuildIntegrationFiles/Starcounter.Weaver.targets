@@ -8,13 +8,19 @@
       Any project can opt-out by setting <DisableWeaving> to 'true'.
 
   -->
+
+  <!--
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+    
+  </PropertyGroup>
+  -->
   
   <PropertyGroup>
     <BuildDependsOn>$(BuildDependsOn);WeaveProject</BuildDependsOn>
   </PropertyGroup>
   
   <Target Name="WeaveProject" Condition="'$(DisableWeaving)' != 'true'" AfterTargets="Build">
-    <Message Text="WeaveProject: Weaving $(TargetPath)" Importance="high" />
+    <Message Text="WeaveProject: $(TargetFramework): Weaving $(TargetPath)" Importance="high" />
     <Error Condition="!Exists('$(TargetPath)')" Text="Weaving input file $(TargetPath) does not exist" />
   </Target>
 
