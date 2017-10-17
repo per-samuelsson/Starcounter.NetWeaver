@@ -12,7 +12,7 @@ namespace Starcounter.Hosting.Schema {
                 return assemblies.Values;
             }
         }
-
+        
         public DatabaseAssembly DefineAssembly(string name) {
             if (string.IsNullOrWhiteSpace(name)) {
                 throw new ArgumentNullException(nameof(name));
@@ -24,6 +24,24 @@ namespace Starcounter.Hosting.Schema {
             assemblies.Add(assembly.Name, assembly);
 
             return assembly;
+        }
+
+        public bool ContainSameAssemblies(DatabaseSchema other) {
+            if (other == null) {
+                throw new ArgumentNullException(nameof(other));
+            }
+
+            if (other.assemblies.Count != assemblies.Count) {
+                return false;
+            }
+
+            foreach (var otherKey in other.assemblies.Keys) {
+                if (!assemblies.ContainsKey(otherKey)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         internal DatabaseType FindType(string name) {
