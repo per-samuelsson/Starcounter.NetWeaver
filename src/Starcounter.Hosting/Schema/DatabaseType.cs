@@ -19,6 +19,18 @@ namespace Starcounter.Hosting.Schema {
             }
         }
 
+        public DatabaseType GetBaseType() {
+            return DefiningAssembly.DefiningSchema.FindType(BaseTypeName);
+        }
+
+        public bool IsDefinedIn(DatabaseAssembly assembly) {
+            if (assembly == null) {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
+            return assembly.Equals(DefiningAssembly);
+        }
+
         public void AddProperty(DatabaseProperty property) {
             if (property == null) {
                 throw new ArgumentNullException(nameof(property));
