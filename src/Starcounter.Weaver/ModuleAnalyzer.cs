@@ -4,7 +4,7 @@ using Starcounter.Hosting.Schema;
 using Starcounter.Weaver.Analysis;
 
 namespace Starcounter.Weaver {
-
+    
     public class ModuleAnalyzer {
         readonly PreAnalysis preAnalysis;
         readonly WeaverDiagnostics diag;
@@ -23,8 +23,8 @@ namespace Starcounter.Weaver {
             diag = diagnostics;
             databaseDiscoveryProvider = databaseTypeDiscovery;
         }
-        
-        public DatabaseAssembly DiscoverAssembly(ModuleDefinition module) {
+
+        public AnalysisResult DiscoverAssembly(ModuleDefinition module) {
             ModuleDefinition targetReference;
             DatabaseSchema schema;
             preAnalysis.Execute(module, out targetReference, out schema);
@@ -33,12 +33,16 @@ namespace Starcounter.Weaver {
             if (databaseDiscovery == null) {
                 return null;
             }
-            
+
             var assembly = schema.DefineAssembly(module.Name);
 
             databaseDiscovery.DiscoverAssembly(module, assembly);
 
-            return assembly;
+            return new AnalysisResult() {
+                SourceModule = module,
+                TargetModule = targetReference,
+                AnalyzedAssembly = assembly
+            };
         }
     }
 }
