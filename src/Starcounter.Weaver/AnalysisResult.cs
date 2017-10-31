@@ -11,5 +11,11 @@ namespace Starcounter.Weaver {
         public ModuleDefinition TargetModule { get; internal set; }
 
         public DatabaseAssembly AnalyzedAssembly { get; internal set; }
+
+        public DatabaseSchema Schema {
+            get {
+                return AnalyzedAssembly.DefiningSchema;
+            }
+        }
     }
 }
