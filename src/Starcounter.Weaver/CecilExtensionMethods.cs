@@ -1,4 +1,6 @@
-﻿using Mono.Cecil;
+﻿
+using Mono.Cecil;
+using Starcounter.Weaver.Rewriting;
 using System;
 using System.Linq;
 
@@ -7,9 +9,7 @@ namespace Starcounter.Weaver {
     public static class CecilExtensionMethods {
 
         public static bool IsAutoImplemented(this PropertyDefinition p) {
-            var type = p.DeclaringType;
-            var name = $"<{p.Name}>k__BackingField";
-            return type.HasFields && type.Fields.Any(f => f.Name == name);
+            return AutoImplementedProperty.IsAutoImplementedProperty(p);
         }
 
         public static bool HasCustomAttribute(this TypeDefinition type, Type attributeType, bool declaredOnly = false) {
