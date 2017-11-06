@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Starcounter.Weaver.Rewriting {
 
-    public static class WeaverAssertionMethods {
+    public static class RewritingAssertionMethods {
 
         public static void VerifyExpectedOriginalGetter(MethodDefinition getter) {
             Guard.NotNull(getter, nameof(getter));
