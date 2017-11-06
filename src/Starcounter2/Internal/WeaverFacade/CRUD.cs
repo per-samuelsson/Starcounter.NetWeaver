@@ -2,6 +2,10 @@
 
 namespace Starcounter2.Internal.WeaverFacade {
 
+    public interface IObject {
+
+    }
+
     public static class CRUD {
 
         public static void CreateCrud(out ulong dbId, out ulong dbRef, ulong crudHandle) {
@@ -22,6 +26,14 @@ namespace Starcounter2.Internal.WeaverFacade {
         }
 
         public static void SetNullableInt(ulong dbId, ulong dbRef, ulong crudHandle, int? value) {
+
+        }
+
+        public static IObject GetObject(ulong dbId, ulong dbRef, ulong crudHandle) {
+            return null;
+        }
+
+        public static void SetObject(ulong dbId, ulong dbRef, ulong crudHandle, IObject value) {
 
         }
     }
