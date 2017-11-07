@@ -8,16 +8,25 @@ namespace Starcounter.Weaver.Rewriting {
         protected readonly TypeDefinition type;
         protected readonly DatabaseTypeStateNames stateNames;
 
-        public FieldDefinition DbId {
+        public FieldReference DbId {
             get {
-                return type.Fields.Single(f => f.Name.Equals(stateNames.DbId));
+                return GetFieldRecursive(type, stateNames.DbId);
             }
         }
 
-        public FieldDefinition DbRef {
+        public FieldReference DbRef {
             get {
-                return type.Fields.Single(f => f.Name.Equals(stateNames.DbRef));
+                return GetFieldRecursive(type, stateNames.DbRef);
             }
+        }
+
+        static FieldReference GetFieldRecursive(TypeDefinition t, string name) {
+            var result = t.Fields.SingleOrDefault(f => f.Name.Equals(name));
+            if (result == null && t.BaseType != null) {
+                t = t.BaseType.Resolve();
+                return GetFieldRecursive(t, name);
+            }
+            return result;
         }
 
         public FieldDefinition CreateHandle {
@@ -44,6 +53,7 @@ namespace Starcounter.Weaver.Rewriting {
             Guard.NotNull(typeDefinition, nameof(typeDefinition));
             Guard.NotNull(names, nameof(names));
             type = typeDefinition;
+            stateNames = names;
         }
     }
 }
