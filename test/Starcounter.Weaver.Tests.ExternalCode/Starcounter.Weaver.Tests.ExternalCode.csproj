@@ -3,5 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Starcounter.Weaver.Tests.ExternalCodeBase\Starcounter.Weaver.Tests.ExternalCodeBase.csproj" />
+  </ItemGroup>
   
 </Project>
