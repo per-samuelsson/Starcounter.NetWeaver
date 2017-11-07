@@ -3,23 +3,20 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 namespace Starcounter.Weaver.Rewriting {
-    // What does the rewriter need?
-    // The type with those fields.
-    // Then the property, and getter and setter with possible cast.
-
+    
     public sealed class AutoImplementedPropertyRewriter {
-        readonly TypeDefinition type;
+        readonly DatabaseTypeState state;
         readonly Instruction[] setup;
-
-        public AutoImplementedPropertyRewriter(TypeDefinition typeDefinition) {
-            Guard.NotNull(typeDefinition, nameof(typeDefinition));
-            type = typeDefinition;
+        
+        public AutoImplementedPropertyRewriter(DatabaseTypeState typeState) {
+            Guard.NotNull(typeState, nameof(typeState));
+            state = typeState;
 
             setup = new Instruction[4];
             setup[0] = Instruction.Create(OpCodes.Ldarg_0);
-            setup[1] = Instruction.Create(OpCodes.Ldfld, typeDefinition.GetIdField());
+            setup[1] = Instruction.Create(OpCodes.Ldfld, typeState.DbId);
             setup[2] = Instruction.Create(OpCodes.Ldarg_0);
-            setup[3] = Instruction.Create(OpCodes.Ldfld, typeDefinition.GetRefField());
+            setup[3] = Instruction.Create(OpCodes.Ldfld, typeState.DbRef);
 
             // Pre-create instruction sequence with fields, like
             // ldarg.0
@@ -54,7 +51,7 @@ namespace Starcounter.Weaver.Rewriting {
             }
         }
 
-        void RewriteGetter(AutoImplementedProperty property, MethodDefinition getMethod) {
+        void RewriteGetter(AutoImplementedProperty property, MethodDefinition readMethod) {
             // ldarg.0
             // ldfld [property.BackingField]
             // ret
@@ -78,12 +75,12 @@ namespace Starcounter.Weaver.Rewriting {
             for (int i = 0; i < setup.Length; i++) {
                 il.Append(setup[i]);
             }
-            il.Append(il.Create(OpCodes.Ldsfld, property.Property.GetPropertyHandleField()));
-            il.Append(il.Create(OpCodes.Call, getMethod));
+            il.Append(il.Create(OpCodes.Ldsfld, state.GetPropertyHandle(property.Property)));
+            il.Append(il.Create(OpCodes.Call, readMethod));
             il.Append(il.Create(OpCodes.Ret));
         }
 
-        void RewriteSetter(AutoImplementedProperty property, MethodDefinition setMethod) {
+        void RewriteSetter(AutoImplementedProperty property, MethodDefinition writeMethod) {
             // ldarg.0
             // ldarg.1
             // stfld [property.BackingField]
@@ -109,9 +106,9 @@ namespace Starcounter.Weaver.Rewriting {
             for (int i = 0; i < setup.Length; i++) {
                 il.Append(setup[i]);
             }
-            il.Append(il.Create(OpCodes.Ldsfld, property.Property.GetPropertyHandleField()));
+            il.Append(il.Create(OpCodes.Ldsfld, state.GetPropertyHandle(property.Property)));
             il.Append(il.Create(OpCodes.Ldarg_1));
-            il.Append(il.Create(OpCodes.Call, setMethod));
+            il.Append(il.Create(OpCodes.Call, writeMethod));
             il.Append(il.Create(OpCodes.Ret));
         }
 
