@@ -6,28 +6,29 @@ namespace Starcounter.Weaver.Rewriting {
 
     public class DatabaseTypeState {
         protected readonly TypeDefinition type;
+        protected readonly DatabaseTypeStateNames stateNames;
 
         public FieldDefinition DbId {
             get {
-                return type.Fields.Single(f => f.Name.Equals(DatabaseTypeStateNames.DbId));
+                return type.Fields.Single(f => f.Name.Equals(stateNames.DbId));
             }
         }
 
         public FieldDefinition DbRef {
             get {
-                return type.Fields.Single(f => f.Name.Equals(DatabaseTypeStateNames.DbRef));
+                return type.Fields.Single(f => f.Name.Equals(stateNames.DbRef));
             }
         }
 
         public FieldDefinition CreateHandle {
             get {
-                return type.Fields.Single(f => f.Name.Equals(DatabaseTypeStateNames.CreateHandle));
+                return type.Fields.Single(f => f.Name.Equals(stateNames.CreateHandle));
             }
         }
 
         public FieldDefinition DeleteHandle {
             get {
-                return type.Fields.Single(f => f.Name.Equals(DatabaseTypeStateNames.DeleteHandle));
+                return type.Fields.Single(f => f.Name.Equals(stateNames.DeleteHandle));
             }
         }
 
@@ -36,11 +37,12 @@ namespace Starcounter.Weaver.Rewriting {
         }
 
         public FieldDefinition GetPropertyHandle(string propertyName) {
-            return type.Fields.Single(f => f.Name.Equals(DatabaseTypeStateNames.GetPropertyHandleName(propertyName)));
+            return type.Fields.Single(f => f.Name.Equals(stateNames.GetPropertyHandleName(propertyName)));
         }
 
-        public DatabaseTypeState(TypeDefinition typeDefinition) {
+        public DatabaseTypeState(TypeDefinition typeDefinition, DatabaseTypeStateNames names) {
             Guard.NotNull(typeDefinition, nameof(typeDefinition));
+            Guard.NotNull(names, nameof(names));
             type = typeDefinition;
         }
     }
