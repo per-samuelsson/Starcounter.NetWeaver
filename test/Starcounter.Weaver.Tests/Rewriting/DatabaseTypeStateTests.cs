@@ -68,5 +68,31 @@ namespace Starcounter.Weaver.Tests {
             Assert.NotNull(state.DbId);
             Assert.NotNull(state.DbRef);
         }
+        
+        [Fact]
+        public void EmittingFullState() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
+            Assert.NotNull(type);
+            type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
+            Assert.NotNull(type);
+
+            var emitter = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
+            emitter.EmitReferenceFields();
+            emitter.EmitCRUDHandles();
+            emitter.EmitPropertyCRUDHandle("test");
+            emitter.EmitPropertyCRUDHandle("test2");
+            emitter.EmitPropertyCRUDHandle("test3");
+
+            var state = new DatabaseTypeState(type, new DatabaseTypeStateNames());
+            Assert.NotNull(state.DbId);
+            Assert.NotNull(state.DbRef);
+            Assert.NotNull(state.CreateHandle);
+            Assert.NotNull(state.DeleteHandle);
+            Assert.NotNull(state.GetPropertyHandle("test"));
+            Assert.NotNull(state.GetPropertyHandle("test2"));
+            Assert.NotNull(state.GetPropertyHandle("test3"));
+        }
     }
 }
