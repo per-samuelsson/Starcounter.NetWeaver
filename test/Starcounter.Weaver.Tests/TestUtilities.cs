@@ -56,8 +56,8 @@ namespace Starcounter.Weaver.Tests {
             }
         }
 
-        public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null) {
-            if (currentAssemblyModule == null) {
+        public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null, bool alwaysReRead = false) {
+            if (currentAssemblyModule == null || alwaysReRead) {
                 var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
                 readerParameters = readerParameters ?? new DefaultModuleReaderParameters(currentAssemblyPath).Parameters;
                 var module = ModuleDefinition.ReadModule(currentAssemblyPath, readerParameters);

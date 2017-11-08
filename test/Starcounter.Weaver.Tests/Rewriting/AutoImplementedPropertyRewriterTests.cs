@@ -21,7 +21,7 @@ namespace Starcounter.Weaver.Tests {
         
         [Fact]
         public void RewriterAcceptStateWithReferenceFields() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
             var type = module.Types.Single(t => t.FullName == typeof(ClassWithIntAutoProperty).FullName);
             Assert.NotNull(type);
@@ -34,7 +34,7 @@ namespace Starcounter.Weaver.Tests {
 
         [Fact]
         public void Test2() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
             var type = module.Types.Single(t => t.FullName == typeof(ClassWithIntAutoProperty).FullName);
             Assert.NotNull(type);
