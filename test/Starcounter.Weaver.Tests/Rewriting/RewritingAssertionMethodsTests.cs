@@ -30,8 +30,37 @@ namespace Starcounter.Weaver.Tests {
         }
     }
 
+    class InvalidReadMethods {
+
+        int NotStatic(ulong i1, ulong i2, ulong i3) { return 42; }
+
+        static int NoParameters() { return 42; }
+
+        static int ToManyParameters(ulong i1, ulong i2, ulong i3, ulong i4) { return 42; }
+
+        static int WrongParameterType(ulong i1, int i2, ulong i3) { return 42; }
+    }
+
+    class InvalidWriteMethods {
+
+        void NotStatic(ulong i1, ulong i2, ulong i3, ulong u4) { }
+
+        int ReturnValue(ulong i1, ulong i2, ulong i3, ulong u4) { return 42; }
+
+        static void NoParameters() { }
+
+        static void ToManyParameters(ulong i1, ulong i2, ulong i3, ulong i4, ulong i5) { }
+
+        static void WrongParameterType(ulong i1, int i2, ulong i3, ulong i4) { }
+    }
+
+    class ProperReadAndWriteMethods {
+        public static int ReadInt(ulong i1, ulong i2, ulong i3) { return 42; }
+        public static void WriteInt(ulong i1, ulong i2, ulong i3, int value) {  }
+    }
+
     public class RewritingAssertionMethodsTests {
-        
+
         [Fact]
         public void BadInputReportMeaningfulErrors() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
@@ -83,6 +112,64 @@ namespace Starcounter.Weaver.Tests {
                     RewritingAssertionMethods.VerifyExpectedOriginalSetter(setter);
                 }
             }
+        }
+
+        [Fact]
+        public void DetectInvalidReadMethods() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var invalidReadMethods = module.Types.Single(t => t.FullName == typeof(InvalidReadMethods).FullName);
+            Assert.NotNull(invalidReadMethods);
+
+            var intProperties = module.Types.Single(t => t.FullName == typeof(IntAutoProperties).FullName);
+            Assert.NotNull(intProperties);
+
+            var dummy = new AutoImplementedProperty(intProperties.Properties.First());
+            foreach (var readMethod in invalidReadMethods.Methods) {
+                var e = Assert.Throws<ArgumentException>(() => {
+                    RewritingAssertionMethods.VerifyExpectedReadMethod(dummy, readMethod);
+                });
+            }
+        }
+
+        [Fact]
+        public void DetectInvalidWriteMethods() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var invalidWriteMethods = module.Types.Single(t => t.FullName == typeof(InvalidWriteMethods).FullName);
+            Assert.NotNull(invalidWriteMethods);
+
+            var intProperties = module.Types.Single(t => t.FullName == typeof(IntAutoProperties).FullName);
+            Assert.NotNull(intProperties);
+
+            var dummy = new AutoImplementedProperty(intProperties.Properties.First());
+            foreach (var writeMethod in invalidWriteMethods.Methods) {
+                var e = Assert.Throws<ArgumentException>(() => {
+                    RewritingAssertionMethods.VerifyExpectedWriteMethod(dummy, writeMethod);
+                });
+            }
+        }
+
+        [Fact]
+        public void ProperReadAndWriteMethodsPassVerification() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var properReadWriteMethods = module.Types.Single(t => t.FullName == typeof(ProperReadAndWriteMethods).FullName);
+            Assert.NotNull(properReadWriteMethods);
+
+            var readInt = properReadWriteMethods.Methods.Single(m => m.Name == nameof(ProperReadAndWriteMethods.ReadInt));
+            Assert.NotNull(readInt);
+
+            var writeInt = properReadWriteMethods.Methods.Single(m => m.Name == nameof(ProperReadAndWriteMethods.WriteInt));
+            Assert.NotNull(writeInt);
+
+            var intProperties = module.Types.Single(t => t.FullName == typeof(IntAutoProperties).FullName);
+            Assert.NotNull(intProperties);
+
+            var dummy = new AutoImplementedProperty(intProperties.Properties.First());
+
+            RewritingAssertionMethods.VerifyExpectedReadMethod(dummy, readInt);
+            RewritingAssertionMethods.VerifyExpectedWriteMethod(dummy, writeInt);
         }
     }
 }
