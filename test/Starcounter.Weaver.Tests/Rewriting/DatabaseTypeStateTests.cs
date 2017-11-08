@@ -31,68 +31,77 @@ namespace Starcounter.Weaver.Tests {
 
         [Fact]
         public void SingleClassStateEmission() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
-            var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
-            Assert.NotNull(type);
-            type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
-            Assert.NotNull(type);
+            using (var writeModule = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = writeModule.Module;
 
-            var names = new DatabaseTypeStateNames();
-            var emitter = new DatabaseTypeStateEmitter(type, names);
-            emitter.EmitReferenceFields();
+                var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
+                Assert.NotNull(type);
+                type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
+                Assert.NotNull(type);
 
-            var state = (DatabaseTypeState) emitter;
-            Assert.NotNull(state.DbId);
-            Assert.NotNull(state.DbRef);
+                var names = new DatabaseTypeStateNames();
+                var emitter = new DatabaseTypeStateEmitter(type, names);
+                emitter.EmitReferenceFields();
 
-            emitter.EmitCRUDHandles();
-            Assert.NotNull(state.CreateHandle);
-            Assert.NotNull(state.DeleteHandle);
+                var state = (DatabaseTypeState)emitter;
+                Assert.NotNull(state.DbId);
+                Assert.NotNull(state.DbRef);
 
-            emitter.EmitPropertyCRUDHandle("test");
-            Assert.NotNull(state.GetPropertyHandle("test"));
+                emitter.EmitCRUDHandles();
+                Assert.NotNull(state.CreateHandle);
+                Assert.NotNull(state.DeleteHandle);
+
+                emitter.EmitPropertyCRUDHandle("test");
+                Assert.NotNull(state.GetPropertyHandle("test"));
+            }
         }
 
         [Fact]
         public void DerivedClassStateLookup() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
-            var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
-            Assert.NotNull(type);
-            type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.Derived));
-            Assert.NotNull(type);
+            using (var writeModule = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = writeModule.Module;
 
-            var names = new CustomStateNames();
-            var state = new DatabaseTypeState(type, names);
-            Assert.NotNull(state.DbId);
-            Assert.NotNull(state.DbRef);
+                var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
+                Assert.NotNull(type);
+                type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.Derived));
+                Assert.NotNull(type);
+
+                var names = new CustomStateNames();
+                var state = new DatabaseTypeState(type, names);
+                Assert.NotNull(state.DbId);
+                Assert.NotNull(state.DbRef);
+            }
         }
         
         [Fact]
         public void EmittingFullState() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
-            var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
-            Assert.NotNull(type);
-            type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
-            Assert.NotNull(type);
+            using (var writeModule = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = writeModule.Module;
 
-            var emitter = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
-            emitter.EmitReferenceFields();
-            emitter.EmitCRUDHandles();
-            emitter.EmitPropertyCRUDHandle("test");
-            emitter.EmitPropertyCRUDHandle("test2");
-            emitter.EmitPropertyCRUDHandle("test3");
+                var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
+                Assert.NotNull(type);
+                type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
+                Assert.NotNull(type);
 
-            var state = new DatabaseTypeState(type, new DatabaseTypeStateNames());
-            Assert.NotNull(state.DbId);
-            Assert.NotNull(state.DbRef);
-            Assert.NotNull(state.CreateHandle);
-            Assert.NotNull(state.DeleteHandle);
-            Assert.NotNull(state.GetPropertyHandle("test"));
-            Assert.NotNull(state.GetPropertyHandle("test2"));
-            Assert.NotNull(state.GetPropertyHandle("test3"));
+                var emitter = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
+                emitter.EmitReferenceFields();
+                emitter.EmitCRUDHandles();
+                emitter.EmitPropertyCRUDHandle("test");
+                emitter.EmitPropertyCRUDHandle("test2");
+                emitter.EmitPropertyCRUDHandle("test3");
+
+                var state = new DatabaseTypeState(type, new DatabaseTypeStateNames());
+                Assert.NotNull(state.DbId);
+                Assert.NotNull(state.DbRef);
+                Assert.NotNull(state.CreateHandle);
+                Assert.NotNull(state.DeleteHandle);
+                Assert.NotNull(state.GetPropertyHandle("test"));
+                Assert.NotNull(state.GetPropertyHandle("test2"));
+                Assert.NotNull(state.GetPropertyHandle("test3"));
+            }
         }
     }
 }
