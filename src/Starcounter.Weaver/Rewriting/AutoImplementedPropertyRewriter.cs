@@ -17,38 +17,30 @@ namespace Starcounter.Weaver.Rewriting {
             setup[1] = Instruction.Create(OpCodes.Ldfld, typeState.DbId);
             setup[2] = Instruction.Create(OpCodes.Ldarg_0);
             setup[3] = Instruction.Create(OpCodes.Ldfld, typeState.DbRef);
-
-            // Pre-create instruction sequence with fields, like
-            // ldarg.0
-            // ldfld dbid
-            // ldarg.0
-            // ldfld dbref
-            // ldsfld crudHandle
-            //
-            // When writing tests, check if this work even if those fields are in a parent
-            // class (we emit them only on root level).
-            // TODO:
         }
         
-        public void Rewrite(AutoImplementedProperty property, MethodDefinition getMethod, MethodDefinition setMethod) {
+        public void Rewrite(AutoImplementedProperty property, MethodDefinition readMethod, MethodDefinition writeMethod) {
             Guard.NotNull(property, nameof(property));
-            Guard.NotNull(getMethod, nameof(getMethod));
-            Guard.NotNull(setMethod, nameof(setMethod));
+            Guard.NotNull(readMethod, nameof(readMethod));
+            Guard.NotNull(writeMethod, nameof(writeMethod));
 
-            // For primitives, we could verify property type is same as target method
-            // return type.
-            //
+            AssertValidReadMethod(property, readMethod);
+            AssertValidWriteMethod(property, writeMethod);
+            
             // For object writes, there might be a cast too.
+            // TODO:
 
             var propDef = property.Property;
-            VerifyExpectedGetter(propDef.GetMethod);
-            RewriteGetter(property, getMethod);
+            AssertExpectedGetter(propDef.GetMethod);
+            RewriteGetter(property, readMethod);
 
             var setter = propDef.SetMethod;
             if (setter != null) {
-                VerifyExpectedSetter(setter);
-                RewriteSetter(property, setMethod);
+                AssertExpectedSetter(setter);
+                RewriteSetter(property, writeMethod);
             }
+
+            propDef.DeclaringType.Fields.Remove(property.BackingField);
         }
 
         void RewriteGetter(AutoImplementedProperty property, MethodDefinition readMethod) {
@@ -113,14 +105,26 @@ namespace Starcounter.Weaver.Rewriting {
         }
 
         // This one will eventually be conditional, part of only
+        // non-optimized builds. Initially, we'll be paranoid though.
+        void AssertValidReadMethod(AutoImplementedProperty property, MethodDefinition method) {
+            RewritingAssertionMethods.VerifyExpectedReadMethod(property, method);
+        }
+
+        // This one will eventually be conditional, part of only
         // non-optimized builds. Initially, we'll be paranoid though. 
-        void VerifyExpectedGetter(MethodDefinition getter) {
+        void AssertValidWriteMethod(AutoImplementedProperty property, MethodDefinition method) {
+            RewritingAssertionMethods.VerifyExpectedWriteMethod(property, method);
+        }
+
+        // This one will eventually be conditional, part of only
+        // non-optimized builds. Initially, we'll be paranoid though. 
+        void AssertExpectedGetter(MethodDefinition getter) {
             RewritingAssertionMethods.VerifyExpectedOriginalGetter(getter);
         }
 
         // This one will eventually be conditional, part of only
         // non-optimized builds. Initially, we'll be paranoid though. 
-        void VerifyExpectedSetter(MethodDefinition setter) {
+        void AssertExpectedSetter(MethodDefinition setter) {
             RewritingAssertionMethods.VerifyExpectedOriginalSetter(setter);
         }
     }
