@@ -92,7 +92,7 @@ namespace Starcounter.Weaver.Rewriting {
             //
             // (Nop's excluded) 
 
-            var getter = property.Property.GetMethod;
+            var getter = property.Property.SetMethod;
             getter.Body.Instructions.Clear();
             var il = getter.Body.GetILProcessor();
             for (int i = 0; i < setup.Length; i++) {
