@@ -31,7 +31,7 @@ namespace Starcounter.Weaver.Tests {
 
         [Fact]
         public void SingleClassStateEmission() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
             var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
             Assert.NotNull(type);
@@ -56,7 +56,7 @@ namespace Starcounter.Weaver.Tests {
 
         [Fact]
         public void DerivedClassStateLookup() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
             var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
             Assert.NotNull(type);
@@ -71,7 +71,7 @@ namespace Starcounter.Weaver.Tests {
         
         [Fact]
         public void EmittingFullState() {
-            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var module = TestUtilities.GetModuleOfCurrentAssembly(alwaysReRead: true);
 
             var type = module.Types.Single(t => t.FullName == typeof(DatabaseTypeStateTests).FullName);
             Assert.NotNull(type);
