@@ -23,19 +23,19 @@ namespace Starcounter.Weaver {
             diag = diagnostics;
             databaseDiscoveryProvider = databaseTypeDiscovery;
         }
-
-        public AnalysisResult DiscoverAssembly(ModuleDefinition module) {
+        
+        public AnalysisResult Analyze(ModuleDefinition module, IAssemblyAnalyzer assemblyAnalyzer) {
             ModuleDefinition targetReference;
             DatabaseSchema schema;
-            preAnalysis.Execute(module, out targetReference, out schema);
+            preAnalysis.Execute(module, assemblyAnalyzer, out targetReference, out schema);
 
-            var databaseDiscovery = databaseDiscoveryProvider.ProvideDiscovery(module, targetReference, schema);
+            var databaseDiscovery = databaseDiscoveryProvider.ProvideDiscovery(module, assemblyAnalyzer, targetReference, schema);
             if (databaseDiscovery == null) {
                 return null;
             }
 
             var assembly = schema.DefineAssembly(module.Name);
-
+            
             databaseDiscovery.DiscoverAssembly(module, assembly);
 
             return new AnalysisResult() {

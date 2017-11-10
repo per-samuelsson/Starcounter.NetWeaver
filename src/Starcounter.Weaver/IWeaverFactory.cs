@@ -20,11 +20,10 @@ namespace Starcounter.Weaver {
         /// <summary>
         /// Provides weaver with the rewriter to use to transform an assembly. 
         /// </summary>
-        /// <param name="host">The weaver host</param>
         /// <param name="analysis">Result of previous analysis.</param>
         /// <returns>A rewriter that will rewrite the source module of the
         /// given analysis result, or null of rewriting is not supported.
         /// </returns>
-        IAssemblyRewriter ProviderRewriter(IWeaverHost host, AnalysisResult analysis);
+        IAssemblyRewriter ProviderRewriter(AnalysisResult analysis);
     }
 }

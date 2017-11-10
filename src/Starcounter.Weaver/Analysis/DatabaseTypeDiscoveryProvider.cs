@@ -5,23 +5,24 @@ using Starcounter.Hosting.Schema;
 namespace Starcounter.Weaver.Analysis {
 
     public class DatabaseTypeDiscoveryProvider {
-        readonly WeaverDiagnostics diag;
+        readonly WeaverDiagnostics diagnostics;
 
-        public DatabaseTypeDiscoveryProvider(WeaverDiagnostics diagnostics) {
-            diag = diagnostics;
+        public DatabaseTypeDiscoveryProvider(WeaverDiagnostics weaverDiagnostics) {
+            Guard.NotNull(weaverDiagnostics, nameof(weaverDiagnostics));
+            diagnostics = weaverDiagnostics;
         }
 
-        public IDatabaseTypeDiscovery ProvideDiscovery(ModuleDefinition module, ModuleDefinition preAnalysisTarget, DatabaseSchema preAnalysisSchema) {
+        public IDatabaseTypeDiscovery ProvideDiscovery(ModuleDefinition module, IAssemblyAnalyzer assemblyAnalyzer, ModuleDefinition preAnalysisTarget, DatabaseSchema preAnalysisSchema) {
             if (preAnalysisTarget == null) {
-                diag.WriteWarning($"Assembly {module} does not reference given target.");
+                diagnostics.WriteWarning($"Assembly {module} does not reference given target.");
                 return null;
             }
 
-            return BeginDiscovery(module);
+            return BeginDiscovery(module, assemblyAnalyzer);
         }
 
-        protected virtual IDatabaseTypeDiscovery BeginDiscovery(ModuleDefinition module) {
-            return new DefaultDatabaseTypeDiscovery();
+        protected virtual IDatabaseTypeDiscovery BeginDiscovery(ModuleDefinition module, IAssemblyAnalyzer assemblyAnalyzer) {
+            return new DefaultDatabaseTypeDiscovery(diagnostics, assemblyAnalyzer);
         }
     }
 }

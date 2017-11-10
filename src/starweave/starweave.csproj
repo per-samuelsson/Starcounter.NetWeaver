@@ -4,9 +4,15 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta6" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Starcounter.Weaver\Starcounter.Weaver.csproj" />
+    <ProjectReference Include="..\Starcounter.Hosting\Starcounter.Hosting.csproj" />
+    <ProjectReference Include="..\Starcounter2\Starcounter2.csproj" />
   </ItemGroup>
 
 </Project>

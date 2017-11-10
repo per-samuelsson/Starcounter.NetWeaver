@@ -21,12 +21,12 @@ namespace Starcounter.Weaver.Analysis {
             diag = diagnostics;
         }
 
-        public void Execute(ModuleDefinition module, out ModuleDefinition target, out DatabaseSchema externalSchema) {
+        public void Execute(ModuleDefinition module, IAssemblyAnalyzer analyzer, out ModuleDefinition target, out DatabaseSchema externalSchema) {
             target = null;
             externalSchema = null;
-
+            
             var referenceFinder = SingleModuleReferenceFinder.Run(module, refDiscovery, (m) => {
-                return IsTargetModule(m);
+                return analyzer.IsTargetReference(m);
             });
 
             if (referenceFinder.Result == null) {
@@ -43,9 +43,7 @@ namespace Starcounter.Weaver.Analysis {
                 }
             }
         }
-
-        protected abstract bool IsTargetModule(ModuleDefinition candidate);
-
+        
         protected abstract DatabaseSchema DiscoverSchema(ModuleDefinition candidate, SchemaSerializationContext serializationContext);
     }
 }

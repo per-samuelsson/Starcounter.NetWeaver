@@ -5,6 +5,6 @@ namespace Starcounter.Weaver.Analysis {
 
     public interface IDatabaseTypeDiscovery {
 
-        DatabaseSchema DiscoverAssembly(ModuleDefinition module, DatabaseAssembly assembly);
+        void DiscoverAssembly(ModuleDefinition module, DatabaseAssembly assembly);
     }
 }

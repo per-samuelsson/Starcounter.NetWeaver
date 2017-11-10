@@ -2,9 +2,15 @@
 using Starcounter.Weaver;
 using System;
 using System.IO;
+using Mono.Cecil;
+using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Rewriting;
+using System.Collections.Generic;
+using System.Linq;
+using starweave.Weaver;
 
 namespace starweave {
-
+    
     class Program {
 
         static int Main(string[] args) {
@@ -26,8 +32,8 @@ namespace starweave {
                 Directory.CreateDirectory(dir);
             }
             
-            var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir);
-            weaver.Weave();
+            var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, new StarcounterWeaverFactory());
+            // weaver.Weave();
 
             Console.WriteLine($"Weaved {assemblyFile} -> {dir}");
 

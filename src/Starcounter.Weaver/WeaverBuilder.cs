@@ -15,19 +15,24 @@ namespace Starcounter.Weaver {
         /// <param name="assemblyFile"></param>
         /// <param name="outputDirectory"></param>
         /// <returns></returns>
-        public static IWeaver BuildDefaultFromAssemblyFile(string assemblyFile, string outputDirectory) {
+        public static IWeaver BuildDefaultFromAssemblyFile(string assemblyFile, string outputDirectory, IWeaverFactory weaverFactory) {
+            Guard.NotNull(weaverFactory, nameof(weaverFactory));
             Guard.FileExists(assemblyFile, nameof(assemblyFile));
             Guard.DirectoryExists(outputDirectory, nameof(outputDirectory));
 
+            // Create diagnostics
             var diagnosticFormatter = new MsBuildAdheringFormatter("Starcounter.Postcompiler");
             var diagnostics = new TextWriterWeaverDiagnostics(Console.Error, diagnosticFormatter);
 
+            // Create module reader
             var readerParameters = new DefaultModuleReaderParameters(assemblyFile);
             var moduleReader = new AssemblyFileModuleReader(assemblyFile, diagnostics, readerParameters.Parameters);
 
+            // Create module writer
             var targetPath = Path.Combine(outputDirectory, Path.GetFileName(assemblyFile));
             var moduleWriter = new AssemblyFileModuleWriter(targetPath, diagnostics);
 
+            // Create serialization context
             var schemaSerializer = new JsonNETSchemaSerializer(new DefaultAdvicedContractResolver());
             var serializationContext = new EmbeddedResourceSchemaSerializationContext(
                 schemaSerializer,
@@ -35,21 +40,25 @@ namespace Starcounter.Weaver {
                 diagnostics
                 );
 
+            // Create pre analysis, including module reference discovery
             var preAnalysis = new DefaultPreAnalysis(
                 new ModuleReferenceDiscovery(ModuleReferenceDiscoveryAdvisor.PossibleDefault, diagnostics),
                 serializationContext,
                 diagnostics
                 );
 
+            // Now create the analyzer, and the provider of type discovery.
             var analyzer = new ModuleAnalyzer(
                 preAnalysis,
                 new DatabaseTypeDiscoveryProvider(diagnostics),
                 diagnostics
             );
 
+            // Create module weaver
             var weaver = new ModuleWeaver(serializationContext);
 
-            return new AssemblyWeaver(diagnostics, moduleReader, analyzer, weaver, moduleWriter);
+            var host = new DefaultWeaverHost(diagnostics);
+            return new AssemblyWeaver(host, weaverFactory, moduleReader, analyzer, weaver, moduleWriter);
         }
     }
 }
