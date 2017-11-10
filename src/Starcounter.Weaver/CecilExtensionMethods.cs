@@ -1,6 +1,5 @@
 ﻿
 using Mono.Cecil;
-using Starcounter.Weaver.Rewriting;
 using System;
 using System.Linq;
 

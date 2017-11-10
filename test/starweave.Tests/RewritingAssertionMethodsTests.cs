@@ -1,10 +1,11 @@
 ﻿
+using Starcounter.Weaver;
 using Starcounter.Weaver.Rewriting;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Weaver.Tests {
+namespace starweave.Tests {
 
     abstract class ClassWithAbstractMethod {
 

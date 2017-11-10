@@ -3,7 +3,7 @@ using Mono.Cecil;
 using System;
 using System.Linq;
 
-namespace Starcounter.Weaver.Rewriting {
+namespace Starcounter.Weaver {
 
     public sealed class AutoImplementedProperty {
         readonly PropertyDefinition definition;

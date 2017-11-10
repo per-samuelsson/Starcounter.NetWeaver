@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Weaver.Tests {
+namespace starweave.Tests {
 
     public class DatabaseTypeStateTests {
 

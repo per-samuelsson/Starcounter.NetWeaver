@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\starweave\starweave.csproj" />
+    <ProjectReference Include="..\Starcounter.Weaver.Tests.ExternalCode\Starcounter.Weaver.Tests.ExternalCode.csproj" />
   </ItemGroup>
 
 </Project>

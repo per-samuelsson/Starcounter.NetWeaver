@@ -1,9 +1,10 @@
 ﻿
+using Starcounter.Weaver;
 using Starcounter.Weaver.Rewriting;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Weaver.Tests {
+namespace starweave.Tests {
 
     public class ClassWithIntAutoProperty {
 
@@ -18,7 +19,23 @@ namespace Starcounter.Weaver.Tests {
     }
     
     public class AutoImplementedPropertyRewriterTests {
-        
+
+        [Fact]
+        public void AllPropertiesOfIntAutoPropertiesHasExpectedImplementation() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var type = module.Types.Single(t => t.FullName == typeof(IntAutoProperties).FullName);
+            Assert.NotNull(type);
+
+            Assert.True(type.Properties.All(p => {
+                RewritingAssertionMethods.VerifyExpectedOriginalGetter(p.GetMethod);
+                if (p.SetMethod != null) {
+                    RewritingAssertionMethods.VerifyExpectedOriginalSetter(p.SetMethod);
+                }
+                return true;
+            }));
+        }
+
         [Fact]
         public void RewriterAcceptStateWithReferenceFields() {
 

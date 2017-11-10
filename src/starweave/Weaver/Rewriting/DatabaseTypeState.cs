@@ -20,6 +20,8 @@ namespace Starcounter.Weaver.Rewriting {
             }
         }
 
+        // Move to engine.
+        // TODO:
         static FieldReference GetFieldRecursive(TypeDefinition t, string name) {
             var result = t.Fields.SingleOrDefault(f => f.Name.Equals(name));
             if (result == null && t.BaseType != null) {
