@@ -26,7 +26,7 @@ namespace starweave.Weaver {
         }
 
         bool IAssemblyAnalyzer.IsTargetReference(ModuleDefinition module) {
-            return module.Name.Equals("Starcounter2");
+            return module.Name.Equals("Starcounter2.dll");
         }
 
         void IAssemblyAnalyzer.DiscoveryAssembly(DatabaseAssembly assembly) {
