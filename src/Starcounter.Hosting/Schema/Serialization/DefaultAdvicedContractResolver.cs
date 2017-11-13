@@ -10,7 +10,9 @@ namespace Starcounter.Hosting.Schema.Serialization {
 
             var advice = new TypeSerializationAdvice(typeof(DatabaseSchema));
             advice.PrivateFields.Add("assemblies");
+            advice.PrivateFields.Add("dataTypes");
             advice.IgnoredProperties.Add(nameof(DatabaseSchema.Assemblies));
+            advice.IgnoredProperties.Add(nameof(DatabaseSchema.DataTypes));
             advices.Add(advice);
 
             advice = new TypeSerializationAdvice(typeof(DatabaseAssembly));
