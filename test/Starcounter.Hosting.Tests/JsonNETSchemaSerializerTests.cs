@@ -33,9 +33,11 @@ namespace Starcounter.Hosting.Tests {
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
             Assert.NotEmpty(bytes);
+            Assert.Empty(schema.DataTypes);
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Empty(schema2.Assemblies);
+            Assert.Empty(schema2.DataTypes);
         }
 
         [Fact]
@@ -45,6 +47,7 @@ namespace Starcounter.Hosting.Tests {
             var schema = new DatabaseSchema();
             schema.DefineAssembly("test");
             Assert.Equal(1, schema.Assemblies.Count());
+            Assert.Empty(schema.DataTypes);
 
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
@@ -53,11 +56,48 @@ namespace Starcounter.Hosting.Tests {
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Equal(1, schema2.Assemblies.Count());
+            Assert.Empty(schema2.DataTypes);
 
             var testAssembly = schema.Assemblies.Single();
             Assert.NotNull(testAssembly);
             Assert.Equal("test", testAssembly.Name);
             Assert.True(schema2.ContainSameAssemblies(testAssembly.DefiningSchema));
+        }
+
+        [Fact]
+        public void CanRoundtripWithCustomDefinedTypes() {
+            var serializer = CreateSerializer();
+            
+            var schema = new DatabaseSchema();
+            var names = new[] {
+                "test",
+                "test.foo",
+                "test.bar",
+                "foo.bar.test.whatever"
+            };
+
+            foreach (var name in names) {
+                schema.DefineDataType(name);
+            }
+
+            Assert.True(schema.Assemblies.Count() == 0);
+            Assert.True(schema.DataTypes.Count() == names.Count());
+            foreach (var name in names) {
+                Assert.True(schema.DataTypes.Any(t => t.Name == name));
+            }
+            
+            var bytes = serializer.Serialize(schema);
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+
+            var schema2 = serializer.Deserialize(bytes);
+            Assert.NotNull(schema2);
+            Assert.Empty(schema2.Assemblies);
+            Assert.Equal(names.Count(), schema2.DataTypes.Count());
+
+            foreach (var name in names) {
+                Assert.True(schema2.DataTypes.Any(t => t.Name == name));
+            }
         }
 
         [Fact]
