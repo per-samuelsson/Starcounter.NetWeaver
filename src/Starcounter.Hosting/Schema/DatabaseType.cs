@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Starcounter.Hosting.Schema {
 
-    public class DatabaseType {
+    public class DatabaseType : IDataType {
         readonly Dictionary<string, DatabaseProperty> properties = new Dictionary<string, DatabaseProperty>();
 
         public DatabaseAssembly DefiningAssembly { get; internal set; }
@@ -18,6 +18,8 @@ namespace Starcounter.Hosting.Schema {
                 return properties.Values;
             }
         }
+
+        string IDataType.Name => FullName;
 
         public DatabaseType GetBaseType() {
             return DefiningAssembly.DefiningSchema.FindType(BaseTypeName);
