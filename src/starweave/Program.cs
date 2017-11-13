@@ -3,12 +3,27 @@ using Starcounter.Weaver;
 using System;
 using System.IO;
 using starweave.Weaver;
+using System.Diagnostics;
 
 namespace starweave {
 
     class Program {
 
+        public static void CheckForDebugSwitch(ref string[] args) {
+            if (args.Length > 0) {
+                var first = args[0].TrimStart('-');
+                if (first.Equals("sc-debug", StringComparison.InvariantCultureIgnoreCase)) {
+                    Debugger.Launch();
+                    var stripped = new string[args.Length - 1];
+                    Array.Copy(args, 1, stripped, 0, args.Length - 1);
+                    args = stripped;
+                }
+            }
+        }
+
         static int Main(string[] args) {
+            CheckForDebugSwitch(ref args);
+
             if (args.Length == 0) {
                 Console.Error.WriteLine("Usage: starweave <assembly>");
                 return 1;
