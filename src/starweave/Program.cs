@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using starweave.Weaver;
 using System.Diagnostics;
+using Starcounter.Weaver.Rewriting;
 
 namespace starweave {
 
@@ -41,8 +42,9 @@ namespace starweave {
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
-            
-            var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, new StarcounterWeaverFactory());
+
+            var weaverFactory = new StarcounterWeaverFactory(new DatabaseTypeStateNames());
+            var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, weaverFactory);
             weaver.Weave();
 
             Console.WriteLine($"Weaved {assemblyFile} -> {dir}");
