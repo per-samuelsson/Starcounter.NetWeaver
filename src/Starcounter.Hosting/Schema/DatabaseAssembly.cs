@@ -42,6 +42,7 @@ namespace Starcounter.Hosting.Schema {
                     var msg = $"Type {typeDefinition.Item1} define base type {typeDefinition.Item2} which is not defined";
                     throw new ArgumentOutOfRangeException(nameof(nameAndBaseNames), msg);
                 }
+                
                 additions.Add(new DatabaseType() {
                     FullName = typeDefinition.Item1,
                     BaseTypeName = typeDefinition.Item2
@@ -52,20 +53,20 @@ namespace Starcounter.Hosting.Schema {
             return additions;
         }
 
-        void AddTypesSafe(IEnumerable<DatabaseType> databaseTypes) {
-            foreach (var type in databaseTypes) {
-                types.Add(type.FullName, type);
-                type.DefiningAssembly = this;
-            }
-        }
-
-        internal DatabaseType FindType(string name) {
+        public DatabaseType FindType(string name) {
             if (string.IsNullOrWhiteSpace(name)) {
                 throw new ArgumentNullException(nameof(name));
             }
 
             DatabaseType type;
             return types.TryGetValue(name, out type) ? type : null;
+        }
+
+        void AddTypesSafe(IEnumerable<DatabaseType> databaseTypes) {
+            foreach (var type in databaseTypes) {
+                types.Add(type.FullName, type);
+                type.DefiningAssembly = this;
+            }
         }
     }
 }
