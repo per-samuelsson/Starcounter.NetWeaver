@@ -107,12 +107,12 @@ namespace Starcounter.Hosting.Tests {
             var schema = new DatabaseSchema();
             var assembly = schema.DefineAssembly("test");
             var types = assembly.DefineTypes(
-                new[] { Tuple.Create("test.test", typeof(System.Object).FullName) }
+                new[] { Tuple.Create<string, string>("test.test", null) }
                 );
             Assert.Equal(1, schema.Assemblies.Count());
             Assert.Equal(1, types.Count());
             Assert.Equal("test.test", types.Single().FullName);
-            Assert.Equal(typeof(object).FullName, types.Single().BaseTypeName);
+            Assert.Null(types.Single().BaseTypeName);
             Assert.Empty(types.Single().Properties);
 
             var bytes = serializer.Serialize(schema);
