@@ -46,7 +46,7 @@ namespace Starcounter.Hosting.Schema {
             }
 
             bool isDataType;
-            int index = GetTypeHandleByName(typeName, out isDataType);
+            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
             if (index != InvalidTypeHandle) {
                 if (!isDataType) {
                     throw new InvalidOperationException($"Can't define data type {typeName}: a database type with that name already exist");
@@ -77,7 +77,7 @@ namespace Starcounter.Hosting.Schema {
             }
 
             bool isDataType;
-            int index = GetTypeHandleByName(typeName, out isDataType);
+            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
             if (index != InvalidTypeHandle) {
                 var error = $"Can't define database type {typeName}: ";
                 if (isDataType) {
@@ -115,9 +115,18 @@ namespace Starcounter.Hosting.Schema {
         }
         
         public int GetTypeHandleByName(string typeName, out bool isDataType) {
+            var index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
+            if (index == InvalidTypeHandle) {
+                throw new ArgumentOutOfRangeException($"No type named {typeName} is defined.");
+            }
+            return index;
+        }
+
+        int GetTypeHandleByNameOrInvalidIfMissing(string typeName, out bool isDataType) {
             var index = indexOfAllNamedTypes.IndexOf(typeName);
             if (index == -1) {
-                throw new ArgumentOutOfRangeException(nameof(typeName));
+                isDataType = false;
+                return InvalidTypeHandle;
             }
             isDataType = dataTypes.Contains(index);
             return index;
