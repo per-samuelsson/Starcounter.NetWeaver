@@ -75,7 +75,8 @@ namespace Starcounter.Hosting.Tests {
             var type = assembly.DefineTypes(new [] { Tuple.Create<string, string>("test", null) }).First();
             Assert.NotNull(type);
 
-            type.DefineProperty("name", "doesnotexist");
+            rangeException = Assert.Throws<ArgumentOutOfRangeException>(() => type.DefineProperty("name", "doesnotexist"));
+            Assert.Contains("doesnotexist", rangeException.Message);
         }
     }
 }
