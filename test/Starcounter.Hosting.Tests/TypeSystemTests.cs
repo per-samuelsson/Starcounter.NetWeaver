@@ -62,7 +62,16 @@ namespace Starcounter.Hosting.Tests {
             var e = Assert.Throws<InvalidOperationException>(() => ts.DefineDatabaseType("test"));
             Assert.Contains("test", e.Message);
         }
-        
+
+        [Fact]
+        public void DatabaseTypesCanNotBeDefinedWhenDataTypeAlreadyExist() {
+            var ts = new TypeSystem();
+
+            ts.DefineDataType("test");
+            var e = Assert.Throws<InvalidOperationException>(() => ts.DefineDatabaseType("test"));
+            Assert.Contains("test", e.Message);
+        }
+
         [Fact]
         public void ContainsTypeMethodCanBeUsedToCheckForTypeWithName() {
             var ts = new TypeSystem();
