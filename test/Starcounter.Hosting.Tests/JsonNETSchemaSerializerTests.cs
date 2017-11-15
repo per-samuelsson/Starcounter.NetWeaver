@@ -33,11 +33,11 @@ namespace Starcounter.Hosting.Tests {
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
             Assert.NotEmpty(bytes);
-            Assert.Empty(schema.DataTypes);
+            Assert.Empty(schema.Types);
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Empty(schema2.Assemblies);
-            Assert.Empty(schema2.DataTypes);
+            Assert.Empty(schema2.Types);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Starcounter.Hosting.Tests {
             var schema = new DatabaseSchema();
             schema.DefineAssembly("test");
             Assert.Equal(1, schema.Assemblies.Count());
-            Assert.Empty(schema.DataTypes);
+            Assert.Empty(schema.Types);
 
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
@@ -56,7 +56,7 @@ namespace Starcounter.Hosting.Tests {
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Equal(1, schema2.Assemblies.Count());
-            Assert.Empty(schema2.DataTypes);
+            Assert.Empty(schema2.Types);
 
             var testAssembly = schema.Assemblies.Single();
             Assert.NotNull(testAssembly);
@@ -81,9 +81,9 @@ namespace Starcounter.Hosting.Tests {
             }
 
             Assert.True(schema.Assemblies.Count() == 0);
-            Assert.True(schema.DataTypes.Count() == names.Count());
+            Assert.True(schema.Types.Count() == names.Count());
             foreach (var name in names) {
-                Assert.True(schema.DataTypes.Any(t => t.Name == name));
+                Assert.True(schema.Types.Any(t => t.Name == name));
             }
             
             var bytes = serializer.Serialize(schema);
@@ -93,10 +93,10 @@ namespace Starcounter.Hosting.Tests {
             var schema2 = serializer.Deserialize(bytes);
             Assert.NotNull(schema2);
             Assert.Empty(schema2.Assemblies);
-            Assert.Equal(names.Count(), schema2.DataTypes.Count());
+            Assert.Equal(names.Count(), schema2.Types.Count());
 
             foreach (var name in names) {
-                Assert.True(schema2.DataTypes.Any(t => t.Name == name));
+                Assert.True(schema2.Types.Any(t => t.Name == name));
             }
         }
 

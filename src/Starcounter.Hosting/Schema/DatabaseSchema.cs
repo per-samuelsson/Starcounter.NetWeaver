@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Starcounter.Hosting.Schema {
-
+    
     public sealed class DatabaseSchema {
-        Dictionary<string, DatabaseAssembly> assemblies = new Dictionary<string, DatabaseAssembly>();
-        List<string> dataTypes = new List<string>();
+        readonly Dictionary<string, DatabaseAssembly> assemblies = new Dictionary<string, DatabaseAssembly>();
+        readonly TypeSystem typeSystem = new TypeSystem();
 
         class NamedType : IDataType {
             readonly string name;
@@ -25,10 +25,11 @@ namespace Starcounter.Hosting.Schema {
             }
         }
 
-        public IEnumerable<IDataType> DataTypes {
+        public IEnumerable<IDataType> Types {
             get {
+                var dataTypes = typeSystem.DataTypes;
                 var databaseTypeCount = assemblies.Values.Sum(a => a.Types.Count());
-                var types = new List<IDataType>(dataTypes.Count + databaseTypeCount);
+                var types = new List<IDataType>(dataTypes.Count() + databaseTypeCount);
                 foreach (var name in dataTypes) {
                     types.Add(new NamedType(name));
                 }
@@ -39,14 +40,14 @@ namespace Starcounter.Hosting.Schema {
             }
         }
 
-        public void DefineDataType(string name) {
-            if (string.IsNullOrWhiteSpace(name)) {
-                throw new ArgumentNullException(nameof(name));
+        internal TypeSystem TypeSystem {
+            get {
+                return typeSystem;
             }
+        }
 
-            if (!dataTypes.Contains(name)) {
-                dataTypes.Add(name);
-            }
+        public void DefineDataType(string typeName) {
+            typeSystem.DefineDataType(typeName);
         }
         
         public DatabaseAssembly DefineAssembly(string name) {
@@ -54,9 +55,7 @@ namespace Starcounter.Hosting.Schema {
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var assembly = new DatabaseAssembly();
-            assembly.Name = name;
-            assembly.DefiningSchema = this;
+            var assembly = new DatabaseAssembly(this, name);
             assemblies.Add(assembly.Name, assembly);
 
             return assembly;
@@ -80,7 +79,7 @@ namespace Starcounter.Hosting.Schema {
             return true;
         }
 
-        public DatabaseType FindType(string name) {
+        public DatabaseType FindDatabaseType(string name) {
             if (string.IsNullOrWhiteSpace(name)) {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -98,10 +97,11 @@ namespace Starcounter.Hosting.Schema {
 
             return null;
         }
-
-        internal bool TryGetIndexOfDataType(string name, out int index) {
-            index = dataTypes.IndexOf(name);
-            return index != -1;
+        
+        internal IDataType GetTypeByHandle(int typeHandle) {
+            bool isDataType;
+            var name = typeSystem.GetTypeNameByHandle(typeHandle, out isDataType);
+            return isDataType ? (IDataType) new NamedType(name) : FindDatabaseType(name);
         }
     }
 }

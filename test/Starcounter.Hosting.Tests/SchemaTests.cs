@@ -12,7 +12,7 @@ namespace Starcounter.Hosting.Tests {
         public void NewInstanceContainNoAssembliesOrTypes() {
             var schema = new DatabaseSchema();
             Assert.True(schema.Assemblies.Count() == 0);
-            Assert.True(schema.DataTypes.Count() == 0);
+            Assert.True(schema.Types.Count() == 0);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Starcounter.Hosting.Tests {
             Assert.Equal("name", npe.ParamName);
 
             Assert.True(schema.Assemblies.Count() == 0);
-            Assert.True(schema.DataTypes.Count() == 0);
+            Assert.True(schema.Types.Count() == 0);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Starcounter.Hosting.Tests {
             Assert.Throws<ArgumentException>(() => schema.DefineAssembly("test"));
             
             Assert.True(schema.Assemblies.Count() == 1);
-            Assert.True(schema.DataTypes.Count() == 0);
+            Assert.True(schema.Types.Count() == 0);
         }
 
         [Fact]
@@ -56,10 +56,26 @@ namespace Starcounter.Hosting.Tests {
             }
             
             Assert.True(schema.Assemblies.Count() == 0);
-            Assert.True(schema.DataTypes.Count() == names.Count());
+            Assert.True(schema.Types.Count() == names.Count());
             foreach (var name in names) {
-                Assert.True(schema.DataTypes.Any(t => t.Name == name));
+                Assert.True(schema.Types.Any(t => t.Name == name));
             }
+        }
+
+        [Fact]
+        public void TypesNotDefinedCantBeReferenced() {
+            var schema = new DatabaseSchema();
+
+            var assembly = schema.DefineAssembly("test");
+            var rangeException = Assert.Throws<ArgumentOutOfRangeException>(() => {
+                assembly.DefineTypes(new[] { Tuple.Create("test", "doesnotexist") });
+                });
+            Assert.Contains("doesnotexist", rangeException.Message);
+
+            var type = assembly.DefineTypes(new [] { Tuple.Create<string, string>("test", null) }).First();
+            Assert.NotNull(type);
+
+            type.DefineProperty("name", "doesnotexist");
         }
     }
 }
