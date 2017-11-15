@@ -78,5 +78,20 @@ namespace Starcounter.Hosting.Tests {
             rangeException = Assert.Throws<ArgumentOutOfRangeException>(() => type.DefineProperty("name", "doesnotexist"));
             Assert.Contains("doesnotexist", rangeException.Message);
         }
+
+        [Fact]
+        public void DatabaseClassesCanNotExtendDataTypes() {
+            var schema = new DatabaseSchema();
+
+            schema.DefineDataType("System.Int");
+
+            var assembly = schema.DefineAssembly("test");
+            var types = new[] { Tuple.Create("testtype", "System.Int") };
+
+            var e = Assert.Throws<ArgumentOutOfRangeException>(() => {
+                assembly.DefineTypes(types);
+            });
+            Assert.Contains("testtype", e.Message);
+        }
     }
 }
