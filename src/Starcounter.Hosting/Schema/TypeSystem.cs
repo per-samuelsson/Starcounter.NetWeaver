@@ -117,7 +117,7 @@ namespace Starcounter.Hosting.Schema {
         public int GetTypeHandleByName(string typeName, out bool isDataType) {
             var index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
             if (index == InvalidTypeHandle) {
-                throw new ArgumentOutOfRangeException($"No type named {typeName} is defined.");
+                throw new ArgumentOutOfRangeException(nameof(typeName), $"No type named {typeName} is defined.");
             }
             return index;
         }
