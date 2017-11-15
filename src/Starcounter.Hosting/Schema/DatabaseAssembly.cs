@@ -17,14 +17,22 @@ namespace Starcounter.Hosting.Schema {
                 return types.Values;
             }
         }
+
+        // Deserialization support
+        private DatabaseAssembly() {}
+
+        public DatabaseAssembly(DatabaseSchema schema, string name) {
+            DefiningSchema = schema;
+            Name = name;
+        }
         
         public IEnumerable<DatabaseType> DefineTypes(Tuple<string, string>[] nameAndBaseNames) {
             if (nameAndBaseNames == null) {
                 throw new ArgumentNullException(nameof(nameAndBaseNames));
             }
-
-            bool ResolveBaseTypeName(string name, DatabaseSchema schema, Tuple<string, string>[] registrars) {
-                if (name.Equals(typeof(object).FullName)) {
+            
+            bool CanResolveBaseTypeName(string name, DatabaseSchema schema, Tuple<string, string>[] registrars) {
+                if (name == null) {
                     return true;
                 }
 
@@ -32,25 +40,51 @@ namespace Starcounter.Hosting.Schema {
                     return true;
                 }
 
-                return schema.FindType(name) != null;
+                return schema.FindDatabaseType(name) != null;
             }
-
-            var additions = new List<DatabaseType>(nameAndBaseNames.Length);
+            
+            var typeSystem = DefiningSchema.TypeSystem;
 
             foreach (var typeDefinition in nameAndBaseNames) {
-                if (!ResolveBaseTypeName(typeDefinition.Item2, DefiningSchema, nameAndBaseNames)) {
-                    var msg = $"Type {typeDefinition.Item1} define base type {typeDefinition.Item2} which is not defined";
+                var typeName = typeDefinition.Item1;
+                var baseName = typeDefinition.Item2;
+
+                if (string.IsNullOrWhiteSpace(typeName)) {
+                    throw new ArgumentNullException("All types must define a name");
+                }
+
+                if (!CanResolveBaseTypeName(typeName, DefiningSchema, nameAndBaseNames)) {
+                    var msg = $"Type {typeName} define base type {baseName} which is not defined";
                     throw new ArgumentOutOfRangeException(nameof(nameAndBaseNames), msg);
                 }
-                
-                additions.Add(new DatabaseType() {
-                    FullName = typeDefinition.Item1,
-                    BaseTypeName = typeDefinition.Item2
-                });
+
+                if (typeSystem.ContainsType(typeName)) {
+                    throw new InvalidOperationException($"A type named {typeName} is already defined");
+                }
+            }
+            
+            foreach (var typeDefinition in nameAndBaseNames) {
+                var typeName = typeDefinition.Item1;
+                typeSystem.DefineDatabaseType(typeName);
+            }
+            
+            foreach (var typeDefinition in nameAndBaseNames) {
+                var typeName = typeDefinition.Item1;
+                var baseName = typeDefinition.Item2;
+
+                bool ignored;
+                int? baseHandle = null;
+
+                if (baseName != null) {
+                    baseHandle = typeSystem.GetTypeHandleByName(baseName, out ignored);
+                }
+                var handle = typeSystem.GetTypeHandleByName(typeName, out ignored);
+
+                var type = new DatabaseType(this, handle, baseHandle);
+                types.Add(type.FullName, type);
             }
 
-            AddTypesSafe(additions);
-            return additions;
+            return types.Values;
         }
 
         public DatabaseType FindType(string name) {
@@ -60,13 +94,6 @@ namespace Starcounter.Hosting.Schema {
 
             DatabaseType type;
             return types.TryGetValue(name, out type) ? type : null;
-        }
-
-        void AddTypesSafe(IEnumerable<DatabaseType> databaseTypes) {
-            foreach (var type in databaseTypes) {
-                types.Add(type.FullName, type);
-                type.DefiningAssembly = this;
-            }
         }
     }
 }

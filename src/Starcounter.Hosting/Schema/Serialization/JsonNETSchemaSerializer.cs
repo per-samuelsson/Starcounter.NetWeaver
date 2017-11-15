@@ -26,7 +26,10 @@ namespace Starcounter.Hosting.Schema.Serialization {
             }
 
             var resolver = contractResolver ?? new DefaultContractResolver();
-            var settings = new JsonSerializerSettings() { ContractResolver = resolver };
+            var settings = new JsonSerializerSettings() {
+                ContractResolver = resolver,
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+            };
 
             var s = Encoding.UTF8.GetString(schema);
             var result = JsonConvert.DeserializeObject<DatabaseSchema>(s, settings);
