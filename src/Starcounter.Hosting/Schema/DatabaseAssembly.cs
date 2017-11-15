@@ -44,7 +44,7 @@ namespace Starcounter.Hosting.Schema {
             }
             
             var typeSystem = DefiningSchema.TypeSystem;
-
+            
             foreach (var typeDefinition in nameAndBaseNames) {
                 var typeName = typeDefinition.Item1;
                 var baseName = typeDefinition.Item2;
@@ -53,7 +53,7 @@ namespace Starcounter.Hosting.Schema {
                     throw new ArgumentNullException("All types must define a name");
                 }
 
-                if (!CanResolveBaseTypeName(typeName, DefiningSchema, nameAndBaseNames)) {
+                if (!CanResolveBaseTypeName(baseName, DefiningSchema, nameAndBaseNames)) {
                     var msg = $"Type {typeName} define base type {baseName} which is not defined";
                     throw new ArgumentOutOfRangeException(nameof(nameAndBaseNames), msg);
                 }
