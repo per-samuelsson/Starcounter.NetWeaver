@@ -27,7 +27,7 @@ namespace Starcounter.Hosting.Tests {
         }
 
         [Fact]
-        public void RoundtripWithEmptySchema() {
+        public void CanRoundtripWithEmptySchema() {
             var serializer = CreateSerializer();
             var schema = new DatabaseSchema();
             var bytes = serializer.Serialize(schema);
@@ -41,7 +41,7 @@ namespace Starcounter.Hosting.Tests {
         }
 
         [Fact]
-        public void RoundtripWithOneDefinedAssembly() {
+        public void CanRoundtripWithOneDefinedAssembly() {
             var serializer = CreateSerializer();
 
             var schema = new DatabaseSchema();
@@ -67,7 +67,7 @@ namespace Starcounter.Hosting.Tests {
         [Fact]
         public void CanRoundtripWithCustomDefinedTypes() {
             var serializer = CreateSerializer();
-            
+
             var schema = new DatabaseSchema();
             var names = new[] {
                 "test",
@@ -85,7 +85,7 @@ namespace Starcounter.Hosting.Tests {
             foreach (var name in names) {
                 Assert.True(schema.Types.Any(t => t.Name == name));
             }
-            
+
             var bytes = serializer.Serialize(schema);
             Assert.NotNull(bytes);
             Assert.NotEmpty(bytes);
@@ -101,7 +101,7 @@ namespace Starcounter.Hosting.Tests {
         }
 
         [Fact]
-        public void RoundtripWithOneDefinedType() {
+        public void CanRoundtripWithOneDefinedType() {
             var serializer = CreateSerializer();
 
             var schema = new DatabaseSchema();
@@ -133,6 +133,75 @@ namespace Starcounter.Hosting.Tests {
             Assert.Equal("test.test", testType.FullName);
             Assert.Empty(testType.Properties);
             Assert.Equal(testAssembly, testType.DefiningAssembly);
+        }
+
+        [Fact]
+        public void CanRoundtripWithTwoDefinedTypesWithProperties() {
+            var serializer = CreateSerializer();
+
+            var schema = new DatabaseSchema();
+            schema.DefineDataType("System.Int32");
+            schema.DefineDataType("System.String");
+
+            var assembly = schema.DefineAssembly("test");
+            var types = assembly.DefineTypes(new[] {
+                Tuple.Create<string, string>("test.test", null),
+                Tuple.Create("test2.test2", "test.test")
+            });
+            Assert.Equal(1, schema.Assemblies.Count());
+            Assert.Equal(2, types.Count());
+            
+            var type1 = types.First(t => t.FullName == "test.test");
+            Assert.NotNull(type1);
+            var type2 = types.First(t => t.FullName == "test2.test2" && t.BaseTypeName == "test.test");
+            Assert.NotNull(type2);
+
+            var property = type1.DefineProperty("test", "System.Int32");
+            Assert.NotNull(property);
+            Assert.Equal(property.Name, "test");
+            Assert.Equal(property.DataType.Name, "System.Int32");
+
+            property = type1.DefineProperty("test2", "System.String");
+            Assert.NotNull(property);
+            Assert.Equal(property.Name, "test2");
+            Assert.Equal(property.DataType.Name, "System.String");
+
+            property = type2.DefineProperty("test", type1.FullName);
+            Assert.NotNull(property);
+            Assert.Equal(property.Name, "test");
+            Assert.Equal(property.DataType.Name, type1.FullName);
+
+            var bytes = serializer.Serialize(schema);
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+
+            var schema2 = serializer.Deserialize(bytes);
+            Assert.NotNull(schema2);
+            Assert.Equal(1, schema2.Assemblies.Count());
+
+            var testAssembly = schema2.Assemblies.Single();
+            Assert.NotNull(testAssembly);
+            Assert.Equal("test", testAssembly.Name);
+            Assert.True(schema2.ContainSameAssemblies(testAssembly.DefiningSchema));
+            Assert.Equal(2, testAssembly.Types.Count());
+
+            type1 = types.First(t => t.FullName == "test.test");
+            Assert.NotNull(type1);
+            type2 = types.First(t => t.FullName == "test2.test2" && t.BaseTypeName == "test.test");
+            Assert.NotNull(type2);
+
+            Assert.Equal(2, type1.Properties.Count());
+            property = type1.Properties.First(p => p.Name.Equals("test"));
+            Assert.NotNull(property);
+            Assert.Equal(property.DataType.Name, "System.Int32");
+
+            property = type1.Properties.First(p => p.Name.Equals("test2"));
+            Assert.NotNull(property);
+            Assert.Equal(property.DataType.Name, "System.String");
+
+            property = type2.Properties.First(p => p.Name.Equals("test"));
+            Assert.NotNull(property);
+            Assert.Equal(property.DataType.Name, type1.FullName);
         }
     }
 }
