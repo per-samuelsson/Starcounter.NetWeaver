@@ -11,7 +11,7 @@ namespace starweave.Weaver {
     /// and some helper methods to do lookups not violating that.
     /// </summary>
     public static class TypeDefintitionBindingExtensions {
-        const string BindingNameOfNoDeclaredBaseType = null;
+        public const string BindingNameOfNoDeclaredBaseType = null;
 
         public static string GetBindingName(this TypeReference typeRef) {
             return typeRef.FullName;
@@ -23,7 +23,7 @@ namespace starweave.Weaver {
 
         public static string GetBaseTypeBindingName(this TypeDefinition typeDef) {
             var typeSystem = typeDef.Module.TypeSystem;
-            var useDeclaredBaseType = typeDef.BaseType != null && !typeDef.BaseType.Equals(typeSystem.Object);
+            var useDeclaredBaseType = typeDef.BaseType != null && !typeDef.BaseType.FullName.Equals(typeSystem.Object.FullName);
             return useDeclaredBaseType ? typeDef.BaseType.GetBindingName() : BindingNameOfNoDeclaredBaseType; 
         }
 
