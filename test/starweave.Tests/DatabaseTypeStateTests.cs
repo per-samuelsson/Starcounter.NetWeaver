@@ -1,12 +1,11 @@
 ﻿
-using Mono.Cecil;
 using Starcounter.Weaver.Rewriting;
 using Starcounter.Weaver.Tests.ExternalCode;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     public class DatabaseTypeStateTests {
 

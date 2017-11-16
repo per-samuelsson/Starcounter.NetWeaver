@@ -4,7 +4,7 @@ using Starcounter.Weaver.Rewriting;
 using starweave.Weaver;
 using Xunit;
 
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     public class StarcounterWeaverFactoryTests {
         

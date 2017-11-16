@@ -10,7 +10,7 @@ using Xunit;
 
 using ModuleDefinition = Mono.Cecil.ModuleDefinition;
 
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     public class ModuleWithWriteTestWhenDisposed : IDisposable {
         ModuleDefinition module;

@@ -1,5 +1,5 @@
 ﻿
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     class IntAutoProperties {
 

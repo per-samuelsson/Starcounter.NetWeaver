@@ -4,7 +4,7 @@ using Starcounter.Weaver.Rewriting;
 using System.Linq;
 using Xunit;
 
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     public class ClassWithIntAutoProperty {
 

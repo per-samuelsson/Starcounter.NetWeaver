@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace starweave.Tests {
+namespace starweave.Weaver.Tests {
 
     abstract class ClassWithAbstractMethod {
 
