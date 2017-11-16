@@ -22,8 +22,8 @@ namespace Starcounter.Hosting.Schema {
 
         public string BaseTypeName {
             get {
-                return baseNameHandle != null ?
-                    DefiningAssembly.DefiningSchema.TypeSystem.GetTypeNameByHandle(nameHandle) : 
+                return baseNameHandle.HasValue ?
+                    DefiningAssembly.DefiningSchema.TypeSystem.GetTypeNameByHandle(baseNameHandle.Value) : 
                     null;
             }
         }
