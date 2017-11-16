@@ -46,7 +46,8 @@ namespace Starcounter.Hosting.Schema {
         }
 
         public DatabaseType GetBaseType() {
-            return DefiningAssembly.DefiningSchema.FindDatabaseType(BaseTypeName);
+            return baseNameHandle.HasValue ?
+                DefiningAssembly.DefiningSchema.FindDatabaseType(BaseTypeName) : null;
         }
 
         public bool IsDefinedIn(DatabaseAssembly assembly) {
