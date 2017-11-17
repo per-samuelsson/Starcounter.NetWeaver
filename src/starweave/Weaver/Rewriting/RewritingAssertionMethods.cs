@@ -28,10 +28,10 @@ namespace Starcounter.Weaver.Rewriting {
             });
         }
 
-        public static void VerifyExpectedReadMethod(AutoImplementedProperty property, MethodDefinition method) {
+        public static void VerifyExpectedReadMethod(AutoImplementedProperty property, MethodReference method) {
             var module = method.Module;
             var typeSystem = module.TypeSystem;
-            var pass = (method.Attributes & MethodAttributes.Static) != 0;
+            var pass = !method.HasThis;
             if (pass) {
                 pass = method.HasParameters && method.Parameters.Count == 3;
                 if (pass) {
@@ -44,10 +44,10 @@ namespace Starcounter.Weaver.Rewriting {
             }
         }
 
-        public static void VerifyExpectedWriteMethod(AutoImplementedProperty property, MethodDefinition method) {
+        public static void VerifyExpectedWriteMethod(AutoImplementedProperty property, MethodReference method) {
             var module = method.Module;
             var typeSystem = module.TypeSystem;
-            var pass = (method.Attributes & MethodAttributes.Static) != 0;
+            var pass = !method.HasThis;
             if (pass) {
                 pass = method.HasParameters && method.Parameters.Count == 4;
                 if (pass) {

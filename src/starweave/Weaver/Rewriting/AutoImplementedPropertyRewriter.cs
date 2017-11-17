@@ -19,7 +19,7 @@ namespace Starcounter.Weaver.Rewriting {
             setup[3] = Instruction.Create(OpCodes.Ldfld, typeState.DbRef);
         }
         
-        public void Rewrite(AutoImplementedProperty property, MethodDefinition readMethod, MethodDefinition writeMethod) {
+        public void Rewrite(AutoImplementedProperty property, MethodReference readMethod, MethodReference writeMethod) {
             Guard.NotNull(property, nameof(property));
             Guard.NotNull(readMethod, nameof(readMethod));
             Guard.NotNull(writeMethod, nameof(writeMethod));
@@ -43,7 +43,7 @@ namespace Starcounter.Weaver.Rewriting {
             propDef.DeclaringType.Fields.Remove(property.BackingField);
         }
 
-        void RewriteGetter(AutoImplementedProperty property, MethodDefinition readMethod) {
+        void RewriteGetter(AutoImplementedProperty property, MethodReference readMethod) {
             // ldarg.0
             // ldfld [property.BackingField]
             // ret
@@ -72,7 +72,7 @@ namespace Starcounter.Weaver.Rewriting {
             il.Append(il.Create(OpCodes.Ret));
         }
 
-        void RewriteSetter(AutoImplementedProperty property, MethodDefinition writeMethod) {
+        void RewriteSetter(AutoImplementedProperty property, MethodReference writeMethod) {
             // ldarg.0
             // ldarg.1
             // stfld [property.BackingField]
@@ -106,13 +106,13 @@ namespace Starcounter.Weaver.Rewriting {
 
         // This one will eventually be conditional, part of only
         // non-optimized builds. Initially, we'll be paranoid though.
-        void AssertValidReadMethod(AutoImplementedProperty property, MethodDefinition method) {
+        void AssertValidReadMethod(AutoImplementedProperty property, MethodReference method) {
             RewritingAssertionMethods.VerifyExpectedReadMethod(property, method);
         }
 
         // This one will eventually be conditional, part of only
         // non-optimized builds. Initially, we'll be paranoid though. 
-        void AssertValidWriteMethod(AutoImplementedProperty property, MethodDefinition method) {
+        void AssertValidWriteMethod(AutoImplementedProperty property, MethodReference method) {
             RewritingAssertionMethods.VerifyExpectedWriteMethod(property, method);
         }
 
