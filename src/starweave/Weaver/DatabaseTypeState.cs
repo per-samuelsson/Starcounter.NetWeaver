@@ -1,8 +1,9 @@
 ﻿
 using Mono.Cecil;
+using Starcounter.Weaver;
 using System.Linq;
 
-namespace Starcounter.Weaver {
+namespace starweave.Weaver {
 
     public class DatabaseTypeState {
         protected readonly TypeDefinition type;

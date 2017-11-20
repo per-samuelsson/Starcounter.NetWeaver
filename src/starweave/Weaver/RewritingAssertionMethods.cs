@@ -1,11 +1,12 @@
 ﻿
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Starcounter.Weaver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Starcounter.Weaver {
+namespace starweave.Weaver {
 
     public static class RewritingAssertionMethods {
 

@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter.Weaver {
+namespace starweave.Weaver {
 
     /// <summary>
     /// These names, or at least some of them, probably need to be

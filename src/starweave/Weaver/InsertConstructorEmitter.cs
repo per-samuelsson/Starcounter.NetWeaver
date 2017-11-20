@@ -7,7 +7,6 @@ using System;
 namespace starweave.Weaver {
 
     public sealed class InsertConstructorEmitter {
-        readonly MethodReference objectConstructor;
         readonly TypeReference signatureType;
         readonly MethodReference insertMethod;
         readonly CodeEmissionContext context;

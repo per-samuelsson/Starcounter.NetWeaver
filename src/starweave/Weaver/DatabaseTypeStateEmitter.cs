@@ -1,9 +1,9 @@
 ﻿
 using Mono.Cecil;
-using starweave.Weaver;
+using Starcounter.Weaver;
 using System;
 
-namespace Starcounter.Weaver {
+namespace starweave.Weaver {
 
     public class DatabaseTypeStateEmitter : DatabaseTypeState {
         readonly TypeReference ulongType;
