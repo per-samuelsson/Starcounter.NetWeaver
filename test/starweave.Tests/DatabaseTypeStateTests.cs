@@ -24,7 +24,7 @@ namespace starweave.Weaver.Tests {
             var npe = Assert.Throws<ArgumentNullException>(() => new DatabaseTypeState(null, names));
             Assert.Equal("typeDefinition", npe.ParamName);
 
-            npe = Assert.Throws<ArgumentNullException>(() => new DatabaseTypeStateEmitter(null, names));
+            npe = Assert.Throws<ArgumentNullException>(() => new DatabaseTypeStateEmitter(null, null, names));
             Assert.Equal("typeDefinition", npe.ParamName);
         }
 
@@ -40,7 +40,7 @@ namespace starweave.Weaver.Tests {
                 Assert.NotNull(type);
 
                 var names = new DatabaseTypeStateNames();
-                var emitter = new DatabaseTypeStateEmitter(type, names);
+                var emitter = new DatabaseTypeStateEmitter(new CodeEmissionContext(module), type, names);
                 emitter.EmitReferenceFields();
 
                 var state = (DatabaseTypeState)emitter;
@@ -85,7 +85,7 @@ namespace starweave.Weaver.Tests {
                 type = type.NestedTypes.First(t => t.Name == nameof(DatabaseTypeStateTests.TestClass));
                 Assert.NotNull(type);
 
-                var emitter = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
+                var emitter = new DatabaseTypeStateEmitter(new CodeEmissionContext(module), type, new DatabaseTypeStateNames());
                 emitter.EmitReferenceFields();
                 emitter.EmitCRUDHandles();
                 emitter.EmitPropertyCRUDHandle("test");

@@ -44,7 +44,7 @@ namespace starweave.Weaver.Tests {
                 var type = module.Types.Single(t => t.FullName == typeof(ClassWithIntAutoProperty).FullName);
                 Assert.NotNull(type);
 
-                var state = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
+                var state = new DatabaseTypeStateEmitter(new CodeEmissionContext(module), type, new DatabaseTypeStateNames());
                 state.EmitReferenceFields();
 
                 new AutoImplementedPropertyRewriter(state);
@@ -64,7 +64,7 @@ namespace starweave.Weaver.Tests {
                 var readMethod = type.Methods.Single(m => m.Name == nameof(ClassWithIntAutoProperty.GetInt));
                 var writeMethod = type.Methods.Single(m => m.Name == nameof(ClassWithIntAutoProperty.SetInt));
 
-                var state = new DatabaseTypeStateEmitter(type, new DatabaseTypeStateNames());
+                var state = new DatabaseTypeStateEmitter(new CodeEmissionContext(module), type, new DatabaseTypeStateNames());
                 state.EmitReferenceFields();
                 state.EmitPropertyCRUDHandle(nameof(ClassWithIntAutoProperty.Int1));
 

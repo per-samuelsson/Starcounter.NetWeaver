@@ -1,13 +1,17 @@
 ﻿
 using Mono.Cecil;
+using starweave.Weaver;
+using System;
 
 namespace Starcounter.Weaver {
 
     public class DatabaseTypeStateEmitter : DatabaseTypeState {
         readonly TypeReference ulongType;
+        readonly CodeEmissionContext context;
 
-        public DatabaseTypeStateEmitter(TypeDefinition typeDefinition, DatabaseTypeStateNames names) : base(typeDefinition, names) {
-            ulongType = type.Module.ImportReference(typeof(ulong));
+        public DatabaseTypeStateEmitter(CodeEmissionContext emitContext, TypeDefinition typeDefinition, DatabaseTypeStateNames names) : base(typeDefinition, names) {
+            context = emitContext ?? throw new ArgumentNullException(nameof(emitContext));
+            ulongType = context.Use(type.Module.TypeSystem.UInt64);
         }
 
         public void EmitReferenceFields() {

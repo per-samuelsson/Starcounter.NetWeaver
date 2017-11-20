@@ -11,20 +11,22 @@ namespace starweave.Weaver {
         readonly AnalysisResult analysis;
         readonly DatabaseTypeStateNames names;
         readonly DbCrudMethodProvider crudMethods;
+        readonly CodeEmissionContext emitContext;
 
         public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, DatabaseTypeStateNames stateNames, DbCrudMethodProvider methodProvider) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             analysis = result ?? throw new ArgumentNullException(nameof(result));
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
             crudMethods = methodProvider ?? throw new ArgumentNullException(nameof(methodProvider));
+            emitContext = new CodeEmissionContext(result.SourceModule);
         }
-
+        
         void IAssemblyRewriter.RewriteType(DatabaseType type) {
             var module = analysis.SourceModule;
 
             var typeDef = type.GetTypeDefinition(module);
 
-            var stateEmitter = new DatabaseTypeStateEmitter(typeDef, names);
+            var stateEmitter = new DatabaseTypeStateEmitter(emitContext, typeDef, names);
             stateEmitter.EmitCRUDHandles();
             stateEmitter.EmitReferenceFields();
 
