@@ -1,5 +1,5 @@
 ﻿
-using Starcounter2.Internal.WeaverFacade;
+using Starcounter2.Internal;
 using System.Collections.Generic;
 using Xunit;
 using System.Linq;

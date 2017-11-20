@@ -5,7 +5,7 @@ using System.IO;
 using starweave.Weaver;
 using System.Diagnostics;
 using Starcounter.Weaver.Rewriting;
-using Starcounter2.Internal.WeaverFacade;
+using Starcounter2.Internal;
 
 namespace starweave {
 

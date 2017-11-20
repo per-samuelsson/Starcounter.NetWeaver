@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace Starcounter2.Internal.WeaverFacade {
+namespace Starcounter2.Internal {
 
     public interface IObject {
 
     }
 
-    public static class CRUD {
+    public static class DbCrud {
 
-        public static void CreateCrud(out ulong dbId, out ulong dbRef, ulong crudHandle) {
+        public static void Create(out ulong dbId, out ulong dbRef, ulong crudHandle) {
             dbId = 42;
             dbRef = 42;
         }

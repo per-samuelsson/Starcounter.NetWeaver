@@ -3,22 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Starcounter2.Internal.WeaverFacade {
+namespace Starcounter2.Internal {
 
     public class DefaultCRUDMethodProvider : CRUDMethodProvider {
         readonly static Dictionary<string, string> readMethods = new Dictionary<string, string>() {
-            { typeof(int).FullName, nameof(CRUD.GetInt) },
-            { typeof(int?).FullName, nameof(CRUD.GetNullableInt) }
+            { typeof(int).FullName, nameof(DbCrud.GetInt) },
+            { typeof(int?).FullName, nameof(DbCrud.GetNullableInt) }
         };
 
         readonly static Dictionary<string, string> writeMethods = new Dictionary<string, string>() {
-            { typeof(int).FullName, nameof(CRUD.SetInt) },
-            { typeof(int?).FullName, nameof(CRUD.SetNullableInt) }
+            { typeof(int).FullName, nameof(DbCrud.SetInt) },
+            { typeof(int?).FullName, nameof(DbCrud.SetNullableInt) }
         };
         
         public override string CreateMethod {
             get {
-                return nameof(CRUD.CreateCrud);
+                return nameof(DbCrud.Create);
             }
         }
 
@@ -41,7 +41,7 @@ namespace Starcounter2.Internal.WeaverFacade {
         }
 
         public override MethodInfo GetMethodByName(string method) {
-            return typeof(CRUD).GetTypeInfo().GetMethod(method, BindingFlags.Public | BindingFlags.Static);
+            return typeof(DbCrud).GetTypeInfo().GetMethod(method, BindingFlags.Public | BindingFlags.Static);
         }
     }
 }

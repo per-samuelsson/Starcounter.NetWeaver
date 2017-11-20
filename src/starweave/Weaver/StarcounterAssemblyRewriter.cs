@@ -2,7 +2,7 @@
 using Starcounter.Hosting.Schema;
 using Starcounter.Weaver;
 using Starcounter.Weaver.Rewriting;
-using Starcounter2.Internal.WeaverFacade;
+using Starcounter2.Internal;
 using System;
 
 namespace starweave.Weaver {

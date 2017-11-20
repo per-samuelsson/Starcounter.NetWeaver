@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Starcounter2.Internal.WeaverFacade {
+namespace Starcounter2.Internal {
 
     public abstract class CRUDMethodProvider {
 

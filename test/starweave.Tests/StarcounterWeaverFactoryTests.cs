@@ -1,8 +1,7 @@
 
 using Starcounter.Weaver;
 using Starcounter.Weaver.Rewriting;
-using Starcounter2.Internal.WeaverFacade;
-using starweave.Weaver;
+using Starcounter2.Internal;
 using Xunit;
 
 namespace starweave.Weaver.Tests {
