@@ -61,6 +61,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave.Tests", "test\sta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{9493B70F-6554-41B0-9F9B-7CCE088DE897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetCoreSingleDbProperty", "test\TestProjects\ConsoleAppNetCoreSingleDbProperty\ConsoleAppNetCoreSingleDbProperty.csproj", "{6216534D-CCD1-4103-B988-D921F827DE59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFrameworkSingleDbProperty", "test\TestProjects\ConsoleAppNetFrameworkSingleDbProperty\ConsoleAppNetFrameworkSingleDbProperty.csproj", "{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{CF792F5A-97D4-4FA7-A339-3CDE83397F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF792F5A-97D4-4FA7-A339-3CDE83397F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF792F5A-97D4-4FA7-A339-3CDE83397F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6216534D-CCD1-4103-B988-D921F827DE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6216534D-CCD1-4103-B988-D921F827DE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6216534D-CCD1-4103-B988-D921F827DE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6216534D-CCD1-4103-B988-D921F827DE59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,6 +165,8 @@ Global
 		{153AA1C9-E707-4616-BB8F-C71B766B499B} = {9493B70F-6554-41B0-9F9B-7CCE088DE897}
 		{BB47345F-B608-4336-B733-77DC367008E5} = {9493B70F-6554-41B0-9F9B-7CCE088DE897}
 		{CF792F5A-97D4-4FA7-A339-3CDE83397F97} = {9493B70F-6554-41B0-9F9B-7CCE088DE897}
+		{6216534D-CCD1-4103-B988-D921F827DE59} = {8A30569E-6858-4A3E-A383-29A7FB268BB3}
+		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208} = {8A30569E-6858-4A3E-A383-29A7FB268BB3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F4749F5-CEF3-4494-88C3-49FD5A0FF0BC}
