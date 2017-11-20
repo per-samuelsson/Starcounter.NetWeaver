@@ -35,7 +35,7 @@ namespace Starcounter.Weaver.Rewriting {
             if (pass) {
                 pass = method.HasParameters && method.Parameters.Count == 3;
                 if (pass) {
-                    pass = method.Parameters.All(p => p.ParameterType == typeSystem.UInt64);
+                    pass = method.Parameters.All(p => p.ParameterType.FullName.Equals(typeSystem.UInt64.FullName));
                 }
             }
 
@@ -51,9 +51,9 @@ namespace Starcounter.Weaver.Rewriting {
             if (pass) {
                 pass = method.HasParameters && method.Parameters.Count == 4;
                 if (pass) {
-                    pass = method.Parameters.Take(3).All(p => p.ParameterType == typeSystem.UInt64);
+                    pass = method.Parameters.Take(3).All(p => p.ParameterType.FullName.Equals(typeSystem.UInt64.FullName));
                     if (pass) {
-                        pass = method.MethodReturnType.ReturnType == typeSystem.Void;
+                        pass = method.MethodReturnType.ReturnType.FullName.Equals(typeSystem.Void.FullName);
                     }
                 }
             }
