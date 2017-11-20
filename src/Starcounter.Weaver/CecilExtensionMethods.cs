@@ -26,6 +26,14 @@ namespace Starcounter.Weaver {
             return hasDatabaseAttribute;
         }
 
+        public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
+            TypeReference tr;
+            module.TryGetTypeReference(typeof(object).FullName, out tr);
+            
+            var type = tr.Resolve();
+            return type.Methods.Single(m => m.Name.Equals(".ctor"));
+        }
+
         public static byte[] ReadEmbeddedResource(this ModuleDefinition module, string name) {
             if (!module.HasResources) {
                 return null;
