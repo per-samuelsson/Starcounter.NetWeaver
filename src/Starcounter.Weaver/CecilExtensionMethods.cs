@@ -26,6 +26,15 @@ namespace Starcounter.Weaver {
             return hasDatabaseAttribute;
         }
 
+        public static FieldReference GetFieldRecursive(this TypeDefinition type, string name) {
+            var result = type.Fields.SingleOrDefault(f => f.Name.Equals(name));
+            if (result == null && type.BaseType != null) {
+                type = type.BaseType.Resolve();
+                return GetFieldRecursive(type, name);
+            }
+            return result;
+        }
+
         public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
             module.TryGetTypeReference(typeof(object).FullName, out TypeReference tr);
 
