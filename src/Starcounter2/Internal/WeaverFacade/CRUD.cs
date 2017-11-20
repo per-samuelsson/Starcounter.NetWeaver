@@ -14,11 +14,13 @@ namespace Starcounter2.Internal.WeaverFacade {
         }
 
         public static int GetInt(ulong dbId, ulong dbRef, ulong crudHandle) {
+            var v = 42;
+            Console.WriteLine($"{nameof(GetInt)}({dbId}/{dbRef}): {v}");
             return 42;
         }
 
         public static void SetInt(ulong dbId, ulong dbRef, ulong crudHandle, int value) {
-
+            Console.WriteLine($"{nameof(SetInt)}({dbId}/{dbRef}): {value}");
         }
 
         public static int? GetNullableInt(ulong dbId, ulong dbRef, ulong crudHandle) {
