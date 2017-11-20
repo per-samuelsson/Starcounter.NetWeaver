@@ -11,9 +11,9 @@ namespace starweave.Weaver {
         readonly IWeaverHost host;
         readonly AnalysisResult analysis;
         readonly DatabaseTypeStateNames names;
-        readonly CRUDMethodProvider crudMethods;
+        readonly DbCrudMethodProvider crudMethods;
 
-        public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, DatabaseTypeStateNames stateNames, CRUDMethodProvider methodProvider) {
+        public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, DatabaseTypeStateNames stateNames, DbCrudMethodProvider methodProvider) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             analysis = result ?? throw new ArgumentNullException(nameof(result));
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
@@ -36,6 +36,13 @@ namespace starweave.Weaver {
 
                 var propertyDef = databaseProperty.GetPropertyDefinition(typeDef);
                 var autoProperty = new AutoImplementedProperty(propertyDef);
+
+                // Here, we need to check the data type of the property: if it's
+                // not a primitive, it's an enum or a reference. If so, we should
+                // get method of "reference" / "object". The named data type must
+                // support that interface. Also: there will need to be a cast in
+                // the getter.
+                // TODO:
 
                 var readMethod = crudMethods.GetReadMethod(databaseProperty.DataType.Name);
                 var writeMethod = crudMethods.GetUpdateMethod(databaseProperty.DataType.Name);

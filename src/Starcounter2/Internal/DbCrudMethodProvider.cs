@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Starcounter2.Internal {
 
-    public abstract class CRUDMethodProvider {
+    public abstract class DbCrudMethodProvider {
 
         public abstract string CreateMethod { get; }
 

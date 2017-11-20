@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Starcounter2.Internal {
 
-    public class DefaultCRUDMethodProvider : CRUDMethodProvider {
+    public class DefaultDbCrudMethodProvider : DbCrudMethodProvider {
         readonly static Dictionary<string, string> readMethods = new Dictionary<string, string>() {
             { typeof(int).FullName, nameof(DbCrud.GetInt) },
             { typeof(int?).FullName, nameof(DbCrud.GetNullableInt) }

@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace starweave.Tests {
 
-    public class CRUDMethodProviderTests {
+    public class DbCrudMethodProviderTests {
 
-        class CustomCrudMethodProvider : DefaultCRUDMethodProvider {
+        class CustomCrudMethodProvider : DefaultDbCrudMethodProvider {
 
             public override Dictionary<string, string> ReadMethods {
                 get {

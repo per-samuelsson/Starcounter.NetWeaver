@@ -44,7 +44,7 @@ namespace starweave {
                 Directory.CreateDirectory(dir);
             }
 
-            var weaverFactory = new StarcounterWeaverFactory(new DatabaseTypeStateNames(), new DefaultCRUDMethodProvider());
+            var weaverFactory = new StarcounterWeaverFactory(new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider());
             var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, weaverFactory);
             weaver.Weave();
 

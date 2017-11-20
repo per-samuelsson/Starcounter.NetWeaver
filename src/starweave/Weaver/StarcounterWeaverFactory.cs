@@ -9,10 +9,10 @@ namespace starweave.Weaver {
 
     public class StarcounterWeaverFactory : IWeaverFactory {
         readonly DatabaseTypeStateNames names;
-        readonly CRUDMethodProvider methodProvider;
+        readonly DbCrudMethodProvider methodProvider;
         IWeaverHost host;
 
-        public StarcounterWeaverFactory(DatabaseTypeStateNames stateNames, CRUDMethodProvider crudMethods) {
+        public StarcounterWeaverFactory(DatabaseTypeStateNames stateNames, DbCrudMethodProvider crudMethods) {
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
             methodProvider = crudMethods ?? throw new ArgumentNullException(nameof(crudMethods));
         }
