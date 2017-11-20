@@ -2,7 +2,7 @@
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-namespace Starcounter.Weaver.Rewriting {
+namespace Starcounter.Weaver {
     
     public sealed class AutoImplementedPropertyRewriter {
         readonly DatabaseTypeState state;

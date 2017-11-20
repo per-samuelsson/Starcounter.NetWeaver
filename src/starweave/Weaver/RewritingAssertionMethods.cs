@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Starcounter.Weaver.Rewriting {
+namespace Starcounter.Weaver {
 
     public static class RewritingAssertionMethods {
 

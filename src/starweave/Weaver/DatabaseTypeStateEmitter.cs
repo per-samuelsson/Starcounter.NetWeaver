@@ -1,7 +1,7 @@
 ﻿
 using Mono.Cecil;
 
-namespace Starcounter.Weaver.Rewriting {
+namespace Starcounter.Weaver {
 
     public class DatabaseTypeStateEmitter : DatabaseTypeState {
         readonly TypeReference ulongType;

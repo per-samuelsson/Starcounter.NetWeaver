@@ -1,6 +1,5 @@
 ﻿
 using Starcounter.Weaver;
-using Starcounter.Weaver.Rewriting;
 using System;
 using System.Linq;
 using Xunit;

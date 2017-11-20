@@ -1,5 +1,5 @@
 ﻿
-using Starcounter.Weaver.Rewriting;
+using Starcounter.Weaver;
 using Starcounter.Weaver.Tests.ExternalCode;
 using System;
 using System.Linq;

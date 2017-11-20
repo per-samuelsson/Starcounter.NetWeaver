@@ -2,7 +2,7 @@
 using Mono.Cecil;
 using System.Linq;
 
-namespace Starcounter.Weaver.Rewriting {
+namespace Starcounter.Weaver {
 
     public class DatabaseTypeState {
         protected readonly TypeDefinition type;
