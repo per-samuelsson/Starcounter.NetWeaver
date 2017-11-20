@@ -17,3 +17,8 @@ but should weave and include schema, because consuming database classes in Class
 
 6. ConsoleAppNetCoreIndirectReference - same as ConsoleAppNetFrameworkIndirectReference, but target
 .NET Core 2.0.
+
+7. ConsoleAppNetFrameworkSingleDbProperty - .NET Framework console application with a single database
+class and a single property. Reference Starcounter2.
+
+8. ConsoleAppNetCoreSingleDbProperty - same as ConsoleAppNetFrameworkSingleDbProperty for .NET Core 2.0.
