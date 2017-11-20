@@ -27,9 +27,8 @@ namespace Starcounter.Weaver {
         }
 
         public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
-            TypeReference tr;
-            module.TryGetTypeReference(typeof(object).FullName, out tr);
-            
+            module.TryGetTypeReference(typeof(object).FullName, out TypeReference tr);
+
             var type = tr.Resolve();
             return type.Methods.Single(m => m.Name.Equals(".ctor"));
         }
