@@ -11,19 +11,19 @@
 
   <PropertyGroup>
     <BuildDependsOn>$(BuildDependsOn);WeaveProject</BuildDependsOn>
-    <WeaverOutputPath>$(MSBuildProjectDirectory)\$(OutputPath).starcounter</WeaverOutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).exe" />
-    <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).pdb" />
-    <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).dll" />
-  </ItemGroup>
-  
   <Target Name="WeaveProject" Condition="'$(DisableWeaving)' != 'true'" AfterTargets="Build">
     <PropertyGroup>
       <debugSwitch Condition="( '$(DebugWeaver)' == 'True' )">--sc-debug</debugSwitch>
+      <WeaverOutputPath>$(MSBuildProjectDirectory)\$(OutputPath).starcounter</WeaverOutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).exe" />
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).pdb" />
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).dll" />
+    </ItemGroup>
     
     <Message Text="WeaveProject: $(TargetFramework): Weaving $(TargetPath)" Importance="high" />
     <Error Condition="!Exists('$(TargetPath)')" Text="Weaving input file $(TargetPath) does not exist" />
@@ -39,6 +39,16 @@
   </Target>
 
   <Target Name="CleanWeaverContent" AfterTargets="Clean">
+    <PropertyGroup>
+      <WeaverOutputPath>$(MSBuildProjectDirectory)\$(OutputPath).starcounter</WeaverOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).exe" />
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).pdb" />
+      <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).dll" />
+    </ItemGroup>
+    
     <Delete Files="@(WeavedFiles)" Condition="Exists('%(RootDir)%(Directory)%(Filename)%(Extension)')" />
     <RemoveDir Directories="$(WeaverOutputPath)" />
   </Target>
