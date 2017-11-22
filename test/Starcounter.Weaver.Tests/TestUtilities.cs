@@ -22,6 +22,7 @@ namespace Starcounter.Weaver.Tests {
         static TestUtilities() {
             var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
             currentAssemblyDefaultReaderParameters = new DefaultModuleReaderParameters(currentAssemblyPath).Parameters;
+            currentAssemblyDefaultReaderParameters.ReadSymbols = false;
             currentAssemblyBytes = File.ReadAllBytes(currentAssemblyPath);
         }
 

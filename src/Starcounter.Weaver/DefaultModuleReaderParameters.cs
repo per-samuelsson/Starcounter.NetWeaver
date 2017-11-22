@@ -14,6 +14,7 @@ namespace Starcounter.Weaver {
 
         public DefaultModuleReaderParameters(string assemblyFile) {
             var readParameters = new ReaderParameters();
+            readParameters.ReadSymbols = true;
 #if NET_STANDARD
             readParameters.AssemblyResolver = new DotNetCoreAssemblyResolver(assemblyFile);
 #else

@@ -18,7 +18,10 @@ namespace Starcounter.Weaver {
         public override void Write(ModuleDefinition module) {
             Guard.NotNull(module, nameof(module));
 
-            module.Write(assemblyPath);
+            var parameters = new WriterParameters();
+            parameters.WriteSymbols = true;
+
+            module.Write(assemblyPath, parameters);
         }
     }
 }
