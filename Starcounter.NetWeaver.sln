@@ -70,6 +70,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCoreSingleDbPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFrameworkSingleDbProperty", "test\TestProjects\ConsoleAppNetFrameworkSingleDbProperty\ConsoleAppNetFrameworkSingleDbProperty.csproj", "{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymbolFileWritten", "test\Prototypes\SymbolFileWritten\SymbolFileWritten.csproj", "{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,10 @@ Global
 		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,6 +178,7 @@ Global
 		{CF792F5A-97D4-4FA7-A339-3CDE83397F97} = {9493B70F-6554-41B0-9F9B-7CCE088DE897}
 		{6216534D-CCD1-4103-B988-D921F827DE59} = {8A30569E-6858-4A3E-A383-29A7FB268BB3}
 		{8206F8EF-BF24-4A07-B07C-BF11FBFAE208} = {8A30569E-6858-4A3E-A383-29A7FB268BB3}
+		{24F6C304-154D-4928-9BFE-5B63EEF1BD5C} = {7F6B0388-8CAF-49EB-A136-7EDCCFBAB750}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F4749F5-CEF3-4494-88C3-49FD5A0FF0BC}
