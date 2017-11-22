@@ -22,6 +22,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeaverOutputToMsBuildErrorsAndWarningsCore", "test\Prototypes\WeaverOutputToMsBuildErrorsAndWarningsCore\WeaverOutputToMsBuildErrorsAndWarningsCore.csproj", "{120E5098-82DE-4E11-BC4E-197025045149}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{8A30569E-6858-4A3E-A383-29A7FB268BB3}"
+	ProjectSection(SolutionItems) = preProject
+		test\TestProjects\ReadMe.txt = test\TestProjects\ReadMe.txt
+		test\TestProjects\TestProjects.props = test\TestProjects\TestProjects.props
+		test\TestProjects\TestProjects.targets = test\TestProjects\TestProjects.targets
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryNetFramework", "test\TestProjects\ClassLibraryNetFramework\ClassLibraryNetFramework.csproj", "{0E121AAA-281B-4D79-9712-9ED1393AE4BF}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -61,7 +66,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave.Tests", "test\sta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{9493B70F-6554-41B0-9F9B-7CCE088DE897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetCoreSingleDbProperty", "test\TestProjects\ConsoleAppNetCoreSingleDbProperty\ConsoleAppNetCoreSingleDbProperty.csproj", "{6216534D-CCD1-4103-B988-D921F827DE59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCoreSingleDbProperty", "test\TestProjects\ConsoleAppNetCoreSingleDbProperty\ConsoleAppNetCoreSingleDbProperty.csproj", "{6216534D-CCD1-4103-B988-D921F827DE59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppNetFrameworkSingleDbProperty", "test\TestProjects\ConsoleAppNetFrameworkSingleDbProperty\ConsoleAppNetFrameworkSingleDbProperty.csproj", "{8206F8EF-BF24-4A07-B07C-BF11FBFAE208}"
 EndProject
