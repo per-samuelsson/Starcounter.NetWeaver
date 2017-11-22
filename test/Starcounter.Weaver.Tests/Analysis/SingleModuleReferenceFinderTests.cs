@@ -30,7 +30,7 @@ namespace Starcounter.Weaver.Tests {
 
             var finder = SingleModuleReferenceFinder.Run(
                 thisAssembly, TestUtilities.AdviceAllReferenceDiscovery, (module) => {
-                    return module.Name.Equals("Starcounter2.dll");
+                    return module.Name.Equals("Starcounter.Weaver.dll");
                 });
 
             Assert.NotNull(finder);
