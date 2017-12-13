@@ -5,16 +5,14 @@ using Starcounter.Weaver;
 using System;
 
 namespace starweave.Weaver {
-    
-    public sealed class ProxyConstructorEmitter {
-        readonly TypeReference signatureType;
+
+    public sealed class ProxyConstructorEmitter : ProxyConstructorFinder {
         readonly CodeEmissionContext context;
 
         // public [ctor]([SignatureType] t) <: base(t)> {
         // }
 
-        public ProxyConstructorEmitter(CodeEmissionContext emitContext, TypeReference signatureTypeRef) {
-            signatureType = signatureTypeRef ?? throw new ArgumentNullException(nameof(signatureTypeRef));
+        public ProxyConstructorEmitter(CodeEmissionContext emitContext, TypeReference signatureTypeRef) : base(signatureTypeRef) {
             context = emitContext ?? throw new ArgumentNullException(nameof(emitContext));
         }
 
