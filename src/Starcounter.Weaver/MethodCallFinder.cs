@@ -22,7 +22,7 @@ namespace Starcounter.Weaver {
             Guard.NotNull(caller, nameof(caller));
             Guard.NotNull(methodTargets, nameof(methodTargets));
             if (!caller.HasBody) {
-                throw new ArgumentException("Call not found: method has no body", nameof(caller));
+                throw new ArgumentException($"Call not found: method {caller.Name} has no body", nameof(caller));
             }
 
             return caller.Body.Instructions.SingleOrDefault(i => IsCallToAnyOfTargets(i, methodTargets));
