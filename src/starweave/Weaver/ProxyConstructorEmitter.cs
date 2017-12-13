@@ -33,13 +33,14 @@ namespace starweave.Weaver {
             if (baseConstructor == null) {
                 throw new ArgumentNullException(nameof(baseConstructor));
             }
+            var baseCtor = context.Use(baseConstructor);
 
             var ctor = EmitMethodDefinition(type);
             ctor.Body.MaxStackSize = 8;
             var il = ctor.Body.GetILProcessor();
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Call, baseConstructor);
+            il.Emit(OpCodes.Call, baseCtor);
             il.Emit(OpCodes.Ret);
 
             return ctor;
