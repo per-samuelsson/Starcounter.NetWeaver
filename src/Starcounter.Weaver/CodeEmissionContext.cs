@@ -1,6 +1,7 @@
 ﻿
 using Mono.Cecil;
 using System;
+using System.Reflection;
 
 namespace Starcounter.Weaver {
 
@@ -22,6 +23,10 @@ namespace Starcounter.Weaver {
         }
 
         public MethodReference Use(MethodReference method) {
+            return module.ImportReference(method);
+        }
+
+        public MethodReference Use(MethodInfo method) {
             return module.ImportReference(method);
         }
     }

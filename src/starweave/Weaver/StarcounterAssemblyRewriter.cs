@@ -48,8 +48,8 @@ namespace starweave.Weaver {
                 var readMethod = crudMethods.GetReadMethod(databaseProperty.DataType.Name);
                 var writeMethod = crudMethods.GetUpdateMethod(databaseProperty.DataType.Name);
 
-                var reader = module.ImportReference(readMethod);
-                var writer = module.ImportReference(writeMethod);
+                var reader = emitContext.Use(readMethod);
+                var writer = emitContext.Use(writeMethod);
                 
                 propRewriter.Rewrite(autoProperty, reader, writer);
             }
