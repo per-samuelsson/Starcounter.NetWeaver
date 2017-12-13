@@ -45,6 +45,10 @@ namespace starweave.Tests {
                 emitter.Emit(testClass);
                 ctors = testClass.Methods.Where(m => m.Name == ".ctor");
                 Assert.Equal(2, ctors.Count());
+
+                var finder = emitter as ProxyConstructorFinder;
+                var emitted = finder.FindProxyConstructor(testClass);
+                Assert.NotNull(emitted);
             }
         }
 
@@ -76,6 +80,12 @@ namespace starweave.Tests {
                 emitter.Emit(testClassDerived, baseConstructor);
                 ctors = testClassDerived.Methods.Where(m => m.Name == ".ctor");
                 Assert.Equal(2, ctors.Count());
+
+                var finder = emitter as ProxyConstructorFinder;
+                var emitted = finder.FindProxyConstructor(testClassBase);
+                Assert.NotNull(emitted);
+                emitted = finder.FindProxyConstructor(testClassDerived);
+                Assert.NotNull(emitted);
             }
         }
     }
