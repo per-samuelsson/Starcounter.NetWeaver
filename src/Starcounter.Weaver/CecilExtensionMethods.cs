@@ -1,11 +1,24 @@
 ﻿
 using Mono.Cecil;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Starcounter.Weaver {
 
     public static class CecilExtensionMethods {
+
+        public static bool ReferenceSameMethod(this MethodReference reference, MethodReference other) {
+            // Meta tokens aren't accurate: definition will have a different token than
+            // any reference. FullName is slow but at least functional here.
+            return reference.FullName.Equals(other.FullName);
+        }
+
+        public static bool ReferenceSameType(this TypeReference reference, TypeReference other) {
+            // Meta tokens aren't accurate: definition will have a different token than
+            // any reference. FullName is slow but at least functional here.
+            return reference.FullName.Equals(other.FullName);
+        }
 
         public static bool IsAutoImplemented(this PropertyDefinition p) {
             return AutoImplementedProperty.IsAutoImplementedProperty(p);
