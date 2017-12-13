@@ -84,7 +84,7 @@ namespace Starcounter.Weaver.Tests {
             Assert.NotNull(instruction);
             var operand = instruction.Operand as MethodReference;
             Assert.NotNull(operand);
-            Assert.True(MethodBodyAnalysisExtensionMethods.ReferenceSameMethod(operand, nocall));
+            Assert.True(operand.ReferenceSameMethod(nocall));
         }
     }
 }
