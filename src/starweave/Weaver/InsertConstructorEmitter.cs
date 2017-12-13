@@ -21,7 +21,7 @@ namespace starweave.Weaver {
             context = emitContext ?? throw new ArgumentNullException(nameof(emitContext));
         }
 
-        public void Emit(TypeDefinition type, DatabaseTypeState state) {
+        public MethodDefinition Emit(TypeDefinition type, DatabaseTypeState state) {
             if (type == null) {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -42,7 +42,7 @@ namespace starweave.Weaver {
                 voidType);
             var handle = new ParameterDefinition("createHandle", ParameterAttributes.None, ulongType);
             var dummy = new ParameterDefinition("dummy", ParameterAttributes.None, signature);
-
+            
             ctor.Parameters.Add(handle);
             ctor.Parameters.Add(dummy);
 
@@ -59,6 +59,8 @@ namespace starweave.Weaver {
             il.Emit(OpCodes.Ret);
 
             type.Methods.Add(ctor);
+
+            return ctor;
         }
     }
 }

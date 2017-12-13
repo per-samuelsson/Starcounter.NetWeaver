@@ -18,7 +18,7 @@ namespace starweave.Weaver {
             context = emitContext ?? throw new ArgumentNullException(nameof(emitContext));
         }
 
-        public void Emit(TypeDefinition type) {
+        public MethodDefinition Emit(TypeDefinition type) {
             var ctor = EmitMethodDefinition(type);
 
             var objectConstructor = context.Use(type.Module.GetObjectConstructorReference());
@@ -27,9 +27,11 @@ namespace starweave.Weaver {
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Call, objectConstructor);
             il.Emit(OpCodes.Ret);
+
+            return ctor;
         }
 
-        public void Emit(TypeDefinition type, MethodReference baseConstructor) {
+        public MethodDefinition Emit(TypeDefinition type, MethodReference baseConstructor) {
             if (baseConstructor == null) {
                 throw new ArgumentNullException(nameof(baseConstructor));
             }
@@ -41,6 +43,8 @@ namespace starweave.Weaver {
             il.Emit(OpCodes.Ldarg_1);
             il.Emit(OpCodes.Call, baseConstructor);
             il.Emit(OpCodes.Ret);
+
+            return ctor;
         }
 
         MethodDefinition EmitMethodDefinition(TypeDefinition type) {
