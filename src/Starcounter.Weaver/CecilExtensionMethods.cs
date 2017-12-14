@@ -48,6 +48,10 @@ namespace Starcounter.Weaver {
             return result;
         }
 
+        public static IEnumerable<MethodDefinition> GetInstanceConstructors(this TypeDefinition type) {
+            return type.Methods.Where(m => m.IsConstructor && m.HasThis);
+        }
+
         public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
             module.TryGetTypeReference(typeof(object).FullName, out TypeReference tr);
 
