@@ -3,6 +3,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Starcounter.Weaver;
 using System;
+using System.Linq;
 
 namespace starweave.Weaver {
 
@@ -38,11 +39,43 @@ namespace starweave.Weaver {
             Guard.NotNull(replacement, nameof(replacement));
             Guard.NotNull(original, nameof(original));
 
-            return false;
+            if (!replacement.HasParameters) {
+                return false;
+            }
+
+            if (replacement.Parameters.Count != (original.Parameters.Count + 2)) {
+                return false;
+            }
+
+            // Pretty naive implementation currently, but probably close
+            // to about what we need for our purpose. We need to test it's
+            // accurate for more exotic types though, such as generics,
+            // etc.
+            // TODO:
+
+            for (int i = 0; i < original.Parameters.Count; i++) {
+                var op = original.Parameters[i];
+                var rp = replacement.Parameters[i];
+
+                if (rp.ParameterType.MetadataToken.Equals(op.ParameterType.MetadataToken)) {
+                    continue;
+                }
+
+                if (!op.ParameterType.ReferenceSameType(rp.ParameterType)) {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         public MethodDefinition Emit(MethodDefinition original) {
             Guard.NotNull(original, nameof(original));
+
+            // Any call to the original constructor - and they can come only from constructors
+            // within this type, or any direct derived type - must be rewritten to instead call
+            // the replacement constructor.
+            // TODO:
 
             var type = original.DeclaringType;
             var typeSystem = type.Module.TypeSystem;
@@ -53,6 +86,8 @@ namespace starweave.Weaver {
             foreach (var p in original.Parameters) {
                 replacement.Parameters.Add(p);
             }
+
+            // original.DeclaringType.Methods.Where(m2 => m2.)
             
             var handle = new ParameterDefinition("createHandle", ParameterAttributes.None, ulongType);
             var dummy = new ParameterDefinition("dummy", ParameterAttributes.None, signature);
