@@ -6,6 +6,11 @@ using System;
 
 namespace starweave.Weaver {
 
+    /// <summary>
+    /// Replacement constructors are proxy constructors emitted by the weaver,
+    /// where we assure they always end up in a single call to the insert
+    /// constructor.
+    /// </summary>
     public sealed class ReplacementConstructorEmitter {
         readonly CodeEmissionContext context;
         readonly TypeReference uniqueSignatureType;
@@ -27,6 +32,13 @@ namespace starweave.Weaver {
         public ReplacementConstructorEmitter(CodeEmissionContext emitContext, TypeReference uniqueSignatureTypeRef) {
             uniqueSignatureType = uniqueSignatureTypeRef ?? throw new ArgumentNullException(nameof(uniqueSignatureTypeRef));
             context = emitContext ?? throw new ArgumentNullException(nameof(emitContext));
+        }
+
+        public static bool IsReplacementFor(MethodDefinition replacement, MethodDefinition original) {
+            Guard.NotNull(replacement, nameof(replacement));
+            Guard.NotNull(original, nameof(original));
+
+            return false;
         }
 
         public MethodDefinition Emit(MethodDefinition original) {
