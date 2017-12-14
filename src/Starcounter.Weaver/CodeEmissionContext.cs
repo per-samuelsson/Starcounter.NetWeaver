@@ -14,11 +14,17 @@ namespace Starcounter.Weaver {
     public sealed class CodeEmissionContext {
         readonly ModuleDefinition module;
 
+        public ModuleDefinition Module => module;
+
         public CodeEmissionContext(ModuleDefinition emissionTargetModule) {
             module = emissionTargetModule ?? throw new ArgumentNullException(nameof(emissionTargetModule));
         }
 
         public TypeReference Use(TypeReference type) {
+            return module.ImportReference(type);
+        }
+
+        public TypeReference Use(Type type) {
             return module.ImportReference(type);
         }
 
