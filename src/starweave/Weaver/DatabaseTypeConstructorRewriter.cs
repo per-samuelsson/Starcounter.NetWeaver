@@ -79,10 +79,10 @@ namespace starweave.Weaver {
                 redirects.Add(instanceConstructor, replacementConstructor);
             }
             
-            foreach (var instanceConstructor in replacementConstructors) {
-                var call = MethodCallFinder.FindSingleCallToAnyTarget(instanceConstructor, redirects.Keys);
+            foreach (var replacementConstructor in replacementConstructors) {
+                var call = MethodCallFinder.FindSingleCallToAnyTarget(replacementConstructor, redirects.Keys);
                 if (call == null) {
-                    throw new Exception($"Constructor {instanceConstructor.FullName} contain no constructor call. We didn't expect that.");
+                    throw new Exception($"Constructor {replacementConstructor.FullName} contain no constructor call. We didn't expect that.");
                 }
 
                 // Implement actual redirect. Push additional arguments on stack and
@@ -91,7 +91,7 @@ namespace starweave.Weaver {
                 var callTarget = (MethodReference)call.Operand;
                 var replacement = redirects[callTarget];
 
-                host.Diagnostics.Trace($"Redirecting call from {instanceConstructor.FullName}: from {callTarget.FullName} to {replacement.FullName}");
+                host.Diagnostics.Trace($"Redirecting call from {replacementConstructor.FullName}: from {callTarget.FullName} to {replacement.FullName}");
             }
         }
     }
