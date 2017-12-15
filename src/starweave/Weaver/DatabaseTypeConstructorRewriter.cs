@@ -75,6 +75,8 @@ namespace starweave.Weaver {
 
             foreach (var instanceConstructor in instanceConstructors) {
                 var replacementConstructor = replacementEmit.Emit(instanceConstructor);
+                replacementEmit.Redirect(instanceConstructor, replacementConstructor, typeState);
+
                 replacementConstructors.Add(replacementConstructor);
                 redirects.Add(instanceConstructor, replacementConstructor);
             }
@@ -82,6 +84,7 @@ namespace starweave.Weaver {
             foreach (var replacementConstructor in replacementConstructors) {
                 var call = MethodCallFinder.FindSingleCallToAnyTarget(replacementConstructor, redirects.Keys);
                 if (call == null) {
+
                     throw new Exception($"Constructor {replacementConstructor.FullName} contain no constructor call. We didn't expect that.");
                 }
 
