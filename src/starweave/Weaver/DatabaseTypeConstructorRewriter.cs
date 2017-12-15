@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Starcounter.Weaver;
 using System;
 using System.Collections.Generic;
@@ -47,14 +48,12 @@ namespace starweave.Weaver {
                 throw new ArgumentException($"Type contain constructors with signature types.");
             }
             
-            // We must enlist all redirects: they include all original ctors
-            // in this class, and all ditos in base.
-
             var redirects = new Dictionary<MethodReference, MethodReference>();
             
             if (baseTypeDefinition == null) {
                 proxyEmit.Emit(typeDefinition);
-                insertEmit.Emit(typeDefinition, typeState);
+                var insertConstructor = insertEmit.Emit(typeDefinition, typeState);
+                redirects.Add(context.Module.GetObjectConstructorReference(), insertConstructor);
             }
             else {
                 // Could be candidate for caching: consider case with lots of classes
@@ -84,17 +83,19 @@ namespace starweave.Weaver {
             foreach (var replacementConstructor in replacementConstructors) {
                 var call = MethodCallFinder.FindSingleCallToAnyTarget(replacementConstructor, redirects.Keys);
                 if (call == null) {
-
                     throw new Exception($"Constructor {replacementConstructor.FullName} contain no constructor call. We didn't expect that.");
                 }
-
-                // Implement actual redirect. Push additional arguments on stack and
-                // redirect the call.
-                // TODO
+                
                 var callTarget = (MethodReference)call.Operand;
-                var replacement = redirects[callTarget];
+                var replacement = redirects.First(pair => pair.Key.ReferenceSameMethod(callTarget)).Value;
 
-                host.Diagnostics.Trace($"Redirecting call from {replacementConstructor.FullName}: from {callTarget.FullName} to {replacement.FullName}");
+                var il = replacementConstructor.Body.GetILProcessor();
+                var loadsignature = il.Create(OpCodes.Ldnull);
+                var loadhandle = il.Create(OpCodes.Ldarg, replacement.Parameters.Count - 1);
+                var replacementCall = il.Create(call.OpCode, replacement);
+                il.Replace(call, replacementCall);
+                il.InsertBefore(replacementCall, loadsignature);
+                il.InsertBefore(loadsignature, loadhandle);
             }
         }
     }
