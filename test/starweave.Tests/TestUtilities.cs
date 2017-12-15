@@ -25,11 +25,16 @@ namespace starweave.Weaver.Tests {
         public ModuleWithWriteTestWhenDisposed(ModuleDefinition moduleDefinition, bool discardTestWrite = false) {
             module = moduleDefinition;
             discardWrite = discardTestWrite;
+            OutputStream = discardTestWrite ? null : new MemoryStream();
+        }
+
+        public Stream OutputStream {
+            get; set;
         }
 
         public void Dispose() {
             if (!discardWrite) {
-                module?.Write(new MemoryStream());
+                module?.Write(OutputStream);
             }
             module = null;
         }
