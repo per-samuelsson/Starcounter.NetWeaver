@@ -71,33 +71,21 @@ namespace starweave.Weaver {
 
         public MethodDefinition Emit(MethodDefinition original) {
             Guard.NotNull(original, nameof(original));
-
-            // Any call to the original constructor - and they can come only from constructors
-            // within this type, or any direct derived type - must be rewritten to instead call
-            // the replacement constructor.
-            // TODO:
-
+            
             var type = original.DeclaringType;
             var typeSystem = type.Module.TypeSystem;
             var ulongType = context.Use(typeSystem.UInt64);
             var signature = context.Use(uniqueSignatureType);
-            
-            var replacement = new MethodDefinition(".ctor", original.Attributes, original.ReturnType);
-            foreach (var p in original.Parameters) {
-                replacement.Parameters.Add(p);
-            }
 
-            // original.DeclaringType.Methods.Where(m2 => m2.)
+            var replacement = original.Clone();
             
             var handle = new ParameterDefinition("createHandle", ParameterAttributes.None, ulongType);
             var dummy = new ParameterDefinition("dummy", ParameterAttributes.None, signature);
-
+            
             replacement.Parameters.Add(handle);
             replacement.Parameters.Add(dummy);
 
-            replacement.Body = original.Body;
             type.Methods.Add(replacement);
-
             return replacement;
         }
 
