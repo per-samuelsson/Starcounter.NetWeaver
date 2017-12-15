@@ -26,6 +26,8 @@ namespace starweave.Tests {
             using (var mod = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
                 var module = mod.Module;
 
+                // mod.OutputStream = System.IO.File.Create(@"c:\Users\Per\test.dll");
+
                 var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
                 var originalCtors = type.GetInstanceConstructors();
                 var defaultCtor = originalCtors.Single();
@@ -52,10 +54,42 @@ namespace starweave.Tests {
                 var constructors = ConstructorSet.Discover(
                     new ConstructorSignatureTypes(emitContext, typeof(MockProxyParameter), typeof(MockInsertParameter)), type);
 
-                Assert.NotNull(constructors.ProxyConstructor);
-                Assert.NotNull(constructors.InsertConstructor);
-                Assert.Equal(1, constructors.OriginalConstructors.Count());
-                Assert.Equal(1, constructors.ReplacementConstructors.Count());
+                AssertFullConstructorSet(constructors, 1);
+            }
+        }
+
+        [Fact]
+        public void NoBaseNoCtorRenderConstructorsWhereNoCallToOriginalOnesRemain() {
+
+            using (var mod = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = mod.Module;
+                
+                var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
+                var testType = module.Types.Single(t => t.FullName == typeof(DatabaseTypeConstructorRewriterTests).FullName);
+                var mockInsert = typeof(DatabaseTypeConstructorRewriterTests).GetMethod(nameof(DatabaseTypeConstructorRewriterTests.MockInsertMethod));
+                var emitContext = new CodeEmissionContext(module);
+
+                var state = new DatabaseTypeStateEmitter(emitContext, type, new DatabaseTypeStateNames());
+                state.EmitReferenceFields();
+                state.EmitCRUDHandles();
+
+                var rewriter = new DatabaseTypeConstructorRewriter(
+                    new DefaultWeaverHost(TestUtilities.QuietDiagnostics),
+                    emitContext,
+                    typeof(MockProxyParameter),
+                    typeof(MockInsertParameter),
+                    mockInsert);
+                rewriter.Rewrite(type, null, state);
+                
+                var constructors = ConstructorSet.Discover(
+                    new ConstructorSignatureTypes(emitContext, typeof(MockProxyParameter), typeof(MockInsertParameter)), type);
+
+                AssertFullConstructorSet(constructors, 1);
+
+                foreach (var ctor in constructors.All) {
+                    var call = MethodCallFinder.FindSingleCallToAnyTarget(ctor, constructors.OriginalConstructors);
+                    Assert.Null(call);
+                }
             }
         }
 
@@ -79,6 +113,17 @@ namespace starweave.Tests {
             }
 
             Assert.Equal(expected, type.GetInstanceConstructors().Count());
+        }
+
+        static void AssertFullConstructorSet(ConstructorSet constructors, int originalConstructorCount = -1) {
+            Assert.NotNull(constructors.ProxyConstructor);
+            Assert.NotNull(constructors.InsertConstructor);
+            Assert.NotEmpty(constructors.OriginalConstructors);
+            Assert.NotEmpty(constructors.ReplacementConstructors);
+            Assert.Equal(constructors.ReplacementConstructors.Count(), constructors.OriginalConstructors.Count());
+            if (originalConstructorCount > 0) {
+                Assert.Equal(originalConstructorCount, constructors.OriginalConstructors.Count());
+            }
         }
     }
 }
