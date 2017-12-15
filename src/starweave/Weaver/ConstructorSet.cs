@@ -23,6 +23,22 @@ namespace starweave.Weaver {
             }
         }
 
+        public IEnumerable<MethodDefinition> All {
+            get {
+                var all = new List<MethodDefinition>();
+                if (ProxyConstructor != null) {
+                    all.Add(ProxyConstructor);
+                }
+                if (InsertConstructor != null) {
+                    all.Add(InsertConstructor);
+                }
+                all.AddRange(OriginalConstructors);
+                all.AddRange(ReplacementConstructors);
+
+                return all;
+            }
+        }
+
         private ConstructorSet(MethodDefinition proxy, MethodDefinition insert, IEnumerable<MethodDefinition> replacements, IEnumerable<MethodDefinition> originals) {
             Guard.NotNull(replacements, nameof(replacements));
             Guard.NotNull(originals, nameof(originals));
