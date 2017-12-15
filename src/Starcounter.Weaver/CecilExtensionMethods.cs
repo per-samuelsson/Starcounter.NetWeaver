@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,24 @@ namespace Starcounter.Weaver {
 
             var type = tr.Resolve();
             return type.Methods.Single(m => m.Name.Equals(".ctor"));
+        }
+
+        public static MethodDefinition Clone(this MethodDefinition method, string newName = null) {
+            // Not sure this one is sufficient. We need some way to do this though,
+            // so let's start here.
+            // Then keep an eye on: https://github.com/jbevain/cecil/issues/476
+            var clone = new MethodDefinition(newName ?? method.Name, method.Attributes, method.ReturnType);
+            foreach (var p in method.Parameters) {
+                clone.Parameters.Add(p);
+            }
+
+            clone.Body = new MethodBody(clone);
+            clone.Body.MaxStackSize = method.Body.MaxStackSize;
+            foreach (var instruction in method.Body.Instructions) {
+                clone.Body.Instructions.Add(instruction);
+            }
+
+            return clone;
         }
 
         public static byte[] ReadEmbeddedResource(this ModuleDefinition module, string name) {
