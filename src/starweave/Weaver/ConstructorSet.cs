@@ -17,6 +17,12 @@ namespace starweave.Weaver {
 
         public IEnumerable<MethodDefinition> ReplacementConstructors { get; }
 
+        public bool ContainConstructorsWithSignatureTypes {
+            get {
+                return ProxyConstructor != null || InsertConstructor != null || ReplacementConstructors.Count() > 0;
+            }
+        }
+
         private ConstructorSet(MethodDefinition proxy, MethodDefinition insert, IEnumerable<MethodDefinition> replacements, IEnumerable<MethodDefinition> originals) {
             Guard.NotNull(replacements, nameof(replacements));
             Guard.NotNull(originals, nameof(originals));
