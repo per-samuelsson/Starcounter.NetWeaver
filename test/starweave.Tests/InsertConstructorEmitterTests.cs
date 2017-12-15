@@ -17,7 +17,7 @@ namespace starweave.Tests {
 
     class DbCrudFake {
 
-        public static void Crete(out ulong dbId, out ulong dbRef, ulong createHandle) {
+        public static void Create(out ulong dbId, out ulong dbRef, ulong createHandle) {
             dbId = 42;
             dbRef = 42;
         }
@@ -32,7 +32,7 @@ namespace starweave.Tests {
                 
                 var signature = module.Types.Single(t => t.FullName == typeof(InsertConstructorParameterType).FullName);
                 var crud = module.Types.Single(t => t.FullName == typeof(DbCrudFake).FullName);
-                var createMethod = crud.Methods.Single(m => m.Name == nameof(DbCrudFake.Crete));
+                var createMethod = crud.Methods.Single(m => m.Name == nameof(DbCrudFake.Create));
 
                 var emitter = new InsertConstructorEmitter(
                     new CodeEmissionContext(module), 
