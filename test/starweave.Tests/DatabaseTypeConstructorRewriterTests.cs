@@ -27,7 +27,9 @@ namespace starweave.Tests {
                 var module = mod.Module;
 
                 var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
-                var ctorCount = type.GetInstanceConstructors().Count();
+                var originalCtors = type.GetInstanceConstructors();
+                var defaultCtor = originalCtors.Single();
+
                 var testType = module.Types.Single(t => t.FullName == typeof(DatabaseTypeConstructorRewriterTests).FullName);
 
                 var mockInsert = typeof(DatabaseTypeConstructorRewriterTests).GetMethod(nameof(DatabaseTypeConstructorRewriterTests.MockInsertMethod));
@@ -45,10 +47,15 @@ namespace starweave.Tests {
                     mockInsert);
                 rewriter.Rewrite(type, null, state);
 
-                AssertExpectedConstructorCountAfterRewrite(ctorCount, type, null);
+                AssertExpectedConstructorCountAfterRewrite(1, type, null);
 
-                // Also, we should find no calls to original constructors.
-                // TODO
+                var constructors = ConstructorSet.Discover(
+                    new ConstructorSignatureTypes(emitContext, typeof(MockProxyParameter), typeof(MockInsertParameter)), type);
+
+                Assert.NotNull(constructors.ProxyConstructor);
+                Assert.NotNull(constructors.InsertConstructor);
+                Assert.Equal(1, constructors.OriginalConstructors.Count());
+                Assert.Equal(1, constructors.ReplacementConstructors.Count());
             }
         }
 
