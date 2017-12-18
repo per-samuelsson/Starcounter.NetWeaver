@@ -57,7 +57,7 @@ namespace starweave.Weaver {
 
             var ctor = new MethodDefinition(
                 ".ctor",
-                MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
+                MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
                 voidType);
             var dummy = new ParameterDefinition("dummy", ParameterAttributes.None, signature);
 
