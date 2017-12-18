@@ -29,7 +29,7 @@ namespace starweave.Tests {
             using (var mod = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
                 var module = mod.Module;
 
-                mod.OutputStream = System.IO.File.Create(@"c:\Users\Per\test.dll");
+                // mod.OutputStream = System.IO.File.Create(@"c:\Users\Per\test.dll");
 
                 var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
 
