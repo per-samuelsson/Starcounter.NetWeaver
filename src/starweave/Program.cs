@@ -52,7 +52,7 @@ namespace starweave {
                 Directory.CreateDirectory(dir);
             }
             
-            var weaverFactory = new StarcounterWeaverFactory("Starcounter2.dll", new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider());
+            var weaverFactory = new StarcounterWeaverFactory("Starcounter2.dll", new DatabaseTypeStateNames());
             var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, weaverFactory);
             weaver.Weave();
 

@@ -9,20 +9,18 @@ namespace starweave.Weaver {
     public class StarcounterWeaverFactory : IWeaverFactory {
         readonly string targetAssemblyIdentity;
         readonly DatabaseTypeStateNames names;
-        readonly DbCrudMethodProvider methodProvider;
         IWeaverHost host;
         StarcounterAssemblyAnalyzer analyzer;
 
-        public StarcounterWeaverFactory(string runtimeTargetAssemblyIdentity, DatabaseTypeStateNames stateNames, DbCrudMethodProvider crudMethods) {
+        public StarcounterWeaverFactory(string runtimeTargetAssemblyIdentity, DatabaseTypeStateNames stateNames) {
             targetAssemblyIdentity = runtimeTargetAssemblyIdentity ?? throw new ArgumentNullException(nameof(runtimeTargetAssemblyIdentity));
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
-            methodProvider = crudMethods ?? throw new ArgumentNullException(nameof(crudMethods));
         }
 
         IAssemblyAnalyzer IWeaverFactory.ProvideAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition) {
             host = weaverHost;
             var runtimeProvider = new AssemblyLoadTargetRuntimeProvider(weaverHost, targetAssemblyIdentity);
-            analyzer = new StarcounterAssemblyAnalyzer(weaverHost, moduleDefinition, runtimeProvider, methodProvider.SupportedDataTypes);
+            analyzer = new StarcounterAssemblyAnalyzer(weaverHost, moduleDefinition, runtimeProvider);
             return analyzer;
         }
 

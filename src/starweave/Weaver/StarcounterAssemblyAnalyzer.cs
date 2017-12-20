@@ -11,17 +11,14 @@ namespace starweave.Weaver {
     public class StarcounterAssemblyAnalyzer : IAssemblyAnalyzer {
         readonly IWeaverHost host;
         readonly ModuleDefinition module;
-        readonly string target;
         readonly TargetRuntimeFacadeProvider runtimeProvider;
-        readonly IEnumerable<string> dataTypes;
 
         public IAssemblyRuntimeFacade RuntimeFacade { get; private set; }
         
-        public StarcounterAssemblyAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition, TargetRuntimeFacadeProvider targetRuntimeProvider, IEnumerable<string> supportedDataTypes) {
+        public StarcounterAssemblyAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition, TargetRuntimeFacadeProvider targetRuntimeProvider) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             module = moduleDefinition ?? throw new ArgumentNullException(nameof(moduleDefinition));
             runtimeProvider = targetRuntimeProvider ?? throw new ArgumentNullException(nameof(targetRuntimeProvider));
-            dataTypes = supportedDataTypes ?? throw new ArgumentNullException(nameof(supportedDataTypes));
         }
         
         bool IAssemblyAnalyzer.IsTargetReference(ModuleDefinition module) {
@@ -31,13 +28,14 @@ namespace starweave.Weaver {
         void IAssemblyAnalyzer.DiscoveryAssembly(AnalysisResult analysisResult) {
             var runtime = RuntimeFacade = runtimeProvider.ProvideRuntimeFacade(analysisResult.TargetModule);
 
-
-            // Supported data types must come from the facade.
+            // Also: bind future weaved assembly to the given runtime. It's kind of
+            // part of the contract too. And it's nice to see that in weaved result:
+            // full identity of the assembly, what it has provided, etc.
             // TODO:
-
+            
             var assembly = analysisResult.AnalyzedAssembly;
 
-            foreach (var dataType in dataTypes) {
+            foreach (var dataType in runtime.SupportedDataTypes) {
                 assembly.DefiningSchema.DefineDataType(dataType);
             }
             
@@ -61,7 +59,6 @@ namespace starweave.Weaver {
         }
 
         IEnumerable<TypeDefinition> DiscoverDefinedDatabaseTypes(Type databaseAttributeType) {
-            // Custom attribute type must come from the target
             return module.Types.Where(t => t.HasCustomAttribute(databaseAttributeType));
         }
 

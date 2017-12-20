@@ -1,6 +1,5 @@
 
 using Starcounter.Weaver;
-using Starcounter2.Internal;
 using Xunit;
 
 namespace starweave.Weaver.Tests {
@@ -9,7 +8,7 @@ namespace starweave.Weaver.Tests {
         
         [Fact]
         public void BadInputRenderMeaningfulErrors() {
-            var f = new StarcounterWeaverFactory("mock", new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider()) as IWeaverFactory;
+            var f = new StarcounterWeaverFactory("mock.dll", new DatabaseTypeStateNames()) as IWeaverFactory;
             Assert.NotNull(f);
         }
     }
