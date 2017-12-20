@@ -1,6 +1,5 @@
 ﻿
 using Mono.Cecil;
-using Starcounter.Hosting.Schema;
 using Starcounter.Weaver;
 using System;
 using System.Collections.Generic;
@@ -11,24 +10,34 @@ namespace starweave.Weaver {
     public class StarcounterAssemblyAnalyzer : IAssemblyAnalyzer {
         readonly IWeaverHost host;
         readonly ModuleDefinition module;
+        readonly string target;
+        readonly TargetRuntimeFacadeProvider runtimeProvider;
         readonly IEnumerable<string> dataTypes;
         
-        public StarcounterAssemblyAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition, IEnumerable<string> supportedDataTypes) {
+        public StarcounterAssemblyAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition, TargetRuntimeFacadeProvider targetRuntimeProvider, IEnumerable<string> supportedDataTypes) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             module = moduleDefinition ?? throw new ArgumentNullException(nameof(moduleDefinition));
+            runtimeProvider = targetRuntimeProvider ?? throw new ArgumentNullException(nameof(targetRuntimeProvider));
             dataTypes = supportedDataTypes ?? throw new ArgumentNullException(nameof(supportedDataTypes));
         }
         
         bool IAssemblyAnalyzer.IsTargetReference(ModuleDefinition module) {
-            return module.Name.Equals("Starcounter2.dll");
+            return runtimeProvider.IsTargetRuntimeReference(module);
         }
 
-        void IAssemblyAnalyzer.DiscoveryAssembly(DatabaseAssembly assembly) {
+        void IAssemblyAnalyzer.DiscoveryAssembly(AnalysisResult analysisResult) {
+            var runtime = runtimeProvider.ProvideRuntimeFacade(analysisResult.TargetModule);
+
+            // Supported data types must come from the facade.
+            // TODO:
+
+            var assembly = analysisResult.AnalyzedAssembly;
+
             foreach (var dataType in dataTypes) {
                 assembly.DefiningSchema.DefineDataType(dataType);
             }
             
-            var types = DiscoverDefinedDatabaseTypes();
+            var types = DiscoverDefinedDatabaseTypes(runtime.DatabaseAttributeType);
 
             var databaseTypes = assembly.DefineTypes(
                 types.Select(t => Tuple.Create(t.GetBindingName(), t.GetBaseTypeBindingName())).ToArray()
@@ -47,8 +56,9 @@ namespace starweave.Weaver {
             }
         }
 
-        IEnumerable<TypeDefinition> DiscoverDefinedDatabaseTypes() {
-            return module.Types.Where(t => t.HasCustomAttribute(typeof(Starcounter2.DatabaseAttribute)));
+        IEnumerable<TypeDefinition> DiscoverDefinedDatabaseTypes(Type databaseAttributeType) {
+            // Custom attribute type must come from the target
+            return module.Types.Where(t => t.HasCustomAttribute(databaseAttributeType));
         }
 
         IEnumerable<PropertyDefinition> DiscoverDefinedDatabaseProperties(TypeDefinition type) {

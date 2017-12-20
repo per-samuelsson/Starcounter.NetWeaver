@@ -5,6 +5,8 @@ using System.IO;
 using starweave.Weaver;
 using System.Diagnostics;
 using Starcounter2.Internal;
+using System.Reflection;
+using System.Linq;
 
 namespace starweave {
 
@@ -25,6 +27,13 @@ namespace starweave {
         static int Main(string[] args) {
             CheckForDebugSwitch(ref args);
 
+            // The default weaver use a strategy that identify database classes using
+            // a custom attribute. Each auto-implemented property in that will be considered
+            // a database property. What we need from the analyzer from the target runtime
+            // is then: 1, the name of the runtime (so we can locate stuff) and 2, the type
+            // of the database attribute. With that, we can carry out analysis. We expect
+            // the shared database schema model (i.e. Starcounter Hosting).
+            
             if (args.Length == 0) {
                 Console.Error.WriteLine("Usage: starweave <assembly>");
                 return 1;
@@ -42,8 +51,8 @@ namespace starweave {
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
-
-            var weaverFactory = new StarcounterWeaverFactory(new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider());
+            
+            var weaverFactory = new StarcounterWeaverFactory("Starcounter2.dll", new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider());
             var weaver = WeaverBuilder.BuildDefaultFromAssemblyFile(assemblyFile, dir, weaverFactory);
             weaver.Weave();
 

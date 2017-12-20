@@ -1,7 +1,4 @@
 ﻿
-using Mono.Cecil;
-using Starcounter.Hosting.Schema;
-
 namespace Starcounter.Weaver.Analysis {
 
     public class DefaultDatabaseTypeDiscovery : IDatabaseTypeDiscovery {
@@ -16,8 +13,8 @@ namespace Starcounter.Weaver.Analysis {
             analyzer = assemblyAnalyzer;
         }
         
-        void IDatabaseTypeDiscovery.DiscoverAssembly(ModuleDefinition module, DatabaseAssembly assembly) {
-            analyzer.DiscoveryAssembly(assembly);
+        void IDatabaseTypeDiscovery.DiscoverAssembly(AnalysisResult analysisResult) {
+            analyzer.DiscoveryAssembly(analysisResult);
         }
     }
 }

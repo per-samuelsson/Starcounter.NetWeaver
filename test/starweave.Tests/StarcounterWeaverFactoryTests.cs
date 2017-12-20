@@ -9,7 +9,7 @@ namespace starweave.Weaver.Tests {
         
         [Fact]
         public void BadInputRenderMeaningfulErrors() {
-            var f = new StarcounterWeaverFactory(new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider()) as IWeaverFactory;
+            var f = new StarcounterWeaverFactory("mock", new DatabaseTypeStateNames(), new DefaultDbCrudMethodProvider()) as IWeaverFactory;
             Assert.NotNull(f);
         }
     }

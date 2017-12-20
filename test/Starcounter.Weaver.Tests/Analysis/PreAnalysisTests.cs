@@ -12,7 +12,7 @@ namespace Starcounter.Weaver.Tests {
         class AnalyzerThatReturnFirstModuleAsReference : IAssemblyAnalyzer {
             int count = 0;
 
-            public void DiscoveryAssembly(DatabaseAssembly assembly) {
+            public void DiscoveryAssembly(AnalysisResult analysisResult) {
             }
 
             public bool IsTargetReference(ModuleDefinition module) {
@@ -41,10 +41,8 @@ namespace Starcounter.Weaver.Tests {
                 TestUtilities.AdviceNoneReferenceDiscovery, 
                 TestUtilities.DefaultSchemaSerializationContext, 
                 TestUtilities.QuietDiagnostics);
-
-            ModuleDefinition target;
-            DatabaseSchema schema;
-            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out target, out schema);
+            
+            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);
             
             Assert.Null(target);
         }
@@ -56,10 +54,8 @@ namespace Starcounter.Weaver.Tests {
                 TestUtilities.AdviceAllReferenceDiscovery, 
                 TestUtilities.DefaultSchemaSerializationContext,
                 TestUtilities.QuietDiagnostics);
-
-            ModuleDefinition target;
-            DatabaseSchema schema;
-            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out target, out schema);
+            
+            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);
             
             Assert.NotNull(target);
         }
@@ -72,10 +68,8 @@ namespace Starcounter.Weaver.Tests {
                 TestUtilities.DefaultSchemaSerializationContext, 
                 TestUtilities.QuietDiagnostics
             );
-
-            ModuleDefinition target;
-            DatabaseSchema schema;
-            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out target, out schema);
+            
+            preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);
 
             Assert.NotNull(target);
             Assert.Equal(0, schema.Assemblies.Count());

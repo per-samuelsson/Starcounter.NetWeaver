@@ -25,9 +25,12 @@ namespace Starcounter.Weaver {
         }
         
         public AnalysisResult Analyze(ModuleDefinition module, IAssemblyAnalyzer assemblyAnalyzer) {
-            ModuleDefinition targetReference;
-            DatabaseSchema schema;
-            preAnalysis.Execute(module, assemblyAnalyzer, out targetReference, out schema);
+            preAnalysis.Execute(
+                module, 
+                assemblyAnalyzer, 
+                out ModuleDefinition targetReference, 
+                out DatabaseSchema schema
+            );
 
             var databaseDiscovery = databaseDiscoveryProvider.ProvideDiscovery(module, assemblyAnalyzer, targetReference, schema);
             if (databaseDiscovery == null) {
@@ -35,14 +38,15 @@ namespace Starcounter.Weaver {
             }
 
             var assembly = schema.DefineAssembly(module.Name);
-            
-            databaseDiscovery.DiscoverAssembly(module, assembly);
-
-            return new AnalysisResult() {
+            var result = new AnalysisResult() {
                 SourceModule = module,
                 TargetModule = targetReference,
                 AnalyzedAssembly = assembly
             };
+
+            databaseDiscovery.DiscoverAssembly(result);
+
+            return result;
         }
     }
 }

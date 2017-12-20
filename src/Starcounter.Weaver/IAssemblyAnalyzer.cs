@@ -8,6 +8,6 @@ namespace Starcounter.Weaver {
 
         bool IsTargetReference(ModuleDefinition module);
 
-        void DiscoveryAssembly(DatabaseAssembly assembly);
+        void DiscoveryAssembly(AnalysisResult analysisResult);
     }
 }
