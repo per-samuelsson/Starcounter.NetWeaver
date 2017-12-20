@@ -17,9 +17,15 @@ namespace starweave.Weaver {
         readonly IWeaverHost host;
         readonly string targetAssemblyIdentity;
 
+        public Func<Assembly, Type> FindRuntimeType {
+            get;
+            set;
+        }
+
         public AssemblyLoadTargetRuntimeProvider(IWeaverHost weaverHost, string targetRuntimeAssemblyIdentity) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             targetAssemblyIdentity = targetRuntimeAssemblyIdentity ?? throw new ArgumentNullException(nameof(targetRuntimeAssemblyIdentity));
+            FindRuntimeType = FindSingleValidTypeFromExportedTypes;
         }
 
         public override bool IsTargetRuntimeReference(ModuleDefinition module) {
@@ -29,7 +35,7 @@ namespace starweave.Weaver {
         public override IAssemblyRuntimeFacade ProvideRuntimeFacade(ModuleDefinition targetReference) {
 
             var a = Assembly.Load(AssemblyName.GetAssemblyName(targetReference.FileName));
-            var runtimeType = a.ExportedTypes.SingleOrDefault(t => IsValidRuntimeFacade(t));
+            var runtimeType = FindRuntimeType(a);
             if (runtimeType == null) {
                 // Error: the assembly contain no runtime type.
                 // Improve error and probably write it to diagnostics instead?
@@ -39,6 +45,10 @@ namespace starweave.Weaver {
 
             var defaultCtor = runtimeType.GetConstructor(new Type[] { });
             return (IAssemblyRuntimeFacade)defaultCtor.Invoke(new object[] { });
+        }
+
+        public static Type FindSingleValidTypeFromExportedTypes(Assembly assembly) {
+            return assembly.ExportedTypes.SingleOrDefault(t => IsValidRuntimeFacade(t));
         }
 
         public static bool IsValidRuntimeFacade(Type type) {
