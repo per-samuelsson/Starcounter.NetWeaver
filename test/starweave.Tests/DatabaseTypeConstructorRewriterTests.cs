@@ -32,11 +32,7 @@ namespace starweave.Tests {
                 // mod.OutputStream = System.IO.File.Create(@"c:\Users\Per\test.dll");
 
                 var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
-
-                DatabaseTypeState state;
-                DatabaseTypeConstructorRewriter rewriter;
-                ConstructorSignatureTypes signatures;
-                CreateRewritingContext(type, out state, out signatures, out rewriter);
+                CreateRewritingContext(type, out DatabaseTypeState state, out ConstructorSignatureTypes signatures, out DatabaseTypeConstructorRewriter rewriter);
 
                 var originalCtors = type.GetInstanceConstructors();
                 Assert.NotNull(originalCtors.SingleOrDefault());
@@ -58,11 +54,7 @@ namespace starweave.Tests {
                 var module = mod.Module;
                 
                 var type = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
-
-                DatabaseTypeState state;
-                DatabaseTypeConstructorRewriter rewriter;
-                ConstructorSignatureTypes signatures;
-                CreateRewritingContext(type, out state, out signatures, out rewriter);
+                CreateRewritingContext(type, out DatabaseTypeState state, out ConstructorSignatureTypes signatures, out DatabaseTypeConstructorRewriter rewriter);
 
                 rewriter.Rewrite(type, null, state);
                 
@@ -84,11 +76,7 @@ namespace starweave.Tests {
                 var module = mod.Module;
 
                 var baseType = module.Types.Single(t => t.FullName == typeof(NoBaseNoDefinedConstructor).FullName);
-
-                DatabaseTypeState state;
-                DatabaseTypeConstructorRewriter rewriter;
-                ConstructorSignatureTypes signatures;
-                CreateRewritingContext(baseType, out state, out signatures, out rewriter);
+                CreateRewritingContext(baseType, out DatabaseTypeState state, out ConstructorSignatureTypes signatures, out DatabaseTypeConstructorRewriter rewriter);
 
                 rewriter.Rewrite(baseType, null, state);
                 var baseConstructors = ConstructorSet.Discover(signatures, baseType);
