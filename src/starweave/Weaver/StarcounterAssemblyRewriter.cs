@@ -1,7 +1,7 @@
 ﻿
+using Starcounter.Hosting;
 using Starcounter.Hosting.Schema;
 using Starcounter.Weaver;
-using Starcounter2.Internal;
 using System;
 
 namespace starweave.Weaver {
@@ -10,25 +10,23 @@ namespace starweave.Weaver {
         readonly IWeaverHost host;
         readonly AnalysisResult analysis;
         readonly DatabaseTypeStateNames names;
-        readonly DbCrudMethodProvider crudMethods;
         readonly CodeEmissionContext emitContext;
         readonly DatabaseTypeConstructorRewriter constructorRewriter;
+        readonly IAssemblyRuntimeFacade runtimeFacade;
 
-        public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, DatabaseTypeStateNames stateNames, DbCrudMethodProvider methodProvider) {
+        public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, IAssemblyRuntimeFacade assemblyRuntimeFacade, DatabaseTypeStateNames stateNames) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             analysis = result ?? throw new ArgumentNullException(nameof(result));
+            runtimeFacade = assemblyRuntimeFacade ?? throw new ArgumentNullException(nameof(assemblyRuntimeFacade));
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
-            crudMethods = methodProvider ?? throw new ArgumentNullException(nameof(methodProvider));
             emitContext = new CodeEmissionContext(result.SourceModule);
-
-            // We might eventually want to inject these. They will differ between L1 and Nova
-            // and are part of API we want to make sure it's versioned.
+            
             constructorRewriter = new DatabaseTypeConstructorRewriter(
                 host,
                 emitContext,
-                typeof(Starcounter2.Internal.ProxyConstructorParameter),
-                typeof(Starcounter2.Internal.InsertConstructorParameter),
-                crudMethods.GetCreateMethod()
+                runtimeFacade.ProxyConstructorSignatureType,
+                runtimeFacade.InsertConstructorSignatureType,
+                runtimeFacade.CreateMethod
             );
         }
         
@@ -61,13 +59,9 @@ namespace starweave.Weaver {
                 // support that interface. Also: there will need to be a cast in
                 // the getter.
                 // TODO:
-
-                // Move to rewrite? We can't know for sure they will be used,
-                // and hence closer is better.
-                // TODO:
-
-                var readMethod = crudMethods.GetReadMethod(databaseProperty.DataType.Name);
-                var writeMethod = crudMethods.GetUpdateMethod(databaseProperty.DataType.Name);
+                
+                var readMethod = runtimeFacade.GetReadMethod(databaseProperty.DataType.Name);
+                var writeMethod = runtimeFacade.GetWriteMethod(databaseProperty.DataType.Name);
 
                 var reader = emitContext.Use(readMethod);
                 var writer = emitContext.Use(writeMethod);

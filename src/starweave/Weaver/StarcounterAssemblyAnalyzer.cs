@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using Starcounter.Hosting;
 using Starcounter.Weaver;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace starweave.Weaver {
         readonly string target;
         readonly TargetRuntimeFacadeProvider runtimeProvider;
         readonly IEnumerable<string> dataTypes;
+
+        public IAssemblyRuntimeFacade RuntimeFacade { get; private set; }
         
         public StarcounterAssemblyAnalyzer(IWeaverHost weaverHost, ModuleDefinition moduleDefinition, TargetRuntimeFacadeProvider targetRuntimeProvider, IEnumerable<string> supportedDataTypes) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
@@ -26,7 +29,8 @@ namespace starweave.Weaver {
         }
 
         void IAssemblyAnalyzer.DiscoveryAssembly(AnalysisResult analysisResult) {
-            var runtime = runtimeProvider.ProvideRuntimeFacade(analysisResult.TargetModule);
+            var runtime = RuntimeFacade = runtimeProvider.ProvideRuntimeFacade(analysisResult.TargetModule);
+
 
             // Supported data types must come from the facade.
             // TODO:
