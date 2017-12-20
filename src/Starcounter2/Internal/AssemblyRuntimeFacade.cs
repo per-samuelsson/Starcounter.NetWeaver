@@ -2,8 +2,10 @@
 using Starcounter.Hosting;
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Starcounter2.Internal {
+
     public sealed class AssemblyRuntimeFacade : IAssemblyRuntimeFacade {
         readonly DbCrudMethodProvider crudProvider;
 
@@ -18,6 +20,8 @@ namespace Starcounter2.Internal {
         public Type InsertConstructorSignatureType => typeof(InsertConstructorParameter);
 
         public MethodInfo CreateMethod => crudProvider.GetCreateMethod();
+
+        public IEnumerable<string> SupportedDataTypes => crudProvider.SupportedDataTypes;
 
         public MethodInfo GetReadMethod(string type) {
             return crudProvider.GetReadMethod(type);

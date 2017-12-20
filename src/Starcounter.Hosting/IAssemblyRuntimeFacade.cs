@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Starcounter.Hosting {
@@ -27,6 +28,8 @@ namespace Starcounter.Hosting {
         Type InsertConstructorSignatureType { get; }
 
         MethodInfo CreateMethod { get; }
+
+        IEnumerable<string> SupportedDataTypes { get; }
 
         MethodInfo GetReadMethod(string type);
 
