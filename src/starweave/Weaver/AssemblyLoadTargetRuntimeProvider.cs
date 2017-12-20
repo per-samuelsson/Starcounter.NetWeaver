@@ -42,7 +42,7 @@ namespace starweave.Weaver {
         }
 
         public static bool IsValidRuntimeFacade(Type type) {
-            if (type.IsAssignableFrom(typeof(IAssemblyRuntimeFacade))) {
+            if (typeof(IAssemblyRuntimeFacade).IsAssignableFrom(type)) {
                 return !type.IsAbstract && type.GetConstructor(new Type[] { }) != null;
             }
             return false;
