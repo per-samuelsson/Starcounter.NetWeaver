@@ -3,5 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Starcounter.Hosting\Starcounter.Hosting.csproj" />
+  </ItemGroup>
 
 </Project>
