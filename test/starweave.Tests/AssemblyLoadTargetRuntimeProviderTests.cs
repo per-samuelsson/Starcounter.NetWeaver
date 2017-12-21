@@ -8,6 +8,7 @@ using System.Reflection;
 using Starcounter.Weaver;
 using Mono.Cecil;
 using starweave.Weaver.Tests;
+using System.Linq;
 
 namespace starweave.Tests {
 
@@ -41,6 +42,27 @@ namespace starweave.Tests {
         }
     }
 
+    public class EmptyButCorrectImplementationOfRuntimeFacade : IAssemblyRuntimeFacade {
+
+        public Type DatabaseAttributeType => throw new NotImplementedException();
+
+        public Type ProxyConstructorSignatureType => throw new NotImplementedException();
+
+        public Type InsertConstructorSignatureType => throw new NotImplementedException();
+
+        public MethodInfo CreateMethod => throw new NotImplementedException();
+
+        public IEnumerable<string> SupportedDataTypes => throw new NotImplementedException();
+
+        public MethodInfo GetReadMethod(string type) {
+            throw new NotImplementedException();
+        }
+
+        public MethodInfo GetWriteMethod(string type) {
+            throw new NotImplementedException();
+        }
+    }
+
     class AssemblyLoadTargetRuntimeProviderUsingGivenAssembly : AssemblyLoadTargetRuntimeProvider {
         protected readonly Assembly assembly;
 
@@ -67,6 +89,22 @@ namespace starweave.Tests {
         
         protected override Type FindRuntimeType(Assembly assembly) {
             return null;
+        }
+    }
+
+    class AssemblyLoadTargetRuntimeProviderWithGivenType : AssemblyLoadTargetRuntimeProviderUsingGivenAssembly {
+        readonly Type type;
+
+        public AssemblyLoadTargetRuntimeProviderWithGivenType(
+            IWeaverHost weaverHost,
+            string targetRuntimeAssemblyIdentity,
+            Assembly givenAssembly,
+            Type givenType) : base(weaverHost, targetRuntimeAssemblyIdentity, givenAssembly) {
+            type = givenType;
+        }
+
+        protected override Type FindRuntimeType(Assembly assembly) {
+            return type;
         }
     }
 
@@ -99,6 +137,23 @@ namespace starweave.Tests {
 
             var e = Assert.Throws<InvalidOperationException>(() => provider.ProvideRuntimeFacade(thisModule));
             Assert.Contains(thisAssembly.GetName().Name, e.Message);
+        }
+
+        [Fact]
+        public void ProvideRuntimeFacadeProvideExpectedInstance() {
+            var thisModule = TestUtilities.GetModuleOfCurrentAssembly();
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            
+            var provider = new AssemblyLoadTargetRuntimeProviderWithGivenType(
+                new DefaultWeaverHost(TestUtilities.QuietDiagnostics),
+                "dummy",
+                thisAssembly,
+                typeof(EmptyButCorrectImplementationOfRuntimeFacade)
+            );
+
+            var facade = provider.ProvideRuntimeFacade(thisModule);
+            Assert.NotNull(facade);
+            Assert.Equal(facade.GetType(), typeof(EmptyButCorrectImplementationOfRuntimeFacade));
         }
     }
 }
