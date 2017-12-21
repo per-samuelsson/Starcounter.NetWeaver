@@ -34,7 +34,7 @@ namespace starweave.Weaver {
                 // Error: the assembly contain no runtime type.
                 // Improve error and probably write it to diagnostics instead?
                 // TODO:
-                throw new Exception($"Assembly {runtimeAssembly.FullName} contain no runtime type");
+                throw new InvalidOperationException($"Assembly {runtimeAssembly.FullName} contain no runtime type");
             }
 
             return CreateAssemblyRuntimeFacade(runtimeType);
