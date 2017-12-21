@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Reflection;
+using Starcounter.Weaver;
+using Mono.Cecil;
+using starweave.Weaver.Tests;
 
 namespace starweave.Tests {
 
@@ -38,10 +41,39 @@ namespace starweave.Tests {
         }
     }
 
+    class AssemblyLoadTargetRuntimeProviderUsingGivenAssembly : AssemblyLoadTargetRuntimeProvider {
+        protected readonly Assembly assembly;
+
+        public AssemblyLoadTargetRuntimeProviderUsingGivenAssembly(
+            IWeaverHost weaverHost,
+            string targetRuntimeAssemblyIdentity,
+            Assembly givenAssembly) : base(weaverHost, targetRuntimeAssemblyIdentity) {
+
+            assembly = givenAssembly;
+        }
+
+        protected override Assembly LoadRuntimeAssembly(ModuleDefinition targetReference) {
+            return assembly;
+        }
+    }
+
+    class AssemblyLoadTargetRuntimeProviderWithNoMatchingType : AssemblyLoadTargetRuntimeProviderUsingGivenAssembly {
+        
+        public AssemblyLoadTargetRuntimeProviderWithNoMatchingType(
+            IWeaverHost weaverHost, 
+            string targetRuntimeAssemblyIdentity,
+            Assembly givenAssembly) : base(weaverHost, targetRuntimeAssemblyIdentity, givenAssembly) {
+        }
+        
+        protected override Type FindRuntimeType(Assembly assembly) {
+            return null;
+        }
+    }
+
     public class AssemblyLoadTargetRuntimeProviderTests {
 
         [Fact]
-        void MethodIsValidRuntimeFacadeProduceExpectedResultsOnFailingTypes() {
+        public void MethodIsValidRuntimeFacadeProduceExpectedResultsOnFailingTypes() {
             var types = new[] {
                 typeof(IAssemblyRuntimeFacade),
                 typeof(ThisTypeDontImplementAnyInterface),
@@ -52,6 +84,21 @@ namespace starweave.Tests {
                 var result = AssemblyLoadTargetRuntimeProvider.IsValidRuntimeFacade(type);
                 Assert.False(result);
             }
+        }
+
+        [Fact]
+        public void AssemblyWithNoRuntimeTypeProduceMeaningfulError() {
+            var thisModule = TestUtilities.GetModuleOfCurrentAssembly();
+            var thisAssembly = Assembly.GetExecutingAssembly();
+
+            var provider = new AssemblyLoadTargetRuntimeProviderWithNoMatchingType(
+                new DefaultWeaverHost(TestUtilities.QuietDiagnostics), 
+                "dummy", 
+                thisAssembly
+            );
+
+            var e = Assert.Throws<InvalidOperationException>(() => provider.ProvideRuntimeFacade(thisModule));
+            Assert.Contains(thisAssembly.GetName().Name, e.Message);
         }
     }
 }
