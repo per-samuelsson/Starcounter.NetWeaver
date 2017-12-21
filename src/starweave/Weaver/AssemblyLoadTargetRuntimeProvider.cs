@@ -16,16 +16,10 @@ namespace starweave.Weaver {
     public class AssemblyLoadTargetRuntimeProvider : TargetRuntimeFacadeProvider {
         readonly IWeaverHost host;
         readonly string targetAssemblyIdentity;
-
-        public Func<Assembly, Type> FindRuntimeType {
-            get;
-            set;
-        }
-
+        
         public AssemblyLoadTargetRuntimeProvider(IWeaverHost weaverHost, string targetRuntimeAssemblyIdentity) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
             targetAssemblyIdentity = targetRuntimeAssemblyIdentity ?? throw new ArgumentNullException(nameof(targetRuntimeAssemblyIdentity));
-            FindRuntimeType = FindSingleValidTypeFromExportedTypes;
         }
 
         public override bool IsTargetRuntimeReference(ModuleDefinition module) {
@@ -34,21 +28,29 @@ namespace starweave.Weaver {
 
         public override IAssemblyRuntimeFacade ProvideRuntimeFacade(ModuleDefinition targetReference) {
 
-            var a = Assembly.Load(AssemblyName.GetAssemblyName(targetReference.FileName));
-            var runtimeType = FindRuntimeType(a);
+            var runtimeAssembly = LoadRuntimeAssembly(targetReference);
+            var runtimeType = FindRuntimeType(runtimeAssembly);
             if (runtimeType == null) {
                 // Error: the assembly contain no runtime type.
                 // Improve error and probably write it to diagnostics instead?
                 // TODO:
-                throw new Exception($"Assembly {a.FullName} contain no runtime type");
+                throw new Exception($"Assembly {runtimeAssembly.FullName} contain no runtime type");
             }
 
-            var defaultCtor = runtimeType.GetConstructor(new Type[] { });
-            return (IAssemblyRuntimeFacade)defaultCtor.Invoke(new object[] { });
+            return CreateAssemblyRuntimeFacade(runtimeType);
         }
 
-        public static Type FindSingleValidTypeFromExportedTypes(Assembly assembly) {
+        protected virtual Assembly LoadRuntimeAssembly(ModuleDefinition targetReference) {
+            return Assembly.Load(AssemblyName.GetAssemblyName(targetReference.FileName));
+        }
+
+        protected virtual Type FindRuntimeType(Assembly assembly) {
             return assembly.ExportedTypes.SingleOrDefault(t => IsValidRuntimeFacade(t));
+        }
+
+        protected virtual IAssemblyRuntimeFacade CreateAssemblyRuntimeFacade(Type runtimeType) {
+            var defaultCtor = runtimeType.GetConstructor(new Type[] { });
+            return (IAssemblyRuntimeFacade)defaultCtor.Invoke(new object[] { });
         }
 
         public static bool IsValidRuntimeFacade(Type type) {
