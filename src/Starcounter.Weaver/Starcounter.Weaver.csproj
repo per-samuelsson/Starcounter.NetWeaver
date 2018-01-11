@@ -2,6 +2,10 @@
 
   <Import Project="..\..\global-library.props" />
   
+  <PropertyGroup>
+    <Description>Main weaver library, used by weaver engine to weave assemblies.</Description>
+  </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6'  ">
     <DefineConstants>$(DefineConstants);NET_STANDARD;</DefineConstants>
   </PropertyGroup>
