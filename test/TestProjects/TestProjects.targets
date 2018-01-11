@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="..\..\src\starweave\BuildIntegrationFiles\Starcounter.Weaver.targets" />
+  <Import Project="..\..\src\starweave\BuildIntegrationFiles\starweave.targets" />
   
 </Project>

@@ -1,8 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <Net46PropsPath>..\..\src\starweave\BuildIntegrationFiles\net46\Starcounter.Weaver.props</Net46PropsPath>
-    <NetCorePropsPath>..\..\src\starweave\BuildIntegrationFiles\netstandard1.6\Starcounter.Weaver.props</NetCorePropsPath>
+    <Net46PropsPath>..\..\src\starweave\BuildIntegrationFiles\net46\starweave.props</Net46PropsPath>
+    <NetCorePropsPath>..\..\src\starweave\BuildIntegrationFiles\netstandard1.6\starweave.props</NetCorePropsPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '' ">
