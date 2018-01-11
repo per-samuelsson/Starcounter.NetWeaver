@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
-using Starcounter.Hosting.Schema;
-using Starcounter.Hosting.Schema.Serialization;
+using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.Abstractions;
 using Starcounter.Weaver.Analysis;
 using System;
 using System.IO;

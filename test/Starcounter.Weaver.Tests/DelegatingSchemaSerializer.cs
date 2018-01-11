@@ -1,6 +1,6 @@
 ﻿
-using Starcounter.Hosting.Schema;
-using Starcounter.Hosting.Schema.Serialization;
+using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.Abstractions;
 using System;
 
 namespace Starcounter.Weaver.Tests {

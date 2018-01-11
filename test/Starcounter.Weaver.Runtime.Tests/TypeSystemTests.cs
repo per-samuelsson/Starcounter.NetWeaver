@@ -1,11 +1,11 @@
 ﻿
-using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Hosting.Tests {
+namespace Starcounter.Weaver.Runtime.Tests {
 
     public class TypeSystemTests {
         string[] databaseTypes = new string[] {
@@ -109,16 +109,14 @@ namespace Starcounter.Hosting.Tests {
             var handles = new Dictionary<int, string>(databaseTypes.Length + dataTypes.Length);
             ForEachDatabaseType(t => handles.Add(ts.DefineDatabaseType(t), t));
             ForEachDatabaseType(t => {
-                bool isDataType;
-                var h = ts.GetTypeHandleByName(t, out isDataType);
+                var h = ts.GetTypeHandleByName(t, out bool isDataType);
                 Assert.False(isDataType);
                 Assert.Equal(handles[h], t);
             });
             
             ForEachDataType(t => handles.Add(ts.DefineDataType(t), t));
             ForEachDataType(t => {
-                bool isDataType;
-                var h = ts.GetTypeHandleByName(t, out isDataType);
+                var h = ts.GetTypeHandleByName(t, out bool isDataType);
                 Assert.True(isDataType);
                 Assert.Equal(handles[h], t);
             });
@@ -133,9 +131,8 @@ namespace Starcounter.Hosting.Tests {
             foreach(var h in handles) {
                 var name = ts.GetTypeNameByHandle(h.Key);
                 Assert.Equal(name, h.Value);
-
-                bool isDataType;
-                name = ts.GetTypeNameByHandle(h.Key, out isDataType);
+                
+                name = ts.GetTypeNameByHandle(h.Key, out bool isDataType);
                 Assert.Equal(name, h.Value);
                 Assert.False(isDataType);
             }
@@ -144,9 +141,8 @@ namespace Starcounter.Hosting.Tests {
             foreach (var h in handles) {
                 var name = ts.GetTypeNameByHandle(h.Key);
                 Assert.Equal(name, h.Value);
-
-                bool isDataType;
-                name = ts.GetTypeNameByHandle(h.Key, out isDataType);
+                
+                name = ts.GetTypeNameByHandle(h.Key, out bool isDataType);
                 Assert.Equal(name, h.Value);
                 Assert.True(isDataType);
             }

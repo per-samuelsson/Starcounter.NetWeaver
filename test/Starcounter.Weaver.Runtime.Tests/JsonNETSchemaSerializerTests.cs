@@ -1,11 +1,11 @@
 ﻿
-using Starcounter.Hosting.Schema;
-using Starcounter.Hosting.Schema.Serialization;
+using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.Abstractions;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Hosting.Tests {
+namespace Starcounter.Weaver.Runtime.Tests {
 
     public class JsonNETSchemaSerializerTests {
 

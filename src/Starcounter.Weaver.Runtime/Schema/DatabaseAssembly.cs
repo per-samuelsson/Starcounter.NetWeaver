@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Starcounter.Hosting.Schema {
+namespace Starcounter.Weaver.Runtime {
 
     public class DatabaseAssembly {
         Dictionary<string, DatabaseType> types = new Dictionary<string, DatabaseType>();
@@ -92,8 +92,7 @@ namespace Starcounter.Hosting.Schema {
                 throw new ArgumentNullException(nameof(name));
             }
 
-            DatabaseType type;
-            return types.TryGetValue(name, out type) ? type : null;
+            return types.TryGetValue(name, out DatabaseType type) ? type : null;
         }
     }
 }

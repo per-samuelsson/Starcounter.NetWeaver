@@ -1,6 +1,5 @@
 ﻿
 using Mono.Cecil;
-using Starcounter.Hosting.Schema;
 
 namespace Starcounter.Weaver {
 

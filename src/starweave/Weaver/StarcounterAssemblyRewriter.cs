@@ -1,6 +1,6 @@
 ﻿
-using Starcounter.Hosting;
-using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.Abstractions;
 using Starcounter.Weaver;
 using System;
 

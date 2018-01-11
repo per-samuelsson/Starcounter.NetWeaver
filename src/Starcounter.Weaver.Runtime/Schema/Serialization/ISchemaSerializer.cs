@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter.Hosting.Schema.Serialization {
+namespace Starcounter.Weaver.Runtime.Abstractions {
 
     public interface ISchemaSerializer {
 

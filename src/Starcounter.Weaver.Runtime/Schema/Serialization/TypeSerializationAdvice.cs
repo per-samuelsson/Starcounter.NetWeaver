@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Starcounter.Hosting.Schema.Serialization {
+namespace Starcounter.Weaver.Runtime {
 
     public class TypeSerializationAdvice {
 
@@ -16,10 +16,7 @@ namespace Starcounter.Hosting.Schema.Serialization {
         public IList<string> IgnoredProperties { get; private set; } = new List<string>();
 
         public TypeSerializationAdvice(Type type) {
-            if (type == null) {
-                throw new ArgumentNullException(nameof(type));
-            }
-            Type = type;
+            Type = type ?? throw new ArgumentNullException(nameof(type));
         }
         
         public List<MemberInfo> GetSerializableMembers(List<MemberInfo> defaultMembers) {

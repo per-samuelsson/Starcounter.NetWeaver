@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Starcounter.Hosting.Schema {
+namespace Starcounter.Weaver.Runtime {
     
     public sealed class DatabaseSchema {
         readonly Dictionary<string, DatabaseAssembly> assemblies = new Dictionary<string, DatabaseAssembly>();
@@ -99,8 +99,7 @@ namespace Starcounter.Hosting.Schema {
         }
         
         internal IDataType GetTypeByHandle(int typeHandle) {
-            bool isDataType;
-            var name = typeSystem.GetTypeNameByHandle(typeHandle, out isDataType);
+            var name = typeSystem.GetTypeNameByHandle(typeHandle, out bool isDataType);
             return isDataType ? (IDataType) new NamedType(name) : FindDatabaseType(name);
         }
     }

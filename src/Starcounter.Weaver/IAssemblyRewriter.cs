@@ -1,5 +1,5 @@
 ﻿
-using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Runtime;
 
 namespace Starcounter.Weaver {
 

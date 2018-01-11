@@ -1,5 +1,5 @@
 ﻿
-using Starcounter.Hosting;
+using Starcounter.Weaver.Runtime.Abstractions;
 using System;
 using System.Reflection;
 using System.Collections.Generic;

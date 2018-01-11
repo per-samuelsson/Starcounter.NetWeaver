@@ -1,10 +1,11 @@
 ﻿
+using Starcounter.Weaver.Runtime.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Text;
 using System;
 
-namespace Starcounter.Hosting.Schema.Serialization {
+namespace Starcounter.Weaver.Runtime {
 
     public class JsonNETSchemaSerializer : ISchemaSerializer {
         readonly IContractResolver contractResolver;
@@ -14,10 +15,7 @@ namespace Starcounter.Hosting.Schema.Serialization {
         }
 
         public JsonNETSchemaSerializer(IContractResolver resolver) {
-            if (resolver == null) {
-                throw new ArgumentNullException(nameof(resolver));
-            }
-            contractResolver = resolver;
+            contractResolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
         }
         
         DatabaseSchema ISchemaSerializer.Deserialize(byte[] schema) {

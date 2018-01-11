@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Starcounter.Hosting.Schema.Serialization {
+namespace Starcounter.Weaver.Runtime {
     
     public class AdvicedContractResolver : DefaultContractResolver {
         readonly Dictionary<Type, TypeSerializationAdvice> advices;
@@ -31,8 +31,7 @@ namespace Starcounter.Hosting.Schema.Serialization {
         }
 
         TypeSerializationAdvice GetAdvice(Type type) {
-            TypeSerializationAdvice advice;
-            return advices.TryGetValue(type, out advice) ? advice : null;
+            return advices.TryGetValue(type, out TypeSerializationAdvice advice) ? advice : null;
         }
     }
 }

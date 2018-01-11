@@ -1,5 +1,5 @@
 ﻿
-using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Runtime;
 using Starcounter.Weaver.Analysis;
 using Xunit;
 using Mono.Cecil;

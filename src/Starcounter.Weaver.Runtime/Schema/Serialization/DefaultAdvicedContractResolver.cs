@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Starcounter.Hosting.Schema.Serialization {
+namespace Starcounter.Weaver.Runtime {
 
     public class DefaultAdvicedContractResolver : AdvicedContractResolver {
 

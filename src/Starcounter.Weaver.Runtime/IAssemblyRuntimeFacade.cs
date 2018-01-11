@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Starcounter.Hosting {
+namespace Starcounter.Weaver.Runtime.Abstractions {
     
     /// <summary>
     /// Define the facade of a runtime weaver can weave against.

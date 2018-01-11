@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Starcounter.Hosting.Schema {
+namespace Starcounter.Weaver.Runtime {
 
     public sealed class TypeSystem {
         public const int InvalidTypeHandle = -1;
@@ -44,9 +44,8 @@ namespace Starcounter.Hosting.Schema {
             if (string.IsNullOrWhiteSpace(typeName)) {
                 throw new ArgumentNullException(nameof(typeName));
             }
-
-            bool isDataType;
-            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
+            
+            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out bool isDataType);
             if (index != InvalidTypeHandle) {
                 if (!isDataType) {
                     throw new InvalidOperationException($"Can't define data type {typeName}: a database type with that name already exist");
@@ -76,8 +75,7 @@ namespace Starcounter.Hosting.Schema {
                 throw new ArgumentNullException(nameof(typeName));
             }
 
-            bool isDataType;
-            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out isDataType);
+            int index = GetTypeHandleByNameOrInvalidIfMissing(typeName, out bool isDataType);
             if (index != InvalidTypeHandle) {
                 var error = $"Can't define database type {typeName}: ";
                 if (isDataType) {

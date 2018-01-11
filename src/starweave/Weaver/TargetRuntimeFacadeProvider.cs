@@ -1,6 +1,6 @@
 ﻿
 using Mono.Cecil;
-using Starcounter.Hosting;
+using Starcounter.Weaver.Runtime.Abstractions;
 
 namespace starweave.Weaver {
 

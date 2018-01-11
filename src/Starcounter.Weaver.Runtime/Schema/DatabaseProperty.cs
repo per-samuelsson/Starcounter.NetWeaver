@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter.Hosting.Schema {
+namespace Starcounter.Weaver.Runtime {
 
     public class DatabaseProperty {
         readonly string name;

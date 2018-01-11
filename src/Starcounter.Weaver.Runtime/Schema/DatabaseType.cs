@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Starcounter.Hosting.Schema {
+namespace Starcounter.Weaver.Runtime {
 
     public class DatabaseType : IDataType {
         readonly int nameHandle;
@@ -65,10 +65,9 @@ namespace Starcounter.Hosting.Schema {
             if (string.IsNullOrWhiteSpace(dataType)) {
                 throw new ArgumentNullException(nameof(dataType));
             }
-
-            bool ignored;
+            
             var typeSystem = DefiningAssembly.DefiningSchema.TypeSystem;
-            var dataTypeHandle = typeSystem.GetTypeHandleByName(dataType, out ignored);
+            var dataTypeHandle = typeSystem.GetTypeHandleByName(dataType, out bool ignored);
 
             var property = new DatabaseProperty(this, name, dataTypeHandle);
             properties.Add(name, property);

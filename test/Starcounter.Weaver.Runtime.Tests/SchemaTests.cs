@@ -1,10 +1,10 @@
 
-using Starcounter.Hosting.Schema;
+using Starcounter.Weaver.Runtime;
 using System;
 using System.Linq;
 using Xunit;
 
-namespace Starcounter.Hosting.Tests {
+namespace Starcounter.Weaver.Runtime.Tests {
     
     public class SchemaTests {
 
