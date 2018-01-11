@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter2", "src\Starcou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver.Tests", "test\Starcounter.Weaver.Tests\Starcounter.Weaver.Tests.csproj", "{96257A4E-C1F7-4D4C-A974-F5F8FFB79623}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Hosting", "src\Starcounter.Hosting\Starcounter.Hosting.csproj", "{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver.Runtime", "src\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj", "{890B0463-F634-4FB0-AFE5-9CCAE9C8B5A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Hosting.Tests", "test\Starcounter.Hosting.Tests\Starcounter.Hosting.Tests.csproj", "{626B9A5A-6E40-4837-BB12-4640F2F1E39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver.Runtime.Tests", "test\Starcounter.Weaver.Runtime.Tests\Starcounter.Weaver.Runtime.Tests.csproj", "{626B9A5A-6E40-4837-BB12-4640F2F1E39D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeaverOutputToMsBuildErrorsAndWarnings", "test\Prototypes\WeaverOutputToMsBuildErrorsAndWarnings\WeaverOutputToMsBuildErrorsAndWarnings.csproj", "{BA5079F1-76B4-428F-A3B9-E2ED4B31AC1F}"
 EndProject

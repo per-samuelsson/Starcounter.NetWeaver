@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Starcounter.Hosting\Starcounter.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj" />
   </ItemGroup>
 
 </Project>
