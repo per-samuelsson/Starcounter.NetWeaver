@@ -1,12 +1,9 @@
 ﻿
 using Starcounter.Weaver;
-using System;
-using System.IO;
 using starweave.Weaver;
+using System;
 using System.Diagnostics;
-using Starcounter2.Internal;
-using System.Reflection;
-using System.Linq;
+using System.IO;
 
 namespace starweave {
 
