@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter.Weaver.Runtime {
+namespace Starcounter.Weaver.Runtime.Abstractions {
 
     public interface IDataType {
 

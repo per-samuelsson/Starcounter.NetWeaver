@@ -1,4 +1,6 @@
 ﻿
+using Starcounter.Weaver.Runtime.Abstractions;
+
 namespace Starcounter.Weaver.Runtime {
 
     public class DatabaseProperty {

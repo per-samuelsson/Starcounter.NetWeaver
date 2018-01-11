@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using Starcounter.Weaver.Runtime.Abstractions;
 
 namespace Starcounter.Weaver.Runtime {
 
