@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\global-library.props" />
+  
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <Description>Starcounter.Weaver types shared between weaver and target runtime</Description>
   </PropertyGroup>
 
   <ItemGroup>
