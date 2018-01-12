@@ -34,21 +34,29 @@ namespace starweave {
             // the shared database schema model (i.e. Starcounter Hosting).
             
             if (args.Length == 0) {
-                Console.Error.WriteLine("Usage: starweave <assembly>");
+                Console.Error.WriteLine("Usage: starweave <assembly> [output_directory]");
                 return 1;
             }
 
             var assemblyFile = args[0];
             if (!File.Exists(assemblyFile)) {
                 Console.Error.WriteLine($"File not found: {assemblyFile}");
-                Console.Error.WriteLine("Usage: starweave <assembly>");
+                Console.Error.WriteLine("Usage: starweave <assembly> [output_directory]");
                 return 1;
             }
 
-            var dir = Path.GetDirectoryName(assemblyFile);
-            dir = Path.Combine(dir, ".starcounter");
-            if (!Directory.Exists(dir)) {
-                Directory.CreateDirectory(dir);
+            string outputDirectory;
+            if (args.Length > 1) {
+                outputDirectory = args[1];
+            }
+            else {
+                var dir = Path.GetDirectoryName(assemblyFile);
+                dir = Path.Combine(dir, ".starcounter");
+                outputDirectory = dir;
+            }
+            
+            if (!Directory.Exists(outputDirectory)) {
+                Directory.CreateDirectory(outputDirectory);
             }
 
             // Assemble the actual weaver engine
@@ -64,7 +72,7 @@ namespace starweave {
             var moduleReader = new AssemblyFileModuleReader(assemblyFile, diagnostics, readerParameters.Parameters);
 
             // Create module writer
-            var targetPath = Path.Combine(dir, Path.GetFileName(assemblyFile));
+            var targetPath = Path.Combine(outputDirectory, Path.GetFileName(assemblyFile));
             var moduleWriter = new AssemblyFileModuleWriter(targetPath, diagnostics);
 
             // Create serialization context
@@ -97,7 +105,7 @@ namespace starweave {
             var weaver = new AssemblyWeaver(host, weaverFactory, moduleReader, analyzer, moduleWeaver, moduleWriter);
             
             weaver.Weave();
-            Console.WriteLine($"Weaved {assemblyFile} -> {dir}");
+            Console.WriteLine($"Weaved {assemblyFile} -> {outputDirectory}");
 
             return 0;
         }
