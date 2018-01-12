@@ -31,7 +31,7 @@
     <Error Condition="!Exists('$(WeaverToolPath)')" Text="Weaver executable not found: $(WeaverToolPath)" />
 
     <Message Text="WeaveProject: Weaving $(WeaverInputAssembly) using $(WeaverToolPath)" Importance="high" />
-    <Exec Command="$(WeaverToolPath) $(debugSwitch) $(WeaverInputAssembly)" />
+    <Exec Command="$(WeaverToolPath) $(debugSwitch) $(WeaverInputAssembly) $(WeaverOutputPath)" />
     
     <Copy 
       SourceFiles="@(WeavedFiles)" 
