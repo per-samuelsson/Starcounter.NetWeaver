@@ -34,7 +34,14 @@ namespace Starcounter.Weaver.Analysis {
                     continue;
                 }
 
-                var m = tref.Resolve().Module;
+                ModuleDefinition m = null;
+                try {
+                    m = tref.Resolve().Module;
+                }
+                catch (AssemblyResolutionException ex) {
+                    Trace($"Failed to resolve reference to type {tref.Name} from module {tref.Module?.Name}: defining assembly {ex.AssemblyReference?.FullName} not resolvable.");
+                    continue;
+                }
 
                 if (discoveredModules.Any(m2 => m2.FileName == m.FileName)) {
                     continue;
