@@ -16,17 +16,11 @@
   </ItemGroup>
   
   <ItemGroup Label="dotnet pack instructions">
-    <!-- Targets file in root build folder, applicable to all frameworks -->
-    <Content Include="BuildIntegrationFiles\starweave.targets">
+    <Content Include="BuildIntegrationFiles\*.targets;BuildIntegrationFiles\net46\*.props">
       <Pack>true</Pack>
-      <PackagePath>build\</PackagePath>
+      <PackagePath>build\net46</PackagePath>
     </Content>
-    <!-- Then custom property files for each framework we support -->
-    <Content Include="BuildIntegrationFiles\net46\starweave.props">
-      <Pack>true</Pack>
-      <PackagePath>build\net46\</PackagePath>
-    </Content>
-    <Content Include="BuildIntegrationFiles\netstandard1.6\starweave.props">
+    <Content Include="BuildIntegrationFiles\*.targets;BuildIntegrationFiles\netstandard1.6\*.props">
       <Pack>true</Pack>
       <PackagePath>build\netstandard1.6</PackagePath>
     </Content>
