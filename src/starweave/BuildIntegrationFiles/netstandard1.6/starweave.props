@@ -1,6 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <WeaverBuildToolsPath>$(MSBuildThisFileDirectory)..\..\bin\Debug\netcoreapp2.0\</WeaverBuildToolsPath>
-    <WeaverExeCommand>dotnet $(WeaverBuildToolsPath)starweave.dll</WeaverExeCommand>
-  </PropertyGroup>
-</Project>

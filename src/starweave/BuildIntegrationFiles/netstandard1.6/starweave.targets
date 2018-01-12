@@ -16,7 +16,9 @@
   <Target Name="WeaveProject" Condition="'$(DisableWeaving)' != 'true'" AfterTargets="Build">
     <PropertyGroup>
       <debugSwitch Condition="( '$(DebugWeaver)' == 'True' )">--sc-debug</debugSwitch>
-      <WeaverOutputPath>$(MSBuildProjectDirectory)\$(OutputPath).starcounter</WeaverOutputPath>
+      <WeaverInputAssembly>$(TargetPath)</WeaverInputAssembly>
+      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(TargetDir).starcounter</WeaverOutputPath>
+      <WeaverToolPath Condition="( '$(WeaverToolPath)' == '' )">$(TargetDir)starweave.exe</WeaverToolPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,15 +26,16 @@
       <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).pdb" />
       <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).dll" />
     </ItemGroup>
+
+    <Error Condition="!Exists('$(WeaverInputAssembly)')" Text="Weaver input assembly $(WeaverInputAssembly) does not exist" />
+    <Error Condition="!Exists('$(WeaverToolPath)')" Text="Weaver executable not found: $(WeaverToolPath)" />
     
-    <Message Text="WeaveProject: $(TargetFramework): Weaving $(TargetPath)" Importance="high" />
-    <Error Condition="!Exists('$(TargetPath)')" Text="Weaving input file $(TargetPath) does not exist" />
-    <Error Condition="'$(WeaverExeCommand)' == ''" Text="Missing weaver tool command. Have you imported the .props file?" />
-    <Exec Command="$(WeaverExeCommand) $(debugSwitch) $(TargetPath)" />
+    <Message Text="WeaveProject: Weaving $(WeaverInputAssembly) using $(WeaverToolPath)" Importance="high" />
+    <Exec Command="dotnet $(WeaverToolPath) $(debugSwitch) $(WeaverInputAssembly)" />
     
     <Copy 
       SourceFiles="@(WeavedFiles)" 
-      DestinationFolder="$(MSBuildProjectDirectory)\$(OutputPath)"
+      DestinationFolder="$(TargetDir)"
       Condition="Exists('%(RootDir)%(Directory)%(Filename)%(Extension)')"
     />
     
@@ -40,7 +43,7 @@
 
   <Target Name="CleanWeaverContent" AfterTargets="Clean">
     <PropertyGroup>
-      <WeaverOutputPath>$(MSBuildProjectDirectory)\$(OutputPath).starcounter</WeaverOutputPath>
+      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(TargetDir).starcounter</WeaverOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

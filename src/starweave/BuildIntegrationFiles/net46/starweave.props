@@ -1,6 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <WeaverBuildToolsPath>$(MSBuildThisFileDirectory)..\..\bin\Debug\net461\</WeaverBuildToolsPath>
-    <WeaverExeCommand>$(WeaverBuildToolsPath)starweave.exe</WeaverExeCommand>
-  </PropertyGroup>
-</Project>

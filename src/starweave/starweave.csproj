@@ -16,11 +16,11 @@
   </ItemGroup>
   
   <ItemGroup Label="dotnet pack instructions">
-    <Content Include="BuildIntegrationFiles\*.targets;BuildIntegrationFiles\net46\*.props">
+    <Content Include="BuildIntegrationFiles\net46\starweave.targets">
       <Pack>true</Pack>
       <PackagePath>build\net46</PackagePath>
     </Content>
-    <Content Include="BuildIntegrationFiles\*.targets;BuildIntegrationFiles\netstandard1.6\*.props">
+    <Content Include="BuildIntegrationFiles\netstandard1.6\starweave.targets">
       <Pack>true</Pack>
       <PackagePath>build\netstandard1.6</PackagePath>
     </Content>

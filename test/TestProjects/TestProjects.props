@@ -1,30 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <PropertyGroup>
-    <Net46PropsPath>..\..\src\starweave\BuildIntegrationFiles\net46\starweave.props</Net46PropsPath>
-    <NetCorePropsPath>..\..\src\starweave\BuildIntegrationFiles\netstandard1.6\starweave.props</NetCorePropsPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '' ">
-    <WeaverPropsPath>$(Net46PropsPath)</WeaverPropsPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net461' ">
-    <WeaverPropsPath>$(Net46PropsPath)</WeaverPropsPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.6' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-  </PropertyGroup>
-  
-  <Import Project="$(WeaverPropsPath)" />
+ <!-- No common test properties needed at this time -->
   
 </Project>
