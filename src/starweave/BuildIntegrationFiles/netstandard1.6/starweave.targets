@@ -17,7 +17,7 @@
     <PropertyGroup>
       <debugSwitch Condition="( '$(DebugWeaver)' == 'True' )">--sc-debug</debugSwitch>
       <WeaverInputAssembly>$(TargetPath)</WeaverInputAssembly>
-      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(TargetDir).starcounter</WeaverOutputPath>
+      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(MSBuildProjectDirectory)\$(IntermediateOutputPath).starcounter</WeaverOutputPath>
       <WeaverToolPath Condition="( '$(WeaverToolPath)' == '' )">$(TargetDir)starweave.exe</WeaverToolPath>
     </PropertyGroup>
 
@@ -43,7 +43,7 @@
 
   <Target Name="CleanWeaverContent" AfterTargets="Clean">
     <PropertyGroup>
-      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(TargetDir).starcounter</WeaverOutputPath>
+      <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(MSBuildProjectDirectory)\$(IntermediateOutputPath).starcounter</WeaverOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
