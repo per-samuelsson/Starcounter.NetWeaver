@@ -3,8 +3,12 @@ SETLOCAL EnableDelayedExpansion
 
 SET NugetOutputPath=%STAR_NUGET%
 IF "%NugetOutputPath%"=="" (
-    SET NugetOutputPath=%~dp0\..\%%STAR_NUGET%%
-    IF EXIST %NugetOutputPath%\*.nupkg DEL %NugetOutputPath%\*.nupkg
+    SET DeleteExistingPackages=True
+    SET NugetOutputPath=%~dp0..\%%STAR_NUGET%%
+)
+
+IF "%DeleteExistingPackages%"=="True" (
+  IF EXIST %NugetOutputPath%\*.nupkg DEL %NugetOutputPath%\*.nupkg
 )
 
 IF "%1"=="" (
