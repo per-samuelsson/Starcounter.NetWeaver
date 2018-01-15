@@ -3,6 +3,10 @@
   <Import Project="..\..\global-library.props" />
   
   <PropertyGroup>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45</TargetFrameworks>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <Description>Starcounter.Weaver types shared between weaver and target runtime</Description>
   </PropertyGroup>
 
