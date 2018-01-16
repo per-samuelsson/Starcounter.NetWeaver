@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 using System.Text;
 using System;
 
-namespace Starcounter.Weaver.Runtime {
+namespace Starcounter.Weaver.Runtime.JsonSerializer {
 
     public class JsonNETSchemaSerializer : ISchemaSerializer {
         readonly IContractResolver contractResolver;

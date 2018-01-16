@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Starcounter.Weaver.Runtime {
+namespace Starcounter.Weaver.Runtime.JsonSerializer {
     
     public class AdvicedContractResolver : DefaultContractResolver {
         readonly Dictionary<Type, TypeSerializationAdvice> advices;

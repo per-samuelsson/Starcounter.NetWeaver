@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Starcounter.Weaver.Runtime {
+namespace Starcounter.Weaver.Runtime.JsonSerializer {
 
     public class TypeSerializationAdvice {
 

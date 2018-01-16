@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Starcounter.Weaver.Runtime {
+namespace Starcounter.Weaver.Runtime.JsonSerializer {
 
     public class DefaultAdvicedContractResolver : AdvicedContractResolver {
 
