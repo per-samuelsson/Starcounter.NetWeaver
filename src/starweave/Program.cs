@@ -2,6 +2,7 @@
 using Starcounter.Weaver;
 using Starcounter.Weaver.Analysis;
 using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.JsonSerializer;
 using starweave.Weaver;
 using System;
 using System.Diagnostics;

@@ -41,7 +41,7 @@ namespace Starcounter.Weaver.Runtime {
             }
         }
 
-        internal TypeSystem TypeSystem {
+        public TypeSystem TypeSystem {
             get {
                 return typeSystem;
             }

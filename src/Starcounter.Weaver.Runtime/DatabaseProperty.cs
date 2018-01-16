@@ -18,7 +18,7 @@ namespace Starcounter.Weaver.Runtime {
 
         public DatabaseType DeclaringType {
             get;
-            internal set;
+            set;
         }
 
         public string Name {

@@ -1,5 +1,5 @@
 ﻿using Mono.Cecil;
-using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.JsonSerializer;
 using Starcounter.Weaver.Runtime.Abstractions;
 using Starcounter.Weaver.Analysis;
 using System;

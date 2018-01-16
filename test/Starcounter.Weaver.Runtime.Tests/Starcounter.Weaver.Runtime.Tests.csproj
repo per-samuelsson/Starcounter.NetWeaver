@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Starcounter.Weaver.Runtime.JsonSerializer\Starcounter.Weaver.Runtime.JsonSerializer.csproj" />
     <ProjectReference Include="..\..\src\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj" />
   </ItemGroup>
 

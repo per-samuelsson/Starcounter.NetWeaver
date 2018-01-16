@@ -8,7 +8,7 @@ namespace Starcounter.Weaver.Runtime {
     public class DatabaseAssembly {
         Dictionary<string, DatabaseType> types = new Dictionary<string, DatabaseType>();
 
-        public DatabaseSchema DefiningSchema { get; internal set; }
+        public DatabaseSchema DefiningSchema { get; set; }
 
         public string Name { get; set; }
 

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Starcounter.Weaver\Starcounter.Weaver.csproj" />
     <ProjectReference Include="..\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj" />
+    <ProjectReference Include="..\Starcounter.Weaver.Runtime.JsonSerializer\Starcounter.Weaver.Runtime.JsonSerializer.csproj" />
   </ItemGroup>
   
   <ItemGroup Label="dotnet pack instructions">

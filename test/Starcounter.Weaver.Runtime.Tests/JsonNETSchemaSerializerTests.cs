@@ -1,5 +1,5 @@
 ﻿
-using Starcounter.Weaver.Runtime;
+using Starcounter.Weaver.Runtime.JsonSerializer;
 using Starcounter.Weaver.Runtime.Abstractions;
 using System;
 using System.Linq;

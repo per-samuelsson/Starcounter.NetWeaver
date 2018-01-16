@@ -12,7 +12,7 @@ namespace Starcounter.Weaver.Runtime {
 
         public DatabaseAssembly DefiningAssembly {
             get;
-            internal set;
+            set;
         }
 
         public string FullName {

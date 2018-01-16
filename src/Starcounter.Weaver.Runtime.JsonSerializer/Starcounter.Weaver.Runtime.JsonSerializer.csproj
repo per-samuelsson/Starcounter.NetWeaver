@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\global-library.props" />
-  
   <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <Description>Serializer based on JSON.NET supporting analysis results to be serialized/deserialized</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj" />
   </ItemGroup>
