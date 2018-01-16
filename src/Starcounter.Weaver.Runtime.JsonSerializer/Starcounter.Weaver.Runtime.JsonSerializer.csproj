@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\global-library.props" />
+  
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <Description>Serializer based on JSON.NET supporting analysis results to be serialized/deserialized</Description>
