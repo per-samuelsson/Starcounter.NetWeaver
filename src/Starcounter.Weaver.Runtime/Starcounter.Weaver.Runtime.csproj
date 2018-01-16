@@ -1,17 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\global-library.props" />
-  
+
   <PropertyGroup>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.2</TargetFrameworks>
   </PropertyGroup>
   
   <PropertyGroup>
     <Description>Starcounter.Weaver types shared between weaver and target runtime</Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-  </ItemGroup>
-
+  
 </Project>
