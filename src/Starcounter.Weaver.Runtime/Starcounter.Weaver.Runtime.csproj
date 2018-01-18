@@ -3,7 +3,7 @@
   <Import Project="..\..\global-library.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.2</TargetFrameworks>
+    <TargetFrameworks>netstandard1.1</TargetFrameworks>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Starcounter.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
