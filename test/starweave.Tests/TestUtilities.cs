@@ -14,7 +14,6 @@ namespace starweave.Weaver.Tests {
         static byte[] currentAssemblyBytes;
         static ModuleDefinition currentAssemblyModule;
         static ReaderParameters currentAssemblyDefaultReaderParameters;
-        static WeaverDiagnostics quietDiagnostics;
 
         static TestUtilities() {
             var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
@@ -25,18 +24,13 @@ namespace starweave.Weaver.Tests {
         
         public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null, bool alwaysReRead = false) {
             if (currentAssemblyModule == null || alwaysReRead) {
-                readerParameters = readerParameters ?? currentAssemblyDefaultReaderParameters;
-                var module = ModuleDefinition.ReadModule(new MemoryStream(currentAssemblyBytes, false), readerParameters);
-                Assert.NotNull(module);
-                currentAssemblyModule = module;
+                currentAssemblyModule = SharedTesting.ReadTestAssembly(currentAssemblyBytes, readerParameters ?? currentAssemblyDefaultReaderParameters);
             }
             return currentAssemblyModule;
         }
 
         public static ModuleWithWriteTestWhenDisposed GetModuleOfCurrentAssemblyForRewriting(ReaderParameters readerParameters = null, bool discardTestWrite = false) {
-            readerParameters = readerParameters ?? currentAssemblyDefaultReaderParameters;
-            var module = ModuleDefinition.ReadModule(new MemoryStream(currentAssemblyBytes, false), readerParameters);
-            Assert.NotNull(module);
+            var module = SharedTesting.ReadTestAssembly(currentAssemblyBytes, readerParameters ?? currentAssemblyDefaultReaderParameters);
             return new ModuleWithWriteTestWhenDisposed(module);
         }
     }

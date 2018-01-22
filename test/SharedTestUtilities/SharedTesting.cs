@@ -1,7 +1,8 @@
-﻿using Starcounter.Weaver;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using Mono.Cecil;
+using Starcounter.Weaver;
+using System.IO;
+using Xunit;
 
 namespace SharedTestUtilities {
 
@@ -9,13 +10,18 @@ namespace SharedTestUtilities {
         static WeaverDiagnostics quietDiagnostics;
 
         public static WeaverDiagnostics QuietDiagnostics {
-            // Use this. We don't now if we want to keep WeaverDiagnostics.Quiet.
             get {
                 if (quietDiagnostics == null) {
                     quietDiagnostics = WeaverDiagnostics.Quiet;
                 }
                 return quietDiagnostics;
             }
+        }
+
+        public static ModuleDefinition ReadTestAssembly(byte[] testAssembly, ReaderParameters readerParameters) {
+            var module = ModuleDefinition.ReadModule(new MemoryStream(testAssembly, false), readerParameters);
+            Assert.NotNull(module);
+            return module;
         }
     }
 }

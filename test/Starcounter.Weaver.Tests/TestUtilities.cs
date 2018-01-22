@@ -16,7 +16,6 @@ namespace Starcounter.Weaver.Tests {
         static byte[] currentAssemblyBytes;
         static ModuleDefinition currentAssemblyModule;
         static ReaderParameters currentAssemblyDefaultReaderParameters;
-        static WeaverDiagnostics quietDiagnostics;
         static ModuleReferenceDiscovery adviceAllReferenceDiscovery;
         static ModuleReferenceDiscovery adviceNoneReferenceDiscovery;
 
@@ -61,10 +60,7 @@ namespace Starcounter.Weaver.Tests {
 
         public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null, bool alwaysReRead = false) {
             if (currentAssemblyModule == null || alwaysReRead) {
-                readerParameters = readerParameters ?? currentAssemblyDefaultReaderParameters;
-                var module = ModuleDefinition.ReadModule(new MemoryStream(currentAssemblyBytes, false), readerParameters);
-                Assert.NotNull(module);
-                currentAssemblyModule = module;
+                currentAssemblyModule = SharedTesting.ReadTestAssembly(currentAssemblyBytes, readerParameters ?? currentAssemblyDefaultReaderParameters);
             }
             return currentAssemblyModule;
         }
