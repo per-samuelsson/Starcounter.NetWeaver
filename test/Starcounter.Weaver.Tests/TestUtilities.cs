@@ -67,7 +67,7 @@ namespace Starcounter.Weaver.Tests {
 
         public static ModuleWithWriteTestWhenDisposed GetModuleOfCurrentAssemblyForRewriting(ReaderParameters readerParameters = null, bool discardTestWrite = false) {
             var module = SharedTesting.ReadTestAssembly(currentAssemblyBytes, readerParameters ?? currentAssemblyDefaultReaderParameters);
-            return new ModuleWithWriteTestWhenDisposed(module);
+            return new ModuleWithWriteTestWhenDisposed(module, discardTestWrite);
         }
     }
 }
