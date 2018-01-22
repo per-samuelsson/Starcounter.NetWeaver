@@ -2,6 +2,7 @@
 using Starcounter.Weaver.Analysis;
 using System;
 using Xunit;
+using SharedTestUtilities;
 
 namespace Starcounter.Weaver.Tests {
 
@@ -10,7 +11,7 @@ namespace Starcounter.Weaver.Tests {
         [Fact]
         public void InvalidParametersTriggerMeaningfulErrors() {
             var thisAssembly = TestUtilities.GetModuleOfCurrentAssembly();
-            var diagostics = TestUtilities.QuietDiagnostics;
+            var diagostics = SharedTesting.QuietDiagnostics;
             var dummySerializer = new DelegatingSchemaSerializer();
 
             var npe = Assert.Throws<ArgumentNullException>(() => new EmbeddedResourceSchemaSerializationContext(null, "test", diagostics));

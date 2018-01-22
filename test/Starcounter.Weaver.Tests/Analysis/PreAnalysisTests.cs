@@ -4,6 +4,7 @@ using Starcounter.Weaver.Analysis;
 using Xunit;
 using Mono.Cecil;
 using System.Linq;
+using SharedTestUtilities;
 
 namespace Starcounter.Weaver.Tests {
 
@@ -40,7 +41,7 @@ namespace Starcounter.Weaver.Tests {
             var preAnalyser = new DefaultPreAnalysis(
                 TestUtilities.AdviceNoneReferenceDiscovery, 
                 TestUtilities.DefaultSchemaSerializationContext, 
-                TestUtilities.QuietDiagnostics);
+                SharedTesting.QuietDiagnostics);
             
             preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);
             
@@ -53,7 +54,7 @@ namespace Starcounter.Weaver.Tests {
             var preAnalyser = new CustomPreAnalysisNoSchemaFirstIsTarget(
                 TestUtilities.AdviceAllReferenceDiscovery, 
                 TestUtilities.DefaultSchemaSerializationContext,
-                TestUtilities.QuietDiagnostics);
+                SharedTesting.QuietDiagnostics);
             
             preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);
             
@@ -66,7 +67,7 @@ namespace Starcounter.Weaver.Tests {
             var preAnalyser = new DefaultPreAnalysis(
                 TestUtilities.AdviceAllReferenceDiscovery, 
                 TestUtilities.DefaultSchemaSerializationContext, 
-                TestUtilities.QuietDiagnostics
+                SharedTesting.QuietDiagnostics
             );
             
             preAnalyser.Execute(thisAssembly, new AnalyzerThatReturnFirstModuleAsReference(), out ModuleDefinition target, out DatabaseSchema schema);

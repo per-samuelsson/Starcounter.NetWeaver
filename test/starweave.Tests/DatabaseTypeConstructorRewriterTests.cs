@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using SharedTestUtilities;
 using Starcounter.Weaver;
 using starweave.Weaver;
 using starweave.Weaver.Tests;
@@ -115,7 +116,7 @@ namespace starweave.Tests {
             state = stateEmit;
 
             rewriter = new DatabaseTypeConstructorRewriter(
-                new DefaultWeaverHost(TestUtilities.QuietDiagnostics),
+                new DefaultWeaverHost(SharedTesting.QuietDiagnostics),
                 emitContext,
                 typeof(MockProxyParameter),
                 typeof(MockInsertParameter),

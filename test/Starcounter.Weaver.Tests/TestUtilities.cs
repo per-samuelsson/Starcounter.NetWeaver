@@ -8,6 +8,7 @@ using System.Reflection;
 using Xunit;
 
 using ModuleDefinition = Mono.Cecil.ModuleDefinition;
+using SharedTestUtilities;
 
 namespace Starcounter.Weaver.Tests {
     
@@ -25,21 +26,11 @@ namespace Starcounter.Weaver.Tests {
             currentAssemblyDefaultReaderParameters.ReadSymbols = false;
             currentAssemblyBytes = File.ReadAllBytes(currentAssemblyPath);
         }
-
-        public static WeaverDiagnostics QuietDiagnostics {
-            // Use this. We don't now if we want to keep WeaverDiagnostics.Quiet.
-            get {
-                if (quietDiagnostics == null) {
-                    quietDiagnostics = WeaverDiagnostics.Quiet;
-                }
-                return quietDiagnostics;
-            }
-        }
-
+        
         public static ModuleReferenceDiscovery AdviceAllReferenceDiscovery {
             get {
                 if (adviceAllReferenceDiscovery == null) {
-                    var diag = TestUtilities.QuietDiagnostics;
+                    var diag = SharedTesting.QuietDiagnostics;
                     adviceAllReferenceDiscovery = new ModuleReferenceDiscovery(new AdviceAllAdvisor(diag), diag);
                 }
                 return adviceAllReferenceDiscovery;
@@ -49,7 +40,7 @@ namespace Starcounter.Weaver.Tests {
         public static ModuleReferenceDiscovery AdviceNoneReferenceDiscovery {
             get {
                 if (adviceNoneReferenceDiscovery == null) {
-                    var diag = TestUtilities.QuietDiagnostics;
+                    var diag = SharedTesting.QuietDiagnostics;
                     adviceNoneReferenceDiscovery = new ModuleReferenceDiscovery(new AdviceNoneAdvisor(diag), diag);
                 }
                 return adviceNoneReferenceDiscovery;
@@ -64,7 +55,7 @@ namespace Starcounter.Weaver.Tests {
             get { return new EmbeddedResourceSchemaSerializationContext(
                 DefaultSchemaSerializer, 
                 EmbeddedResourceSchemaSerializationContext.DefaultResourceStreamName,
-                QuietDiagnostics);
+                SharedTesting.QuietDiagnostics);
             }
         }
 

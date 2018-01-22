@@ -9,6 +9,7 @@ using Starcounter.Weaver;
 using Mono.Cecil;
 using starweave.Weaver.Tests;
 using System.Linq;
+using SharedTestUtilities;
 
 namespace starweave.Tests {
 
@@ -130,7 +131,7 @@ namespace starweave.Tests {
             var thisAssembly = Assembly.GetExecutingAssembly();
 
             var provider = new AssemblyLoadTargetRuntimeProviderWithNoMatchingType(
-                new DefaultWeaverHost(TestUtilities.QuietDiagnostics), 
+                new DefaultWeaverHost(SharedTesting.QuietDiagnostics), 
                 "dummy", 
                 thisAssembly
             );
@@ -145,7 +146,7 @@ namespace starweave.Tests {
             var thisAssembly = Assembly.GetExecutingAssembly();
             
             var provider = new AssemblyLoadTargetRuntimeProviderWithGivenType(
-                new DefaultWeaverHost(TestUtilities.QuietDiagnostics),
+                new DefaultWeaverHost(SharedTesting.QuietDiagnostics),
                 "dummy",
                 thisAssembly,
                 typeof(EmptyButCorrectImplementationOfRuntimeFacade)

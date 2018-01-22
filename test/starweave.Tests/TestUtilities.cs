@@ -22,16 +22,6 @@ namespace starweave.Weaver.Tests {
             currentAssemblyDefaultReaderParameters.ReadSymbols = false;
             currentAssemblyBytes = File.ReadAllBytes(currentAssemblyPath);
         }
-
-        public static WeaverDiagnostics QuietDiagnostics {
-            // Use this. We don't now if we want to keep WeaverDiagnostics.Quiet.
-            get {
-                if (quietDiagnostics == null) {
-                    quietDiagnostics = WeaverDiagnostics.Quiet;
-                }
-                return quietDiagnostics;
-            }
-        }
         
         public static ModuleDefinition GetModuleOfCurrentAssembly(ReaderParameters readerParameters = null, bool alwaysReRead = false) {
             if (currentAssemblyModule == null || alwaysReRead) {

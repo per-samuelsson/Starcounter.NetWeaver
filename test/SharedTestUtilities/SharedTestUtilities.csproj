@@ -10,5 +10,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta7" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Starcounter.Weaver\Starcounter.Weaver.csproj" />
+  </ItemGroup>
 
 </Project>
