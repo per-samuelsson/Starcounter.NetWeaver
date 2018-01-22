@@ -1,42 +1,14 @@
 ﻿
 using Mono.Cecil;
 using Starcounter.Weaver;
-using System;
 using System.IO;
 using System.Reflection;
 using Xunit;
+using SharedTestUtilities;
 
 using ModuleDefinition = Mono.Cecil.ModuleDefinition;
 
 namespace starweave.Weaver.Tests {
-
-    public class ModuleWithWriteTestWhenDisposed : IDisposable {
-        ModuleDefinition module;
-        bool discardWrite;
-
-        public ModuleDefinition Module {
-            get {
-                return module;
-            }
-        }
-
-        public ModuleWithWriteTestWhenDisposed(ModuleDefinition moduleDefinition, bool discardTestWrite = false) {
-            module = moduleDefinition;
-            discardWrite = discardTestWrite;
-            OutputStream = discardTestWrite ? null : new MemoryStream();
-        }
-
-        public Stream OutputStream {
-            get; set;
-        }
-
-        public void Dispose() {
-            if (!discardWrite) {
-                module?.Write(OutputStream);
-            }
-            module = null;
-        }
-    }
 
     public static class TestUtilities {
         static byte[] currentAssemblyBytes;
