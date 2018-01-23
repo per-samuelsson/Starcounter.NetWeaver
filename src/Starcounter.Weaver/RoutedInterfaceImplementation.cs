@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Mono.Cecil;
 using System.Linq;
-using Mono.Cecil.Cil;
 
 namespace Starcounter.Weaver {
 
@@ -15,7 +14,8 @@ namespace Starcounter.Weaver {
     public class RoutedInterfaceImplementation {
         readonly InterfaceImplementation interfaceImplementation;
         readonly TypeDefinition passThroughInterface;
-        readonly Dictionary<MethodDefinition, MethodDefinition> routes = new Dictionary<MethodDefinition, MethodDefinition>();
+        readonly Dictionary<MethodDefinition, RoutedMethodImplementation> methodRoutes = new Dictionary<MethodDefinition, RoutedMethodImplementation>();
+        readonly Dictionary<PropertyDefinition, RoutedPropertyImplementation> propertyRoutes = new Dictionary<PropertyDefinition, RoutedPropertyImplementation>();
 
         public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceDefinition, TypeDefinition passThroughType, TypeDefinition routingTargetType) {
             Guard.NotNull(emissionContext, nameof(emissionContext));
@@ -30,18 +30,22 @@ namespace Starcounter.Weaver {
             if (!passThroughType.IsInterface) {
                 throw new ArgumentException($"Type {passThroughType.FullName} is not an interface", nameof(passThroughType));
             }
-            
+
+            interfaceImplementation = new InterfaceImplementation(interfaceDefinition);
+            passThroughInterface = passThroughType;
+
             foreach (var m in interfaceDefinition.Methods) {
                 var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, m, passThroughType));
                 if (target == null) {
                     throw new ArgumentException($"Routing target type missing qualifying interface method {m.FullName}", nameof(routingTargetType));
                 }
-
-                routes.Add(m, target);
+                
+                methodRoutes.Add(m, new RoutedMethodImplementation(interfaceImplementation, m, target));
             }
-
-            interfaceImplementation = new InterfaceImplementation(interfaceDefinition);
-            passThroughInterface = passThroughType;
+            
+            foreach (var p in interfaceDefinition.Properties) {
+                propertyRoutes.Add(p, new RoutedPropertyImplementation(interfaceImplementation, p));
+            }
         }
         
         public void ImplementOn(TypeDefinition type) {
@@ -51,29 +55,35 @@ namespace Starcounter.Weaver {
             }
 
             type.Interfaces.Add(interfaceImplementation);
-            foreach (var route in routes) {
-                var name = interfaceImplementation.InterfaceType.FullName + "." + route.Key.Name;
-                var attributes = route.Key.Attributes;
-                attributes ^= MethodAttributes.Abstract;
-                attributes ^= MethodAttributes.Public;
-                attributes |= (MethodAttributes.Virtual | MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final);
-                var m = new MethodDefinition(name, attributes, route.Key.ReturnType);
-                m.Overrides.Add(route.Key);
-                m.Body = new MethodBody(m);
-                var il = m.Body.GetILProcessor();
-                il.Emit(OpCodes.Ldarg_0);
-                foreach (var p in route.Key.Parameters) {
-                    il.Emit(OpCodes.Ldarg, p);
-                }
-                il.Emit(OpCodes.Call, route.Value);
-                il.Emit(OpCodes.Ret);
+            
+            foreach (var route in methodRoutes.Values) {
+                route.ImplementOn(type);
+            }
 
-                type.Methods.Add(m);
+            foreach (var p in propertyRoutes) {
+                var interfaceProperty = p.Key;
+                var route = p.Value;
+
+                var getter = methodRoutes[interfaceProperty.GetMethod];
+                var setter = interfaceProperty.SetMethod != null ? methodRoutes[interfaceProperty.SetMethod] : null;
+
+                route.ImplementOn(type, getter, setter);
             }
         }
 
         static bool IsQualifiedRoutingTarget(MethodDefinition target, MethodDefinition interfaceMethod, TypeDefinition passThrough) {
-            if (!target.IsStatic || target.Name != interfaceMethod.Name || !target.HasParameters) {
+            if (!target.IsStatic || !target.HasParameters) {
+                return false;
+            }
+            
+            // To support properties, we give target methods the option to name like Get_Foo and Set_Foo,
+            // instead of get_Foo/set_Foo, allowing code that would raise warnings/errors by code-style
+            // analyzers.
+
+            var comparison = interfaceMethod.IsGetter || interfaceMethod.IsSetter ?
+                StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture;
+
+            if (!interfaceMethod.Name.Equals(target.Name, comparison)) {
                 return false;
             }
 
