@@ -40,8 +40,15 @@ namespace Starcounter.Weaver {
             return hasDatabaseAttribute;
         }
 
-        public static bool ImplementInterface(this TypeDefinition type, TypeReference interfaceType) {
-            return type.Interfaces.Any(i => i.InterfaceType.FullName == interfaceType.FullName);
+        public static bool ImplementInterface(this TypeDefinition type, TypeReference interfaceType, bool declaredOnly = false) {
+            var doesImplement = type.Interfaces.Any(i => i.InterfaceType.FullName == interfaceType.FullName);
+            if (!doesImplement && !declaredOnly) {
+                var baseDefinition = type.BaseType?.Resolve();
+                if (baseDefinition != null) {
+                    return ImplementInterface(baseDefinition, interfaceType, declaredOnly);
+                }
+            }
+            return doesImplement;
         }
 
         public static FieldReference GetFieldRecursive(this TypeDefinition type, string name) {
