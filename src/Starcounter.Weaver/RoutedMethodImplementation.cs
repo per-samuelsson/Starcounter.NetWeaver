@@ -1,6 +1,7 @@
 ﻿
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 
 namespace Starcounter.Weaver {
 
@@ -30,16 +31,26 @@ namespace Starcounter.Weaver {
             attributes ^= MethodAttributes.Abstract;
             attributes ^= MethodAttributes.Public;
             attributes |= (MethodAttributes.Virtual | MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final);
+
             var m = new MethodDefinition(name, attributes, interfaceMethod.ReturnType);
+            foreach (var interfaceParameter in interfaceMethod.Parameters) {
+                m.Parameters.Add(new ParameterDefinition(interfaceParameter.Name, interfaceParameter.Attributes, interfaceParameter.ParameterType));
+            }
             m.Overrides.Add(interfaceMethod);
+
             m.Body = new MethodBody(m);
             var il = m.Body.GetILProcessor();
-            il.Emit(OpCodes.Ldarg_0);
-            foreach (var p in interfaceMethod.Parameters) {
-                il.Emit(OpCodes.Ldarg, p);
+            il.Append(il.Create(OpCodes.Ldarg_0));
+            foreach (var p in m.Parameters) {
+                il.Append(il.Create(OpCodes.Ldarg, p));
             }
-            il.Emit(OpCodes.Call, targetMethod);
-            il.Emit(OpCodes.Ret);
+            il.Append(il.Create(OpCodes.Call, targetMethod));
+            il.Append(il.Create(OpCodes.Ret));
+
+            // Make sure we optimize parameter stack loading on what
+            // we generate
+            // https://stackoverflow.com/questions/10231409/creating-an-il-instruction-with-an-inline-argument-using-mono-cecil
+            il.Body.OptimizeMacros();
 
             type.Methods.Add(m);
 
