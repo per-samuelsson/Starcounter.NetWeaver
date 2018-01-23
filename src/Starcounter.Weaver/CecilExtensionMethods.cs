@@ -51,6 +51,26 @@ namespace Starcounter.Weaver {
             return doesImplement;
         }
 
+        public static bool IsDerivedFrom(this TypeDefinition type, TypeDefinition candidate, bool declaredOnly = false) {
+            var hasMatchingBaseType = type.BaseType?.FullName == candidate.FullName;
+            if (!hasMatchingBaseType && !declaredOnly) {
+                var baseDefinition = type.BaseType?.Resolve();
+                if (baseDefinition != null) {
+                    return IsDerivedFrom(baseDefinition, candidate, declaredOnly);
+                }
+            }
+            return hasMatchingBaseType;
+        }
+
+        public static bool IsAssignableFrom(this TypeDefinition type, TypeDefinition candidate) {
+            return
+                type == candidate ||
+                type.MetadataToken == candidate.MetadataToken ||
+                type.IsInterface && candidate.ImplementInterface(type) ||
+                type.IsClass && candidate.IsDerivedFrom(type) ||
+                type.IsClass && type.BaseType == null && candidate.IsInterface; // object is assignable always
+        }
+
         public static FieldReference GetFieldRecursive(this TypeDefinition type, string name) {
             var result = type.Fields.SingleOrDefault(f => f.Name.Equals(name));
             if (result == null && type.BaseType != null) {
@@ -99,6 +119,12 @@ namespace Starcounter.Weaver {
             }) as EmbeddedResource;
 
             return resource?.GetResourceData();
+        }
+
+        public static IEnumerable<TypeDefinition> GetBaseClasses(this TypeDefinition type) {
+            for (var typeDefinition = type; typeDefinition != null; typeDefinition = typeDefinition.BaseType?.Resolve()) {
+                yield return typeDefinition;
+            }
         }
     }
 }
