@@ -13,34 +13,30 @@ namespace Starcounter.Weaver {
     /// </summary>
     public class RoutedInterfaceImplementation {
         readonly InterfaceImplementation interfaceImplementation;
-        readonly TypeDefinition passThroughInterface;
+        readonly TypeDefinition passThroughType;
         readonly Dictionary<MethodDefinition, RoutedMethodImplementation> methodRoutes = new Dictionary<MethodDefinition, RoutedMethodImplementation>();
         readonly Dictionary<PropertyDefinition, RoutedPropertyImplementation> propertyRoutes = new Dictionary<PropertyDefinition, RoutedPropertyImplementation>();
 
-        public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceDefinition, TypeDefinition passThroughType, TypeDefinition routingTargetType) {
+        public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
             Guard.NotNull(emissionContext, nameof(emissionContext));
             Guard.NotNull(interfaceDefinition, nameof(interfaceDefinition));
-            Guard.NotNull(passThroughType, nameof(passThroughType));
+            Guard.NotNull(passThroughTypeDefinition, nameof(passThroughTypeDefinition));
             Guard.NotNull(routingTargetType, nameof(routingTargetType));
 
             if (!interfaceDefinition.IsInterface) {
                 throw new ArgumentException($"Type {interfaceDefinition.FullName} is not an interface", nameof(interfaceDefinition));
             }
-
-            if (!passThroughType.IsInterface) {
-                throw new ArgumentException($"Type {passThroughType.FullName} is not an interface", nameof(passThroughType));
-            }
-
+            
             interfaceImplementation = new InterfaceImplementation(interfaceDefinition);
-            passThroughInterface = passThroughType;
+            passThroughType = passThroughTypeDefinition;
 
-            foreach (var m in interfaceDefinition.Methods) {
-                var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, m, passThroughType));
+            foreach (var interfaceMethod in interfaceDefinition.Methods) {
+                var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, interfaceMethod, passThroughTypeDefinition));
                 if (target == null) {
-                    throw new ArgumentException($"Routing target type missing qualifying interface method {m.FullName}", nameof(routingTargetType));
+                    throw new ArgumentException($"Routing target type missing qualifying interface method {interfaceMethod.FullName}", nameof(routingTargetType));
                 }
                 
-                methodRoutes.Add(m, new RoutedMethodImplementation(interfaceImplementation, m, target));
+                methodRoutes.Add(interfaceMethod, new RoutedMethodImplementation(interfaceImplementation, interfaceMethod, target));
             }
             
             foreach (var p in interfaceDefinition.Properties) {
@@ -49,9 +45,9 @@ namespace Starcounter.Weaver {
         }
         
         public void ImplementOn(TypeDefinition type) {
-            if (!type.ImplementInterface(passThroughInterface)) {
+            if (!passThroughType.IsAssignableFrom(type)) {
                 throw new ArgumentException(
-                    $"Type {type.FullName} does not implement pass-through interface {passThroughInterface.FullName}.", nameof(type));
+                    $"Type {passThroughType.FullName} is not assignable from type {type.FullName}", nameof(type));
             }
 
             type.Interfaces.Add(interfaceImplementation);
