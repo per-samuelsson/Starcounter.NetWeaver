@@ -10,6 +10,8 @@ namespace Starcounter.Weaver.Tests {
         int Method2();
 
         string Method3(object o);
+
+        bool Method4(int i, short s, string s2, bool b, object o, DateTime dt, IInterfaceWithMethods x, char c, TimeSpan ts, int i2, int i3, long l1);
     }
 
     interface IInterfaceWithProperties {
@@ -31,6 +33,10 @@ namespace Starcounter.Weaver.Tests {
 
         public static string Method3(IPassThroughType t, object o) {
             return "42";
+        }
+
+        public static bool Method4(IPassThroughType t, int i, short s, string s2, bool b, object o, DateTime dt, IInterfaceWithMethods x, char c, TimeSpan ts, int i2, int i3, long l1) {
+            return true;
         }
 
         public static int Get_ReadOnlyProperty(IPassThroughType t) {
@@ -60,6 +66,10 @@ namespace Starcounter.Weaver.Tests {
 
         string IInterfaceWithMethods.Method3(object o) {
             return RoutingTargetType.Method3(this, o);
+        }
+
+        bool IInterfaceWithMethods.Method4(int i, short s, string s2, bool b, object o, DateTime dt, IInterfaceWithMethods x, char c, TimeSpan ts, int i2, int i3, long l1) {
+            return RoutingTargetType.Method4(this, i, s, s2, b, o, dt, x, c, ts, i2, i3, l1);
         }
     }
 
