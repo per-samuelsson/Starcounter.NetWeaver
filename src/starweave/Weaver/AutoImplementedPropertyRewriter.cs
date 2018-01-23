@@ -1,6 +1,7 @@
 ﻿
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Starcounter.Weaver;
 
 namespace starweave.Weaver {
@@ -71,6 +72,7 @@ namespace starweave.Weaver {
             il.Append(il.Create(OpCodes.Ldsfld, state.GetPropertyHandle(property.Property)));
             il.Append(il.Create(OpCodes.Call, readMethod));
             il.Append(il.Create(OpCodes.Ret));
+            il.Body.OptimizeMacros();
         }
 
         void RewriteSetter(AutoImplementedProperty property, MethodReference writeMethod) {
@@ -103,6 +105,7 @@ namespace starweave.Weaver {
             il.Append(il.Create(OpCodes.Ldarg_1));
             il.Append(il.Create(OpCodes.Call, writeMethod));
             il.Append(il.Create(OpCodes.Ret));
+            il.Body.OptimizeMacros();
         }
 
         // This one will eventually be conditional, part of only
