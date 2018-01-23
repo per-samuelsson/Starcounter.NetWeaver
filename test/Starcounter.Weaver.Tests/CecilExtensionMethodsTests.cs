@@ -56,7 +56,7 @@ namespace Starcounter.Weaver.Tests {
         [Fact]
         public void ImplementInterfaceDetectInheritedScenarios() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
-            
+
             var disposable = module.GetTypeReferences().Single(r => r.FullName == typeof(IDisposable).FullName);
             Assert.NotNull(disposable);
 
@@ -67,6 +67,61 @@ namespace Starcounter.Weaver.Tests {
             type = module.Types.Single(t => t.FullName == typeof(ClassDerivingClassImplementingIInterfaceDerivingExternalInterface).FullName);
             Assert.NotNull(type);
             Assert.True(type.ImplementInterface(disposable));
+        }
+
+        [Fact]
+        public void TypesAreAssignableFromSelf() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var disposable = module.GetTypeReferences().Single(r => r.FullName == typeof(IDisposable).FullName).Resolve();
+            Assert.True(disposable.IsAssignableFrom(disposable));
+
+            var type = module.Types.Single(t => t.FullName == typeof(BaseClassWithField).FullName);
+            Assert.True(type.IsAssignableFrom(type));
+
+            type = module.Types.Single(t => t.FullName == typeof(SubClassWithNoField).FullName);
+            Assert.True(type.IsAssignableFrom(type));
+
+            type = module.Types.Single(t => t.FullName == typeof(SubClassThatInheritFieldAcrossAssembly).FullName);
+            Assert.True(type.IsAssignableFrom(type));
+
+            type = module.Types.Single(t => t.FullName == typeof(IInterfaceDerivingExternalInterface).FullName);
+            Assert.True(type.IsAssignableFrom(type));
+        }
+
+        [Fact]
+        public void ObjectIsAssignableFromAllTypes() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var @object = module.GetTypeReferences().Single(r => r.FullName == typeof(object).FullName).Resolve();
+            Assert.True(@object.IsAssignableFrom(@object));
+
+            var type = module.Types.Single(t => t.FullName == typeof(BaseClassWithField).FullName);
+            Assert.True(@object.IsAssignableFrom(type));
+            Assert.False(type.IsAssignableFrom(@object));
+
+            type = module.Types.Single(t => t.FullName == typeof(SubClassWithNoField).FullName);
+            Assert.True(@object.IsAssignableFrom(type));
+            Assert.False(type.IsAssignableFrom(@object));
+
+            type = module.Types.Single(t => t.FullName == typeof(SubClassThatInheritFieldAcrossAssembly).FullName);
+            Assert.True(@object.IsAssignableFrom(type));
+            Assert.False(type.IsAssignableFrom(@object));
+
+            type = module.Types.Single(t => t.FullName == typeof(IInterfaceDerivingExternalInterface).FullName);
+            Assert.True(@object.IsAssignableFrom(type));
+            Assert.False(type.IsAssignableFrom(@object));
+        }
+
+        [Fact]
+        public void BaseClassIsAssignableFromSubClass() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var baseType = module.Types.Single(t => t.FullName == typeof(BaseClassWithField).FullName);
+            var type = module.Types.Single(t => t.FullName == typeof(SubClassWithNoField).FullName);
+
+            Assert.True(baseType.IsAssignableFrom(type));
+            Assert.False(type.IsAssignableFrom(baseType));
         }
     }
 }
