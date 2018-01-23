@@ -26,7 +26,9 @@ namespace Starcounter.Weaver {
             Guard.NotNull(type, nameof(type));
             Guard.NotNull(getter, nameof(getter));
 
-            var p = new PropertyDefinition(interfaceProperty.Name, interfaceProperty.Attributes, interfaceProperty.PropertyType) {
+            var name = interfaceImplementation.InterfaceType.FullName + "." + interfaceProperty.Name;
+
+            var p = new PropertyDefinition(name, interfaceProperty.Attributes, interfaceProperty.PropertyType) {
                 GetMethod = getter.ImplementedMethod,
                 SetMethod = setter?.ImplementedMethod
             };
