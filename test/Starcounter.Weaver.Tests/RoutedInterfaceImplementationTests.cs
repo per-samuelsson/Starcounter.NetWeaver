@@ -1,13 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace Starcounter.Weaver.Tests {
 
-    interface IInterfaceWithSingleVoidMethod {
+    interface IInterfaceWithMethods {
         void Method1();
+
+        int Method2();
+
+        string Method3(object o);
+    }
+
+    interface IInterfaceWithProperties {
+        int ReadOnlyProperty { get; }
+        int ReadWriteProperty { get; set; }
     }
 
     interface IPassThroughType {}
@@ -17,16 +24,56 @@ namespace Starcounter.Weaver.Tests {
         public static void Method1(IPassThroughType t) {
 
         }
+
+        public static int Method2(IPassThroughType t) {
+            return 42;
+        }
+
+        public static string Method3(IPassThroughType t, object o) {
+            return "42";
+        }
+
+        public static int Get_ReadOnlyProperty(IPassThroughType t) {
+            return 42;
+        }
+
+        public static int Get_ReadWriteProperty(IPassThroughType t) {
+            return 42;
+        }
+
+        public static void Set_ReadWriteProperty(IPassThroughType t, int i) {
+        }
     }
 
     class EmptyType : IPassThroughType {
-
     }
     
-    class EmptyType_Facit : IPassThroughType, IInterfaceWithSingleVoidMethod {
+    class EmptyType_Solution : IPassThroughType, IInterfaceWithMethods {
 
-        void IInterfaceWithSingleVoidMethod.Method1() {
+        void IInterfaceWithMethods.Method1() {
             RoutingTargetType.Method1(this);
+        }
+
+        int IInterfaceWithMethods.Method2() {
+            return RoutingTargetType.Method2(this);
+        }
+
+        string IInterfaceWithMethods.Method3(object o) {
+            return RoutingTargetType.Method3(this, o);
+        }
+    }
+
+    class TypeWithInterfaceProperties: IPassThroughType {
+
+    }
+
+    class TypeWithInterfaceProperties_Solution : IPassThroughType, IInterfaceWithProperties {
+
+        int IInterfaceWithProperties.ReadOnlyProperty => RoutingTargetType.Get_ReadOnlyProperty(this);
+
+        int IInterfaceWithProperties.ReadWriteProperty {
+            get => RoutingTargetType.Get_ReadWriteProperty(this);
+            set => RoutingTargetType.Set_ReadWriteProperty(this, value);
         }
     }
     
@@ -39,7 +86,7 @@ namespace Starcounter.Weaver.Tests {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
 
             var emitContext = new CodeEmissionContext(module);
-            var interfaceDefinition = module.Types.Single(t => t.FullName == typeof(IInterfaceWithSingleVoidMethod).FullName);
+            var interfaceDefinition = module.Types.Single(t => t.FullName == typeof(IInterfaceWithMethods).FullName);
             var passThrough = module.Types.Single(t => t.FullName == typeof(IPassThroughType).FullName);
             var routingTargetType = module.Types.Single(t => t.FullName == typeof(RoutingTargetType).FullName);
 
@@ -70,21 +117,60 @@ namespace Starcounter.Weaver.Tests {
         }
 
         [Fact]
-        public void ImplementedInterfaceShowsUpAsExpected() {
+        public void MethodRoutesProduceInterfaceImplementation() {
 
             using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
                 var module = m.Module;
 
-                var interfaceDefinition = module.Types.Single(t => t.FullName == typeof(IInterfaceWithSingleVoidMethod).FullName);
+                var interfaceDefinition = module.Types.Single(t => t.FullName == typeof(IInterfaceWithMethods).FullName);
                 var passThrough = module.Types.Single(t => t.FullName == typeof(IPassThroughType).FullName);
                 var routingTargetType = module.Types.Single(t => t.FullName == typeof(RoutingTargetType).FullName);
-                
+
                 var implementation = new RoutedInterfaceImplementation(new CodeEmissionContext(module), interfaceDefinition, passThrough, routingTargetType);
 
                 var target = module.Types.Single(t => t.FullName == typeof(EmptyType).FullName);
+                var initialTargetMethodCount = 1; //compiler-emitted .ctor
                 Assert.False(target.ImplementInterface(interfaceDefinition));
+                Assert.Equal(initialTargetMethodCount, target.Methods.Count);  
+
                 implementation.ImplementOn(target);
                 Assert.True(target.ImplementInterface(interfaceDefinition));
+                Assert.Equal(interfaceDefinition.Methods.Count + initialTargetMethodCount, target.Methods.Count);
+
+                foreach (var method in target.Methods) {
+                    if (!method.HasOverrides) continue;
+                    Assert.NotNull(MethodCallFinder.FindSingleCallToAnyTarget(method, routingTargetType.Methods));
+                }
+            }
+        }
+
+        [Fact]
+        public void PropertyRoutesProduceInterfaceImplementation() {
+
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var interfaceDefinition = module.Types.Single(t => t.FullName == typeof(IInterfaceWithProperties).FullName);
+                var passThrough = module.Types.Single(t => t.FullName == typeof(IPassThroughType).FullName);
+                var routingTargetType = module.Types.Single(t => t.FullName == typeof(RoutingTargetType).FullName);
+
+                var implementation = new RoutedInterfaceImplementation(new CodeEmissionContext(module), interfaceDefinition, passThrough, routingTargetType);
+
+                var target = module.Types.Single(t => t.FullName == typeof(TypeWithInterfaceProperties).FullName);
+                var initialTargetMethodCount = 1; //compiler-emitted .ctor
+                Assert.False(target.ImplementInterface(interfaceDefinition));
+                Assert.Equal(initialTargetMethodCount, target.Methods.Count);
+                Assert.False(target.HasProperties);
+
+                implementation.ImplementOn(target);
+                Assert.True(target.ImplementInterface(interfaceDefinition));
+                Assert.Equal(interfaceDefinition.Properties.Count, target.Properties.Count);
+                Assert.Equal(interfaceDefinition.Methods.Count + initialTargetMethodCount, target.Methods.Count);
+
+                foreach (var method in target.Methods) {
+                    if (!method.HasOverrides) continue;
+                    Assert.NotNull(MethodCallFinder.FindSingleCallToAnyTarget(method, routingTargetType.Methods));
+                }
             }
         }
     }
