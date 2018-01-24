@@ -13,6 +13,7 @@ namespace starweave.Weaver {
         readonly CodeEmissionContext emitContext;
         readonly DatabaseTypeConstructorRewriter constructorRewriter;
         readonly IAssemblyRuntimeFacade runtimeFacade;
+        readonly DatabaseTypeIDbProxyStateEmitter proxyInterfaceEmitter;
 
         public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, IAssemblyRuntimeFacade assemblyRuntimeFacade, DatabaseTypeStateNames stateNames) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
@@ -20,6 +21,11 @@ namespace starweave.Weaver {
             runtimeFacade = assemblyRuntimeFacade ?? throw new ArgumentNullException(nameof(assemblyRuntimeFacade));
             names = stateNames ?? throw new ArgumentNullException(nameof(stateNames));
             emitContext = new CodeEmissionContext(result.SourceModule);
+
+            proxyInterfaceEmitter = new DatabaseTypeIDbProxyStateEmitter(
+                emitContext, 
+                runtimeFacade.DbProxyStateInterfaceType
+            );
             
             constructorRewriter = new DatabaseTypeConstructorRewriter(
                 host,
@@ -41,6 +47,7 @@ namespace starweave.Weaver {
             stateEmitter.EmitCRUDHandles();
             if (baseType == null) {
                 stateEmitter.EmitReferenceFields();
+                proxyInterfaceEmitter.ImplementOn(typeDef, stateEmitter);
             }
 
             constructorRewriter.Rewrite(typeDef, baseTypeDef, stateEmitter);
