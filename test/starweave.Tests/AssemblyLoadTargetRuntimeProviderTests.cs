@@ -22,6 +22,8 @@ namespace starweave.Tests {
         public abstract Type InsertConstructorSignatureType { get; }
         public abstract MethodInfo CreateMethod { get; }
         public abstract IEnumerable<string> SupportedDataTypes { get; }
+        public abstract IEnumerable<RoutedInterfaceSpecification> RoutedInterfaces { get; }
+        public abstract Type DbProxyStateInterfaceType { get; }
 
         public abstract MethodInfo GetReadMethod(string type);
         public abstract MethodInfo GetWriteMethod(string type);
@@ -35,6 +37,11 @@ namespace starweave.Tests {
         Type IAssemblyRuntimeFacade.InsertConstructorSignatureType => throw new NotImplementedException();
         MethodInfo IAssemblyRuntimeFacade.CreateMethod => throw new NotImplementedException();
         IEnumerable<string> IAssemblyRuntimeFacade.SupportedDataTypes => throw new NotImplementedException();
+
+        IEnumerable<RoutedInterfaceSpecification> IAssemblyRuntimeFacade.RoutedInterfaces => throw new NotImplementedException();
+
+        Type IAssemblyRuntimeFacade.DbProxyStateInterfaceType => throw new NotImplementedException();
+
         MethodInfo IAssemblyRuntimeFacade.GetReadMethod(string type) {
             throw new NotImplementedException();
         }
@@ -54,6 +61,10 @@ namespace starweave.Tests {
         public MethodInfo CreateMethod => throw new NotImplementedException();
 
         public IEnumerable<string> SupportedDataTypes => throw new NotImplementedException();
+
+        public IEnumerable<RoutedInterfaceSpecification> RoutedInterfaces => throw new NotImplementedException();
+
+        public Type DbProxyStateInterfaceType => throw new NotImplementedException();
 
         public MethodInfo GetReadMethod(string type) {
             throw new NotImplementedException();
