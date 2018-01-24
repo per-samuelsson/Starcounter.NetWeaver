@@ -3,6 +3,8 @@ using Starcounter.Weaver.Runtime;
 using Starcounter.Weaver.Runtime.Abstractions;
 using Starcounter.Weaver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace starweave.Weaver {
 
@@ -14,6 +16,7 @@ namespace starweave.Weaver {
         readonly DatabaseTypeConstructorRewriter constructorRewriter;
         readonly IAssemblyRuntimeFacade runtimeFacade;
         readonly DatabaseTypeIDbProxyStateEmitter proxyInterfaceEmitter;
+        readonly IEnumerable<RoutedInterfaceImplementation> interfaceRoutes;
 
         public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, IAssemblyRuntimeFacade assemblyRuntimeFacade, DatabaseTypeStateNames stateNames) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
@@ -25,6 +28,14 @@ namespace starweave.Weaver {
             proxyInterfaceEmitter = new DatabaseTypeIDbProxyStateEmitter(
                 emitContext, 
                 runtimeFacade.DbProxyStateInterfaceType
+            );
+            
+            interfaceRoutes = runtimeFacade.RoutedInterfaces.Select(
+                spec => new RoutedInterfaceImplementation(
+                    emitContext, 
+                    spec.InterfaceType, 
+                    spec.PassThroughType, 
+                    spec.RoutingTarget)
             );
             
             constructorRewriter = new DatabaseTypeConstructorRewriter(
@@ -74,6 +85,10 @@ namespace starweave.Weaver {
                 var writer = emitContext.Use(writeMethod);
                 
                 propRewriter.Rewrite(autoProperty, reader, writer);
+            }
+
+            foreach (var route in interfaceRoutes) {
+                route.ImplementOn(typeDef);
             }
         }
     }
