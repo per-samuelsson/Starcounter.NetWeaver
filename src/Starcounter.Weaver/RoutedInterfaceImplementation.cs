@@ -43,6 +43,18 @@ namespace Starcounter.Weaver {
                 propertyRoutes.Add(p, new RoutedPropertyImplementation(interfaceImplementation, p));
             }
         }
+
+        public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, Type interfaceType, Type passThroughType, Type routingTargetType) :
+            this(emissionContext, UseType(emissionContext, interfaceType), UseType(emissionContext, passThroughType), UseType(emissionContext, routingTargetType)) {
+        }
+
+        static TypeDefinition UseType(CodeEmissionContext emissionContext, Type type) {
+            Guard.NotNull(emissionContext, nameof(emissionContext));
+            Guard.NotNull(type, nameof(type));
+
+            var typeRef = emissionContext.Use(type);
+            return typeRef.Resolve();
+        }
         
         public void ImplementOn(TypeDefinition type) {
             if (!passThroughType.IsAssignableFrom(type)) {
