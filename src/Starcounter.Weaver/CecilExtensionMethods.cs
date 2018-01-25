@@ -122,7 +122,16 @@ namespace Starcounter.Weaver {
         }
 
         public static IEnumerable<TypeDefinition> GetBaseClasses(this TypeDefinition type) {
-            for (var typeDefinition = type; typeDefinition != null; typeDefinition = typeDefinition.BaseType?.Resolve()) {
+            Guard.NotNull(type, nameof(type));
+            if (type.IsInterface) {
+                throw new ArgumentException($"Type {type.FullName} is an interface");
+            }
+
+            return YieldIterateBaseClasses(type);
+        }
+
+        static IEnumerable<TypeDefinition> YieldIterateBaseClasses(TypeDefinition type) {
+            for (var typeDefinition = type.BaseType?.Resolve(); typeDefinition != null; typeDefinition = typeDefinition.BaseType?.Resolve()) {
                 yield return typeDefinition;
             }
         }
