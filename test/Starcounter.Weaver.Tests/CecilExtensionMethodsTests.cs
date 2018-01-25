@@ -28,6 +28,10 @@ namespace Starcounter.Weaver.Tests {
     }
     class ClassDerivingClassImplementingIInterfaceDerivingExternalInterface : ClassImplementingIInterfaceDerivingExternalInterface { }
 
+    class ClassDerivingObject : object { }
+    class ClassDerivingOneBaseClass : ClassDerivingObject { }
+    class ClassDerivingTwoBaseClasses : ClassDerivingOneBaseClass { }
+    
     public class CecilExtensionMethodsTests {
 
         [Fact]
@@ -122,6 +126,36 @@ namespace Starcounter.Weaver.Tests {
 
             Assert.True(baseType.IsAssignableFrom(type));
             Assert.False(type.IsAssignableFrom(baseType));
+        }
+
+        [Fact]
+        public void GetBaseClassesReportErrorOnBadInput() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var interfaceType = module.Types.Single(t => t.FullName == typeof(IInterfaceDerivingExternalInterface).FullName);
+            
+            Assert.Throws<ArgumentNullException>(() => CecilExtensionMethods.GetBaseClasses(null));
+            Assert.Throws<ArgumentException>(() => interfaceType.GetBaseClasses());
+        }
+
+        [Fact]
+        public void GetBaseClassesReturnSingleWhenExtendingObject() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var type = module.Types.Single(t => t.FullName == typeof(ClassDerivingObject).FullName);
+            
+            Assert.Equal(1, type.GetBaseClasses().Count());
+        }
+
+        [Fact]
+        public void GetBaseClassesReturnExpectedCounts() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var one = module.Types.Single(t => t.FullName == typeof(ClassDerivingOneBaseClass).FullName);
+            var two = module.Types.Single(t => t.FullName == typeof(ClassDerivingTwoBaseClasses).FullName);
+
+            Assert.Equal(2, one.GetBaseClasses().Count());
+            Assert.Equal(3, two.GetBaseClasses().Count());
         }
     }
 }
