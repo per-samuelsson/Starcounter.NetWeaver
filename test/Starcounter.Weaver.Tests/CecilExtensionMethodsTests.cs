@@ -1,4 +1,6 @@
 ﻿
+using Mono.Cecil;
+using SharedTestUtilities;
 using Starcounter.Weaver.Tests.ExternalCode;
 using System;
 using System.Linq;
@@ -31,7 +33,23 @@ namespace Starcounter.Weaver.Tests {
     class ClassDerivingObject : object { }
     class ClassDerivingOneBaseClass : ClassDerivingObject { }
     class ClassDerivingTwoBaseClasses : ClassDerivingOneBaseClass { }
-    
+
+    interface IEmptyInterface { }
+
+    interface IInterfaceImplementingOne : IEmptyInterface { }
+
+    interface IInterfaceImplementingTwoImplific : IInterfaceImplementingOne { }
+
+    interface IInterfaceImplementingTwoExplicit : IEmptyInterface, IInterfaceImplementingOne { }
+
+    interface IAnotherInterfaceImplementingOne : IEmptyInterface {}
+
+    interface IInterfaceImplementingTwoImplementingOneCommon : IInterfaceImplementingOne, IAnotherInterfaceImplementingOne { }
+
+    class ClassImplementingOne : IEmptyInterface { }
+
+    class ClassImplementingTwoImplementingOneCommon : IInterfaceImplementingOne, IAnotherInterfaceImplementingOne { }
+
     public class CecilExtensionMethodsTests {
 
         [Fact]
@@ -156,6 +174,75 @@ namespace Starcounter.Weaver.Tests {
 
             Assert.Equal(2, one.GetBaseClasses().Count());
             Assert.Equal(3, two.GetBaseClasses().Count());
+        }
+
+        [Fact]
+        public void GetAllInterfacesOnEmptyInterfaceReturnNone() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var empty = module.DefinitionOf(typeof(IEmptyInterface));
+            Assert.Empty(empty.GetAllInterfaces());
+        }
+
+        [Fact]
+        public void GetAllInterfacesOnInterfaceImplementingAnotherReturn1() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var one = module.DefinitionOf(typeof(IInterfaceImplementingOne));
+            Assert.Equal(1, one.GetAllInterfaces().Count());
+        }
+        
+        [Fact]
+        public void GetAllInterfacesOnInterfaceImplementingTwoImplicitReturn2() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var two = module.DefinitionOf(typeof(IInterfaceImplementingTwoImplific));
+            Assert.Equal(2, two.GetAllInterfaces().Count());
+        }
+        
+        [Fact]
+        public void GetAllInterfacesOnInterfaceImplementingTwoExplicitReturn2() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var two = module.DefinitionOf(typeof(IInterfaceImplementingTwoExplicit));
+            Assert.Equal(2, two.GetAllInterfaces().Count());
+        }
+        
+        [Fact]
+        public void GetAllInterfacesOnInterfaceImplementingTwoWithCommonReturn3() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var three = module.DefinitionOf(typeof(IInterfaceImplementingTwoImplementingOneCommon));
+            var result = three.GetAllInterfaces();
+
+            Assert.Equal(3, result.Count());
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IEmptyInterface).MetadataToken);
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IInterfaceImplementingOne).MetadataToken);
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IAnotherInterfaceImplementingOne).MetadataToken);
+        }
+
+        [Fact]
+        public void GetAllInterfacesOnClassImplementingOneInterfaceReturn1() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var one = module.DefinitionOf(typeof(ClassImplementingOne));
+            var result = one.GetAllInterfaces();
+
+            Assert.Equal(1, result.Count());
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IEmptyInterface).MetadataToken);
+        }
+
+        [Fact]
+        public void GetAllInterfacesOnClassImplementingTwoWithCommonReturn3() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+
+            var three = module.DefinitionOf(typeof(ClassImplementingTwoImplementingOneCommon));
+            var result = three.GetAllInterfaces();
+
+            Assert.Equal(3, result.Count());
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IEmptyInterface).MetadataToken);
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IInterfaceImplementingOne).MetadataToken);
+            Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IAnotherInterfaceImplementingOne).MetadataToken);
         }
     }
 }
