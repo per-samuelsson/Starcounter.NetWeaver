@@ -101,15 +101,17 @@ namespace starweave.Weaver {
             }
         }
 
-        void ImplementGetMethod(MethodDefinition getter, TypeDefinition type, FieldReference state) {
-            var name = implementation.InterfaceType.FullName + "." + getter.Name;
-            var attributes = getter.Attributes;
+        void ImplementGetMethod(MethodDefinition getDefinition, TypeDefinition type, FieldReference state) {
+            var getRef = context.Use(getDefinition);
+
+            var name = implementation.InterfaceType.FullName + "." + getRef.Name;
+            var attributes = getDefinition.Attributes;
             attributes ^= MethodAttributes.Abstract;
             attributes ^= MethodAttributes.Public;
             attributes |= (MethodAttributes.Virtual | MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final);
 
-            var m = new MethodDefinition(name, attributes, getter.ReturnType);
-            m.Overrides.Add(getter);
+            var m = new MethodDefinition(name, attributes, getRef.ReturnType);
+            m.Overrides.Add(getRef);
 
             m.Body = new MethodBody(m);
             var il = m.Body.GetILProcessor();
@@ -122,18 +124,20 @@ namespace starweave.Weaver {
             type.Methods.Add(m);
         }
 
-        void ImplementSetMethod(MethodDefinition setter, TypeDefinition type, FieldReference state) {
-            var name = implementation.InterfaceType.FullName + "." + setter.Name;
-            var attributes = setter.Attributes;
+        void ImplementSetMethod(MethodDefinition setDefinition, TypeDefinition type, FieldReference state) {
+            var setRef = context.Use(setDefinition);
+
+            var name = implementation.InterfaceType.FullName + "." + setRef.Name;
+            var attributes = setDefinition.Attributes;
             attributes ^= MethodAttributes.Abstract;
             attributes ^= MethodAttributes.Public;
             attributes |= (MethodAttributes.Virtual | MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Final);
 
-            var m = new MethodDefinition(name, attributes, setter.ReturnType);
-            var longParam = setter.Parameters[0];
+            var m = new MethodDefinition(name, attributes, setRef.ReturnType);
+            var longParam = setRef.Parameters[0];
             m.Parameters.Add(new ParameterDefinition(
                 longParam.Name, longParam.Attributes, longParam.ParameterType));
-            m.Overrides.Add(setter);
+            m.Overrides.Add(setRef);
 
             m.Body = new MethodBody(m);
             var il = m.Body.GetILProcessor();
