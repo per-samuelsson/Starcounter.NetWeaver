@@ -79,7 +79,7 @@ namespace Starcounter.Weaver {
             }
         }
 
-        static bool IsQualifiedRoutingTarget(MethodDefinition target, MethodDefinition interfaceMethod, TypeDefinition passThrough) {
+        public static bool IsQualifiedRoutingTarget(MethodDefinition target, MethodDefinition interfaceMethod, TypeDefinition passThrough) {
             if (!target.IsStatic || !target.HasParameters) {
                 return false;
             }
@@ -116,7 +116,7 @@ namespace Starcounter.Weaver {
                     return false;
                 }
 
-                if (!x.ParameterType.Equals(y.ParameterType)) {
+                if (!x.ParameterType.ReferenceSameType(y.ParameterType)) {
                     return false;
                 }
             }
