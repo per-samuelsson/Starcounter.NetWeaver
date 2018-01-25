@@ -46,9 +46,8 @@ namespace Starcounter.Weaver.NetCoreAssemblyResolver {
             if (name == null) {
                 throw new ArgumentNullException("name");
             }
-            
-            Lazy<AssemblyDefinition> asm;
-            if (referencedAssemblies.TryGetValue(name.FullName, out asm)) {
+
+            if (referencedAssemblies.TryGetValue(name.FullName, out Lazy<AssemblyDefinition> asm)) {
                 return asm.Value;
             }
 
