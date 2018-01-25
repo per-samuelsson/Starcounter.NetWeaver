@@ -135,5 +135,23 @@ namespace Starcounter.Weaver {
                 yield return typeDefinition;
             }
         }
+
+        public static IEnumerable<TypeDefinition> GetAllInterfaces(this TypeDefinition type) {
+            Guard.NotNull(type, nameof(type));
+            
+            var result = new List<TypeDefinition>();
+            GetAllInterfacesRecursive(type.Interfaces, result);
+            return result;
+        }
+
+        static void GetAllInterfacesRecursive(Mono.Collections.Generic.Collection<InterfaceImplementation> interfaces, List<TypeDefinition> result) {
+            foreach (var item in interfaces) {
+                var definition = item.InterfaceType.Resolve();
+                if (!result.Contains(definition)) {
+                    result.Add(definition);
+                    GetAllInterfacesRecursive(definition.Interfaces, result);
+                }
+            }
+        }
     }
 }
