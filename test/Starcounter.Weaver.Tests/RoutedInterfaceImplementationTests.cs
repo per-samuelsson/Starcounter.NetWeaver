@@ -265,5 +265,25 @@ namespace Starcounter.Weaver.Tests {
                 Assert.Contains(typeof(IRootBaseInterface).Name, e.Message);
             }
         }
+
+        [Fact]
+        public void RoutingTargetMethodsCanBeQualified() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            
+            var extendedInterface = module.DefinitionOf(typeof(IExtendExtendedDisposableClonableAndCustomFormatter));
+            var formatterInterface = extendedInterface.GetAllInterfaces().Single(i => i.MetadataToken.ToInt32() == typeof(ICustomFormatter).MetadataToken);
+
+            var format = formatterInterface.Methods.Single(m => m.Name == nameof(ICustomFormatter.Format));
+
+            var targetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+
+            var pt = module.DefinitionOf(typeof(IPassThroughType));
+            var formatRoutingTarget = targetType.Methods.FirstOrDefault(
+                method => RoutedInterfaceImplementation.IsQualifiedRoutingTarget(
+                    method, 
+                    format,
+                    pt));
+            Assert.NotNull(formatRoutingTarget);
+        }
     }
 }
