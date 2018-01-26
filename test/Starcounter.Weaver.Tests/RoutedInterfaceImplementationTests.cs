@@ -285,5 +285,203 @@ namespace Starcounter.Weaver.Tests {
                     pt));
             Assert.NotNull(formatRoutingTarget);
         }
+
+        [Fact]
+        public void NewImplementationStrategySupportInterfaceNotImplementingAnyOther() {
+
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var root = module.DefinitionOf(typeof(IRootBaseInterface));
+                var @base = module.DefinitionOf(typeof(IBaseInterface));
+                var base2 = module.DefinitionOf(typeof(IBaseInterface2));
+                var extended = module.DefinitionOf(typeof(IExtendedInterface));
+                var extendExtended = module.DefinitionOf(typeof(IExtendExtendedDisposableClonableAndCustomFormatter));
+
+                var passThrough = module.DefinitionOf(typeof(IPassThroughType));
+                var routingTargetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(EmptyType));
+
+                var test = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    context,
+                    root,
+                    passThrough,
+                    routingTargetType
+                );
+
+                Assert.Equal(1, test.Count());
+                Assert.Equal(root.FullName, test.First().InterfaceType.FullName);
+            }
+        }
+
+        [Fact]
+        public void NewImplementationStrategySupportInterfaceWithSingleImplementation() {
+            // interface IRootBaseInterface { }
+            // interface IBaseInterface : IRootBaseInterface { }
+            
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var root = module.DefinitionOf(typeof(IRootBaseInterface));
+                var @base = module.DefinitionOf(typeof(IBaseInterface));
+
+                var passThrough = module.DefinitionOf(typeof(IPassThroughType));
+                var routingTargetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(EmptyType));
+                
+                var test = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    context,
+                    @base,
+                    passThrough,
+                    routingTargetType
+                );
+
+                Assert.Equal(2, test.Count());
+                Assert.Equal(root.FullName, test.First().InterfaceType.FullName);
+                Assert.Equal(@base.FullName, test.Last().InterfaceType.FullName);
+            }
+        }
+
+        [Fact]
+        public void NewImplementationStrategySupportInterfaceWithMultipleImplementations() {
+
+            // interface IRootBaseInterface { }
+            // interface IBaseInterface : IRootBaseInterface { }
+            // interface IBaseInterface2 { 
+            //   void Base2();
+            // }
+            // interface IExtendedInterface : IBaseInterface, IBaseInterface2 {
+            //   void Extended();
+            // }
+            
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var root = module.DefinitionOf(typeof(IRootBaseInterface));
+                var extended = module.DefinitionOf(typeof(IExtendedInterface));
+                
+                var passThrough = module.DefinitionOf(typeof(IPassThroughType));
+                var routingTargetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(EmptyType));
+                
+                var test = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    context,
+                    extended,
+                    passThrough,
+                    routingTargetType
+                );
+
+                Assert.Equal(4, test.Count());
+                Assert.Equal(root.FullName, test.First().InterfaceType.FullName);
+                Assert.Equal(extended.FullName, test.Last().InterfaceType.FullName);
+            }
+        }
+
+
+        [Fact]
+        public void NewImplementationStrategySupportInterfaceWithMultipleImplementationsFromDifferentAssemblies() {
+            // interface IRootBaseInterface { }
+            // interface IBaseInterface : IRootBaseInterface { }
+            // interface IBaseInterface2 { 
+            //   void Base2();
+            // }
+            // interface IExtendedInterface : IBaseInterface, IBaseInterface2 {
+            //   void Extended();
+            // }
+            // interface IExtendExtendedDisposableClonableAndAsyncResult : IExtendedInterface, IDisposable, ICloneable, ICustomFormatter { }
+
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var root = module.DefinitionOf(typeof(IRootBaseInterface));
+                var @base = module.DefinitionOf(typeof(IBaseInterface));
+                var base2 = module.DefinitionOf(typeof(IBaseInterface2));
+                var extended = module.DefinitionOf(typeof(IExtendedInterface));
+                var extendExtended = module.DefinitionOf(typeof(IExtendExtendedDisposableClonableAndCustomFormatter));
+
+                var passThrough = module.DefinitionOf(typeof(IPassThroughType));
+                var routingTargetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(EmptyType));
+
+                var test = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    context,
+                    extendExtended,
+                    passThrough,
+                    routingTargetType
+                );
+
+                Assert.True(test.Count() >= 8);
+                Assert.Equal(extendExtended.FullName, test.Last().InterfaceType.FullName);
+
+                var list = test.ToList();
+                Assert.Equal(extendExtended.FullName, list.Last().InterfaceType.FullName);
+                
+                var rootIndex = list.FindIndex(r => r.InterfaceType.FullName == root.FullName);
+                var baseIndex = list.FindIndex(r => r.InterfaceType.FullName == @base.FullName);
+                var base2Index = list.FindIndex(r => r.InterfaceType.FullName == base2.FullName);
+                var clonableIndex = list.FindIndex(r => r.InterfaceType.FullName == typeof(ICloneable).FullName);
+                var extendExtendedIndex = list.FindIndex(r => r.InterfaceType.FullName == extendExtended.FullName);
+
+                Assert.InRange(baseIndex, rootIndex, extendExtendedIndex);
+                Assert.InRange(base2Index, rootIndex, extendExtendedIndex);
+                Assert.True(clonableIndex < extendExtendedIndex);
+            }
+        }
+
+        [Fact]
+        public void ExtendedInterfacesCanOnlyBeImplementedAfterDependenciesAre() {
+            // interface IRootBaseInterface { }
+            // interface IBaseInterface : IRootBaseInterface { }
+            // interface IBaseInterface2 { 
+            //   void Base2();
+            // }
+            // interface IExtendedInterface : IBaseInterface, IBaseInterface2 {
+            //   void Extended();
+            // }
+
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var root = module.DefinitionOf(typeof(IRootBaseInterface));
+                var @base = module.DefinitionOf(typeof(IBaseInterface));
+                var base2 = module.DefinitionOf(typeof(IBaseInterface2));
+                var extended = module.DefinitionOf(typeof(IExtendedInterface));
+
+                var passThrough = module.DefinitionOf(typeof(IPassThroughType));
+                var routingTargetType = module.DefinitionOf(typeof(RoutingTypeForExtendedInterface));
+                
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(EmptyType));
+                
+                var extendedImpl = new RoutedInterfaceImplementation(context, extended, passThrough, routingTargetType);
+                
+                var e = Assert.Throws<ArgumentException>(() => extendedImpl.ImplementOn(target));
+                Assert.Contains(target.Name, e.Message);
+
+                var strategy = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    context, 
+                    extended, 
+                    passThrough, 
+                    routingTargetType
+                );
+                Assert.Equal(4, strategy.Count());
+
+                foreach (var impl in strategy) {
+                    impl.ImplementOn(target);
+                }
+
+                foreach (var impl in strategy) {
+                    Assert.True(target.ImplementInterface(impl.InterfaceType));
+                }
+            }
+        }
     }
 }
