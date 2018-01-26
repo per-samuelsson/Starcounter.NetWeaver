@@ -1,8 +1,12 @@
-﻿using System;
+﻿using SharedTestUtilities;
+using System;
 using System.Linq;
 using Xunit;
+using System.Threading;
 
 namespace Starcounter.Weaver.Tests {
+
+    interface IInterfaceWithoutMembers { }
 
     interface IInterfaceWithMethods {
         void Method1();
@@ -88,6 +92,45 @@ namespace Starcounter.Weaver.Tests {
     }
     
     class WrongPassThroughType { }
+
+    interface IRootBaseInterface { }
+
+    interface IBaseInterface : IRootBaseInterface { }
+
+    interface IBaseInterface2 {
+        void Base2();
+    }
+
+    interface IExtendedInterfaceSimple : IRootBaseInterface { }
+
+    interface IExtendedInterface : IBaseInterface, IBaseInterface2 {
+        void Extended();
+    }
+
+    interface IExtendExtendedDisposableClonableAndCustomFormatter : IExtendedInterface, IDisposable, ICloneable, ICustomFormatter { }
+
+    class RoutingTypeForExtendedInterface {
+        
+        public static void Base2(IPassThroughType cargo) {
+            throw new NotImplementedException();
+        }
+
+        public static void Extended(IPassThroughType cargo) {
+            throw new NotImplementedException();
+        }
+
+        public static void Dispose(IPassThroughType cargo) {
+            throw new NotImplementedException();
+        }
+
+        public static object Clone(IPassThroughType cargo) {
+            throw new NotImplementedException();
+        }
+
+        public static string Format(IPassThroughType cargo, string format, object arg, IFormatProvider formatProvider) {
+            throw new NotImplementedException();
+        }
+    }
 
     public class RoutedInterfaceImplementationTests {
 
@@ -181,6 +224,45 @@ namespace Starcounter.Weaver.Tests {
                     if (!method.HasOverrides) continue;
                     Assert.NotNull(MethodCallFinder.FindSingleCallToAnyTarget(method, routingTargetType.Methods));
                 }
+            }
+        }
+
+        [Fact]
+        public void ShouldRaiseMeaningfulErrorWhenInterfaceIsImplementedTwice() {
+            
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var emptyInterface = module.Types.Single(t => t.FullName == typeof(IInterfaceWithoutMembers).FullName);
+                var passThrough = module.Types.Single(t => t.FullName == typeof(IPassThroughType).FullName);
+                var routingTargetType = module.Types.Single(t => t.FullName == typeof(RoutingTypeForExtendedInterface).FullName);
+
+                var implementation = new RoutedInterfaceImplementation(new CodeEmissionContext(module), emptyInterface, passThrough, routingTargetType);
+                var target = module.Types.Single(t => t.FullName == typeof(EmptyType).FullName);
+
+                implementation.ImplementOn(target);
+                var e = Assert.Throws<ArgumentException>(() => implementation.ImplementOn(target));
+                Assert.Contains(target.Name, e.Message);
+                Assert.Contains(emptyInterface.Name, e.Message);
+            }
+        }
+
+        [Fact]
+        public void ShouldReportErrorForInterfaceWithSimpleBaseInterfacesNotImplemented() {
+
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+
+                var extendedInterface = module.Types.Single(t => t.FullName == typeof(IExtendedInterfaceSimple).FullName);
+                var passThrough = module.Types.Single(t => t.FullName == typeof(IPassThroughType).FullName);
+                var routingTargetType = module.Types.Single(t => t.FullName == typeof(RoutingTypeForExtendedInterface).FullName);
+                
+                var implementation = new RoutedInterfaceImplementation(new CodeEmissionContext(module), extendedInterface, passThrough, routingTargetType);
+                var target = module.Types.Single(t => t.FullName == typeof(EmptyType).FullName);
+
+                var e = Assert.Throws<ArgumentException>(() => implementation.ImplementOn(target));
+                Assert.Contains(target.Name, e.Message);
+                Assert.Contains(typeof(IRootBaseInterface).Name, e.Message);
             }
         }
     }
