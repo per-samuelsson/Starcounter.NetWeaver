@@ -24,6 +24,31 @@ namespace Starcounter.Weaver {
             }
         }
 
+        /// <summary>
+        /// Provides the definite list of interfaces that need to be implemented to
+        /// fully implement <paramref name="interfaceTypeDefinition"/>, ordered in a way
+        /// that more generic interfaces are assured to be listed before specific ones.
+        /// </summary>
+        /// <param name="emissionContext"></param>
+        /// <param name="interfaceTypeDefinition"></param>
+        /// <param name="passThroughTypeDefinition"></param>
+        /// <param name="routingTargetType"></param>
+        /// <returns></returns>
+        public static IEnumerable<RoutedInterfaceImplementation> NewImplementationStrategy(CodeEmissionContext emissionContext, TypeDefinition interfaceTypeDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
+            
+            var interfaces = interfaceTypeDefinition.GetAllInterfaces().ToList();
+            interfaces.Sort(new TypeSpecializationComparer());
+            interfaces.Add(interfaceTypeDefinition);
+
+            return interfaces.Select(
+                spec => new RoutedInterfaceImplementation(
+                    emissionContext,
+                    spec,
+                    passThroughTypeDefinition,
+                    routingTargetType)
+            );
+        }
+        
         public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceTypeDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
             Guard.NotNull(emissionContext, nameof(emissionContext));
             Guard.NotNull(interfaceTypeDefinition, nameof(interfaceTypeDefinition));
