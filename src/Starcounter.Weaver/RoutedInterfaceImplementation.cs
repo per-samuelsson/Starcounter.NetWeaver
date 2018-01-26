@@ -12,6 +12,7 @@ namespace Starcounter.Weaver {
     /// passing the instance as a first parameter.
     /// </summary>
     public class RoutedInterfaceImplementation {
+        readonly CodeEmissionContext emitContext;
         readonly TypeDefinition interfaceDefinition;
         readonly InterfaceImplementation interfaceImplementation;
         readonly TypeDefinition passThroughType;
@@ -71,20 +72,31 @@ namespace Starcounter.Weaver {
                 throw new ArgumentException($"Type {interfaceTypeDefinition.FullName} is not an interface", nameof(interfaceTypeDefinition));
             }
 
+            emitContext = emissionContext;
             interfaceDefinition = interfaceTypeDefinition;
             interfaceImplementation = new InterfaceImplementation(interfaceTypeDefinition);
             passThroughType = passThroughTypeDefinition;
+
+            emitContext.Use(interfaceTypeDefinition);
 
             foreach (var interfaceMethod in interfaceTypeDefinition.Methods) {
                 var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, interfaceMethod, passThroughTypeDefinition));
                 if (target == null) {
                     throw new ArgumentException($"Routing target type missing qualifying interface method {interfaceMethod.FullName}", nameof(routingTargetType));
                 }
+
+                emitContext.Use(interfaceMethod);
+                emitContext.Use(target);
                 
                 methodRoutes.Add(interfaceMethod, new RoutedMethodImplementation(interfaceImplementation, interfaceMethod, target));
             }
             
             foreach (var p in interfaceTypeDefinition.Properties) {
+                emitContext.Use(p.GetMethod);
+                if (p.SetMethod != null) {
+                    emitContext.Use(p.SetMethod);
+                }
+
                 propertyRoutes.Add(p, new RoutedPropertyImplementation(interfaceImplementation, p));
             }
         }
@@ -116,6 +128,11 @@ namespace Starcounter.Weaver {
             if (notImplementedInterface != null) {
                 throw new ArgumentException(
                     $"Type {type.FullName} must implement all base interfaces of {interfaceDefinition.FullName}. Interface {notImplementedInterface.FullName} is not implemented.", nameof(type));
+            }
+
+            if (emitContext.Module != type.Module) {
+                throw new ArgumentException(
+                    $"Type {type.FullName} must be defined in {emitContext.Module.Name}, the module specified in the context provided in the constructor.", nameof(type));
             }
 
             type.Interfaces.Add(interfaceImplementation);
