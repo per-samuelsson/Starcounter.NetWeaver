@@ -12,25 +12,33 @@ namespace Starcounter.Weaver {
     /// passing the instance as a first parameter.
     /// </summary>
     public class RoutedInterfaceImplementation {
+        readonly TypeDefinition interfaceDefinition;
         readonly InterfaceImplementation interfaceImplementation;
         readonly TypeDefinition passThroughType;
         readonly Dictionary<MethodDefinition, RoutedMethodImplementation> methodRoutes = new Dictionary<MethodDefinition, RoutedMethodImplementation>();
         readonly Dictionary<PropertyDefinition, RoutedPropertyImplementation> propertyRoutes = new Dictionary<PropertyDefinition, RoutedPropertyImplementation>();
 
-        public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
+        public TypeReference InterfaceType {
+            get {
+                return interfaceDefinition;
+            }
+        }
+
+        public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceTypeDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
             Guard.NotNull(emissionContext, nameof(emissionContext));
-            Guard.NotNull(interfaceDefinition, nameof(interfaceDefinition));
+            Guard.NotNull(interfaceTypeDefinition, nameof(interfaceTypeDefinition));
             Guard.NotNull(passThroughTypeDefinition, nameof(passThroughTypeDefinition));
             Guard.NotNull(routingTargetType, nameof(routingTargetType));
 
-            if (!interfaceDefinition.IsInterface) {
-                throw new ArgumentException($"Type {interfaceDefinition.FullName} is not an interface", nameof(interfaceDefinition));
+            if (!interfaceTypeDefinition.IsInterface) {
+                throw new ArgumentException($"Type {interfaceTypeDefinition.FullName} is not an interface", nameof(interfaceTypeDefinition));
             }
-            
-            interfaceImplementation = new InterfaceImplementation(interfaceDefinition);
+
+            interfaceDefinition = interfaceTypeDefinition;
+            interfaceImplementation = new InterfaceImplementation(interfaceTypeDefinition);
             passThroughType = passThroughTypeDefinition;
 
-            foreach (var interfaceMethod in interfaceDefinition.Methods) {
+            foreach (var interfaceMethod in interfaceTypeDefinition.Methods) {
                 var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, interfaceMethod, passThroughTypeDefinition));
                 if (target == null) {
                     throw new ArgumentException($"Routing target type missing qualifying interface method {interfaceMethod.FullName}", nameof(routingTargetType));
@@ -39,7 +47,7 @@ namespace Starcounter.Weaver {
                 methodRoutes.Add(interfaceMethod, new RoutedMethodImplementation(interfaceImplementation, interfaceMethod, target));
             }
             
-            foreach (var p in interfaceDefinition.Properties) {
+            foreach (var p in interfaceTypeDefinition.Properties) {
                 propertyRoutes.Add(p, new RoutedPropertyImplementation(interfaceImplementation, p));
             }
         }
@@ -59,7 +67,18 @@ namespace Starcounter.Weaver {
         public void ImplementOn(TypeDefinition type) {
             if (!passThroughType.IsAssignableFrom(type)) {
                 throw new ArgumentException(
-                    $"Type {passThroughType.FullName} is not assignable from type {type.FullName}", nameof(type));
+                    $"Type {passThroughType.FullName} must be assignable from type {type.FullName}", nameof(type));
+            }
+
+            if (type.ImplementInterface(interfaceImplementation.InterfaceType)) {
+                throw new ArgumentException(
+                    $"Type {type.FullName} already implement interface {interfaceDefinition.FullName}.", nameof(type));
+            }
+
+            var notImplementedInterface = interfaceDefinition.GetAllInterfaces().FirstOrDefault(i => !type.ImplementInterface(i));
+            if (notImplementedInterface != null) {
+                throw new ArgumentException(
+                    $"Type {type.FullName} must implement all base interfaces of {interfaceDefinition.FullName}. Interface {notImplementedInterface.FullName} is not implemented.", nameof(type));
             }
 
             type.Interfaces.Add(interfaceImplementation);
