@@ -34,7 +34,11 @@ namespace Starcounter.Weaver {
         /// <param name="passThroughTypeDefinition"></param>
         /// <param name="routingTargetType"></param>
         /// <returns></returns>
-        public static IEnumerable<RoutedInterfaceImplementation> NewImplementationStrategy(CodeEmissionContext emissionContext, TypeDefinition interfaceTypeDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
+        public static IEnumerable<RoutedInterfaceImplementation> NewImplementationStrategy(
+            CodeEmissionContext emissionContext, 
+            TypeDefinition interfaceTypeDefinition, 
+            TypeDefinition passThroughTypeDefinition, 
+            TypeDefinition routingTargetType) {
             
             var interfaces = interfaceTypeDefinition.GetAllInterfaces().ToList();
             interfaces.Sort(new TypeSpecializationComparer());
@@ -47,6 +51,14 @@ namespace Starcounter.Weaver {
                     passThroughTypeDefinition,
                     routingTargetType)
             );
+        }
+
+        public static IEnumerable<RoutedInterfaceImplementation> NewImplementationStrategy(
+            CodeEmissionContext emissionContext, 
+            Type interfaceType, 
+            Type passThroughType, 
+            Type routingTargetType) {
+            return NewImplementationStrategy(emissionContext, UseType(emissionContext, interfaceType), UseType(emissionContext, passThroughType), UseType(emissionContext, routingTargetType));
         }
         
         public RoutedInterfaceImplementation(CodeEmissionContext emissionContext, TypeDefinition interfaceTypeDefinition, TypeDefinition passThroughTypeDefinition, TypeDefinition routingTargetType) {
