@@ -16,7 +16,7 @@ namespace starweave.Weaver {
         readonly DatabaseTypeConstructorRewriter constructorRewriter;
         readonly IAssemblyRuntimeFacade runtimeFacade;
         readonly DatabaseTypeIDbProxyStateEmitter proxyInterfaceEmitter;
-        readonly IEnumerable<RoutedInterfaceImplementation> interfaceRoutes;
+        readonly List<IEnumerable<RoutedInterfaceImplementation>> interfaceRouteStrategies;
 
         public StarcounterAssemblyRewriter(IWeaverHost weaverHost, AnalysisResult result, IAssemblyRuntimeFacade assemblyRuntimeFacade, DatabaseTypeStateNames stateNames) {
             host = weaverHost ?? throw new ArgumentNullException(nameof(weaverHost));
@@ -29,14 +29,17 @@ namespace starweave.Weaver {
                 emitContext, 
                 runtimeFacade.DbProxyStateInterfaceType
             );
-            
-            interfaceRoutes = runtimeFacade.RoutedInterfaces.Select(
-                spec => new RoutedInterfaceImplementation(
-                    emitContext, 
-                    spec.InterfaceType, 
-                    spec.PassThroughType, 
-                    spec.RoutingTarget)
-            );
+
+            interfaceRouteStrategies = new List<IEnumerable<RoutedInterfaceImplementation>>(runtimeFacade.RoutedInterfaces.Count());
+            foreach (var routedInterfaceSpecification in runtimeFacade.RoutedInterfaces) {
+                var strategy = RoutedInterfaceImplementation.NewImplementationStrategy(
+                    emitContext,
+                    routedInterfaceSpecification.InterfaceType,
+                    routedInterfaceSpecification.PassThroughType,
+                    routedInterfaceSpecification.RoutingTarget
+                    );
+                interfaceRouteStrategies.Add(strategy);
+            }
             
             constructorRewriter = new DatabaseTypeConstructorRewriter(
                 host,
@@ -87,8 +90,10 @@ namespace starweave.Weaver {
                 propRewriter.Rewrite(autoProperty, reader, writer);
             }
 
-            foreach (var route in interfaceRoutes) {
-                route.ImplementOn(typeDef);
+            foreach (var routeStrategy in interfaceRouteStrategies) {
+                foreach (var route in routeStrategy) {
+                    route.ImplementOn(typeDef);
+                }
             }
         }
     }
