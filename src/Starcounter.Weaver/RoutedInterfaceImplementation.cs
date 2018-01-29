@@ -14,6 +14,7 @@ namespace Starcounter.Weaver {
     public class RoutedInterfaceImplementation {
         readonly CodeEmissionContext emitContext;
         readonly TypeDefinition interfaceDefinition;
+        readonly TypeReference interfaceTypeRef;
         readonly InterfaceImplementation interfaceImplementation;
         readonly TypeDefinition passThroughType;
         readonly Dictionary<MethodDefinition, RoutedMethodImplementation> methodRoutes = new Dictionary<MethodDefinition, RoutedMethodImplementation>();
@@ -21,7 +22,7 @@ namespace Starcounter.Weaver {
 
         public TypeReference InterfaceType {
             get {
-                return interfaceDefinition;
+                return interfaceTypeRef;
             }
         }
 
@@ -74,10 +75,10 @@ namespace Starcounter.Weaver {
 
             emitContext = emissionContext;
             interfaceDefinition = interfaceTypeDefinition;
-            interfaceImplementation = new InterfaceImplementation(interfaceTypeDefinition);
+            interfaceTypeRef = emitContext.Use(interfaceTypeDefinition);
             passThroughType = passThroughTypeDefinition;
 
-            emitContext.Use(interfaceTypeDefinition);
+            interfaceImplementation = new InterfaceImplementation(interfaceTypeRef);
 
             foreach (var interfaceMethod in interfaceTypeDefinition.Methods) {
                 var target = routingTargetType.Methods.FirstOrDefault(method => IsQualifiedRoutingTarget(method, interfaceMethod, passThroughTypeDefinition));
@@ -89,7 +90,7 @@ namespace Starcounter.Weaver {
             }
             
             foreach (var p in interfaceTypeDefinition.Properties) {
-                propertyRoutes.Add(p, new RoutedPropertyImplementation(interfaceImplementation, p));
+                propertyRoutes.Add(p, new RoutedPropertyImplementation(emissionContext, interfaceImplementation, p));
             }
         }
 

@@ -4,19 +4,20 @@ using Mono.Cecil;
 namespace Starcounter.Weaver {
 
     public class RoutedPropertyImplementation {
+        readonly CodeEmissionContext emitContext;
         readonly InterfaceImplementation interfaceImplementation;
         readonly PropertyDefinition interfaceProperty;
-
-        public PropertyDefinition ImplementedProperty {
-            get;
-            private set;
-        }
-
-        public RoutedPropertyImplementation(InterfaceImplementation implementation, PropertyDefinition property) {
+        readonly TypeReference interfacePropertyTypeRef;
+        
+        public RoutedPropertyImplementation(CodeEmissionContext codeEmissionContext, InterfaceImplementation implementation, PropertyDefinition property) {
+            Guard.NotNull(codeEmissionContext, nameof(codeEmissionContext));
             Guard.NotNull(implementation, nameof(implementation));
             Guard.NotNull(property, nameof(property));
+
+            emitContext = codeEmissionContext;
             interfaceProperty = property;
             interfaceImplementation = implementation;
+            interfacePropertyTypeRef = emitContext.Use(property.PropertyType);
         }
 
         public void ImplementOn(
@@ -28,13 +29,11 @@ namespace Starcounter.Weaver {
 
             var name = interfaceImplementation.InterfaceType.FullName + "." + interfaceProperty.Name;
 
-            var p = new PropertyDefinition(name, interfaceProperty.Attributes, interfaceProperty.PropertyType) {
+            var p = new PropertyDefinition(name, interfaceProperty.Attributes, interfacePropertyTypeRef) {
                 GetMethod = getter.ImplementedMethod,
                 SetMethod = setter?.ImplementedMethod
             };
             type.Properties.Add(p);
-
-            ImplementedProperty = p;
         }
     }
 }
