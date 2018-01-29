@@ -1,4 +1,6 @@
-﻿using Starcounter.Weaver;
+﻿using SharedTestUtilities;
+using Starcounter.Weaver;
+using Starcounter.Weaver.Tests.ExternalCode;
 using starweave.Weaver;
 using starweave.Weaver.Tests;
 using System;
@@ -121,6 +123,31 @@ namespace starweave.Tests {
                 Assert.Throws<ArgumentException>(() => {
                     new DatabaseTypeIDbProxyStateEmitter(emitContext, proxyInterface);
                 });
+            }
+        }
+
+        [Fact]
+        public void SupportInterfaceFromExternalAssembly() {
+
+            using (var mod = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = mod.Module;
+
+                var emitContext = new CodeEmissionContext(module);
+                var type = module.DefinitionOf(typeof(ClassThatWillReceiveProxyImpl));
+                Assert.NotNull(type);
+
+                var state = new DatabaseTypeStateEmitter(emitContext, type, new DatabaseTypeStateNames());
+                state.EmitReferenceFields();
+
+                var externalProxyInterface = ProviderOfExternalRoutingTypes.DbProxyInterface;
+                var emitter = new DatabaseTypeIDbProxyStateEmitter(
+                    emitContext,
+                    externalProxyInterface
+                );
+
+                Assert.Equal(1, type.Methods.Count); // 1 = ctor
+                emitter.ImplementOn(type, state);
+                Assert.Equal(5, type.Methods.Count);
             }
         }
     }
