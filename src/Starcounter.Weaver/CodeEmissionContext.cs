@@ -35,5 +35,9 @@ namespace Starcounter.Weaver {
         public MethodReference Use(MethodInfo method) {
             return module.ImportReference(method);
         }
+
+        public bool Defines(TypeDefinition type) {
+            return type.Module == Module;
+        }
     }
 }
