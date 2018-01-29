@@ -88,7 +88,7 @@ namespace Starcounter.Weaver {
                 emitContext.Use(interfaceMethod);
                 emitContext.Use(target);
                 
-                methodRoutes.Add(interfaceMethod, new RoutedMethodImplementation(interfaceImplementation, interfaceMethod, target));
+                methodRoutes.Add(interfaceMethod, new RoutedMethodImplementation(emitContext, interfaceImplementation, interfaceMethod, target));
             }
             
             foreach (var p in interfaceTypeDefinition.Properties) {
@@ -130,7 +130,7 @@ namespace Starcounter.Weaver {
                     $"Type {type.FullName} must implement all base interfaces of {interfaceDefinition.FullName}. Interface {notImplementedInterface.FullName} is not implemented.", nameof(type));
             }
 
-            if (emitContext.Module != type.Module) {
+            if (emitContext.Defines(type)) {
                 throw new ArgumentException(
                     $"Type {type.FullName} must be defined in {emitContext.Module.Name}, the module specified in the context provided in the constructor.", nameof(type));
             }
