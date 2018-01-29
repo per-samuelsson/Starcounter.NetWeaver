@@ -10,5 +10,17 @@ namespace Starcounter.Weaver.Tests.ExternalCode {
                 return typeof(IDbProxyInExternalAssembly);
             }
         }
+
+        public static Type RoutingInterface {
+            get {
+                return typeof(IRoutedInterfaceInExternalCode);
+            }
+        }
+
+        public static Type RoutingTargetType {
+            get {
+                return typeof(RoutedInterfaceTargetInExternalCode);
+            }
+        }
     }
 }

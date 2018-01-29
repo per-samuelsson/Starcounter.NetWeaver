@@ -1,8 +1,9 @@
-﻿using SharedTestUtilities;
+﻿
+using SharedTestUtilities;
 using System;
 using System.Linq;
 using Xunit;
-using System.Threading;
+using Starcounter.Weaver.Tests.ExternalCode;
 
 namespace Starcounter.Weaver.Tests {
 
@@ -128,6 +129,24 @@ namespace Starcounter.Weaver.Tests {
         }
 
         public static string Format(IPassThroughType cargo, string format, object arg, IFormatProvider formatProvider) {
+            throw new NotImplementedException();
+        }
+    }
+
+    class ClassThatWillReceiveRoutingInterfaceFromExternalAssembly : IDbProxyInExternalAssembly {
+        ulong IDbProxyInExternalAssembly.GetDbId() {
+            throw new NotImplementedException();
+        }
+
+        ulong IDbProxyInExternalAssembly.GetDbRef() {
+            throw new NotImplementedException();
+        }
+
+        void IDbProxyInExternalAssembly.SetDbId(ulong id) {
+            throw new NotImplementedException();
+        }
+
+        void IDbProxyInExternalAssembly.SetDbRef(ulong @ref) {
             throw new NotImplementedException();
         }
     }
@@ -481,6 +500,24 @@ namespace Starcounter.Weaver.Tests {
                 foreach (var impl in strategy) {
                     Assert.True(target.ImplementInterface(impl.InterfaceType));
                 }
+            }
+        }
+
+        [Fact]
+        public void SupportImplementationOfInterfacesInExternalAssembly() {
+            
+            using (var m = TestUtilities.GetModuleOfCurrentAssemblyForRewriting()) {
+                var module = m.Module;
+                
+                var context = new CodeEmissionContext(module);
+                var target = module.DefinitionOf(typeof(ClassThatWillReceiveRoutingInterfaceFromExternalAssembly));
+
+                var externalInterface = ProviderOfExternalRoutingTypes.RoutingInterface;
+                var passThroughType = ProviderOfExternalRoutingTypes.DbProxyInterface;
+                var externalTargetType = ProviderOfExternalRoutingTypes.RoutingTargetType;
+                
+                var externalImplementation = new RoutedInterfaceImplementation(context, externalInterface, passThroughType, externalTargetType);
+                externalImplementation.ImplementOn(target);
             }
         }
     }
