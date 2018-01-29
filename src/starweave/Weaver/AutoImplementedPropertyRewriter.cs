@@ -3,15 +3,20 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Starcounter.Weaver;
+using System.Reflection;
 
 namespace starweave.Weaver {
     
     public sealed class AutoImplementedPropertyRewriter {
+        readonly CodeEmissionContext emitContext;
         readonly DatabaseTypeState state;
         readonly Instruction[] setup;
         
-        public AutoImplementedPropertyRewriter(DatabaseTypeState typeState) {
+        public AutoImplementedPropertyRewriter(CodeEmissionContext codeEmissionContext, DatabaseTypeState typeState) {
+            Guard.NotNull(codeEmissionContext, nameof(codeEmissionContext));
             Guard.NotNull(typeState, nameof(typeState));
+
+            emitContext = codeEmissionContext;
             state = typeState;
 
             setup = new Instruction[4];
@@ -20,12 +25,30 @@ namespace starweave.Weaver {
             setup[2] = Instruction.Create(OpCodes.Ldarg_0);
             setup[3] = Instruction.Create(OpCodes.Ldfld, typeState.DbRef);
         }
-        
-        public void Rewrite(AutoImplementedProperty property, MethodReference readMethod, MethodReference writeMethod) {
+
+        public void Rewrite(AutoImplementedProperty property, MethodInfo readMethod, MethodInfo writeMethod) {
             Guard.NotNull(property, nameof(property));
             Guard.NotNull(readMethod, nameof(readMethod));
             Guard.NotNull(writeMethod, nameof(writeMethod));
 
+            var readRef = emitContext.Use(readMethod);
+            var writeRef = emitContext.Use(writeMethod);
+
+            Rewrite(property, readRef, writeRef);
+        }
+
+        public void Rewrite(AutoImplementedProperty property, MethodDefinition readMethod, MethodDefinition writeMethod) {
+            Guard.NotNull(property, nameof(property));
+            Guard.NotNull(readMethod, nameof(readMethod));
+            Guard.NotNull(writeMethod, nameof(writeMethod));
+
+            var readRef = emitContext.Use(readMethod);
+            var writeRef = emitContext.Use(writeMethod);
+
+            Rewrite(property, readRef, writeRef);
+        }
+
+        void Rewrite(AutoImplementedProperty property, MethodReference readMethod, MethodReference writeMethod) {
             AssertValidReadMethod(property, readMethod);
             AssertValidWriteMethod(property, writeMethod);
             

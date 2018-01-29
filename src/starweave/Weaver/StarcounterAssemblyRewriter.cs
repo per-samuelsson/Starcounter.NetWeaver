@@ -66,7 +66,7 @@ namespace starweave.Weaver {
 
             constructorRewriter.Rewrite(typeDef, baseTypeDef, stateEmitter);
             
-            var propRewriter = new AutoImplementedPropertyRewriter(stateEmitter);
+            var propRewriter = new AutoImplementedPropertyRewriter(emitContext, stateEmitter);
 
             foreach (var databaseProperty in type.Properties) {
                 stateEmitter.EmitPropertyCRUDHandle(databaseProperty.Name);
@@ -84,10 +84,7 @@ namespace starweave.Weaver {
                 var readMethod = runtimeFacade.GetReadMethod(databaseProperty.DataType.Name);
                 var writeMethod = runtimeFacade.GetWriteMethod(databaseProperty.DataType.Name);
 
-                var reader = emitContext.Use(readMethod);
-                var writer = emitContext.Use(writeMethod);
-                
-                propRewriter.Rewrite(autoProperty, reader, writer);
+                propRewriter.Rewrite(autoProperty, readMethod, writeMethod);
             }
 
             foreach (var routeStrategy in interfaceRouteStrategies) {
