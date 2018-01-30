@@ -12,45 +12,27 @@ namespace Starcounter2.Internal.Weaving {
         public AssemblyRuntimeFacade() {
             crudProvider = new DefaultDbCrudMethodProvider();
         }
+        
+        Type IAssemblyRuntimeFacade.DatabaseAttributeType => typeof(DatabaseAttribute);
 
-        public Type DatabaseAttributeType => typeof(DatabaseAttribute);
+        Type IAssemblyRuntimeFacade.ProxyConstructorSignatureType => typeof(ProxyConstructorParameter);
 
-        public Type ProxyConstructorSignatureType => typeof(ProxyConstructorParameter);
+        Type IAssemblyRuntimeFacade.InsertConstructorSignatureType => typeof(InsertConstructorParameter);
 
-        public Type InsertConstructorSignatureType => typeof(InsertConstructorParameter);
+        MethodInfo IAssemblyRuntimeFacade.CreateMethod => crudProvider.GetCreateMethod();
 
-        public MethodInfo CreateMethod => crudProvider.GetCreateMethod();
-
-        public IEnumerable<string> SupportedDataTypes => crudProvider.SupportedDataTypes;
-
-        Type IAssemblyRuntimeFacade.DatabaseAttributeType => throw new NotImplementedException();
-
-        Type IAssemblyRuntimeFacade.ProxyConstructorSignatureType => throw new NotImplementedException();
-
-        Type IAssemblyRuntimeFacade.InsertConstructorSignatureType => throw new NotImplementedException();
-
-        MethodInfo IAssemblyRuntimeFacade.CreateMethod => throw new NotImplementedException();
-
-        IEnumerable<string> IAssemblyRuntimeFacade.SupportedDataTypes => throw new NotImplementedException();
+        IEnumerable<string> IAssemblyRuntimeFacade.SupportedDataTypes => crudProvider.SupportedDataTypes;
 
         IEnumerable<RoutedInterfaceSpecification> IAssemblyRuntimeFacade.RoutedInterfaces => throw new NotImplementedException();
 
         Type IAssemblyRuntimeFacade.DbProxyStateInterfaceType => throw new NotImplementedException();
-
-        public MethodInfo GetReadMethod(string type) {
+        
+        MethodInfo IAssemblyRuntimeFacade.GetReadMethod(string type) {
             return crudProvider.GetReadMethod(type);
         }
 
-        public MethodInfo GetWriteMethod(string type) {
-            return crudProvider.GetUpdateMethod(type);
-        }
-
-        MethodInfo IAssemblyRuntimeFacade.GetReadMethod(string type) {
-            throw new NotImplementedException();
-        }
-
         MethodInfo IAssemblyRuntimeFacade.GetWriteMethod(string type) {
-            throw new NotImplementedException();
+            return crudProvider.GetUpdateMethod(type);
         }
     }
 }
