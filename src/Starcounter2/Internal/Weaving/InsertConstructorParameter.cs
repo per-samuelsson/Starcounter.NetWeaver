@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter2.Internal {
+namespace Starcounter2.Internal.Weaving {
 
     /// <summary>
     /// Type used to assure unique signature of the emitted insert constructor.

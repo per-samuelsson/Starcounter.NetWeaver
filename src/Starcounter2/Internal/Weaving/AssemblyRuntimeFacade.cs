@@ -1,10 +1,10 @@
 ﻿
 using Starcounter.Weaver.Runtime.Abstractions;
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
-namespace Starcounter2.Internal {
+namespace Starcounter2.Internal.Weaving {
 
     public sealed class AssemblyRuntimeFacade : IAssemblyRuntimeFacade {
         readonly DbCrudMethodProvider crudProvider;
