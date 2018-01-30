@@ -23,9 +23,9 @@ namespace Starcounter2.Internal.Weaving {
 
         IEnumerable<string> IAssemblyRuntimeFacade.SupportedDataTypes => crudProvider.SupportedDataTypes;
 
-        IEnumerable<RoutedInterfaceSpecification> IAssemblyRuntimeFacade.RoutedInterfaces => throw new NotImplementedException();
+        IEnumerable<RoutedInterfaceSpecification> IAssemblyRuntimeFacade.RoutedInterfaces => new RoutedInterfaceSpecification[0];
 
-        Type IAssemblyRuntimeFacade.DbProxyStateInterfaceType => throw new NotImplementedException();
+        Type IAssemblyRuntimeFacade.DbProxyStateInterfaceType => typeof(IDbProxyState);
         
         MethodInfo IAssemblyRuntimeFacade.GetReadMethod(string type) {
             return crudProvider.GetReadMethod(type);
