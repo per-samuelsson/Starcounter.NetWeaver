@@ -1,6 +1,7 @@
 ﻿using Mono.Cecil;
 using SharedTestUtilities;
 using Starcounter.Weaver;
+using Starcounter.Weaver.Runtime;
 using starweave.Weaver;
 using starweave.Weaver.Tests;
 using System;

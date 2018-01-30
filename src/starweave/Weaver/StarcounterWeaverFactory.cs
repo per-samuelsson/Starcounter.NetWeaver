@@ -1,6 +1,7 @@
 ﻿
 using Mono.Cecil;
 using Starcounter.Weaver;
+using Starcounter.Weaver.Runtime;
 using System;
 
 namespace starweave.Weaver {

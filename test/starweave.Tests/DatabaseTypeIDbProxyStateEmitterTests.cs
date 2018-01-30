@@ -1,5 +1,6 @@
 ﻿using SharedTestUtilities;
 using Starcounter.Weaver;
+using Starcounter.Weaver.Runtime;
 using Starcounter.Weaver.Tests.ExternalCode;
 using starweave.Weaver;
 using starweave.Weaver.Tests;

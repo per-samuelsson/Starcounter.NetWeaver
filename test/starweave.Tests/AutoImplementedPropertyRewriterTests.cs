@@ -1,5 +1,6 @@
 ﻿
 using Starcounter.Weaver;
+using Starcounter.Weaver.Runtime;
 using System.Linq;
 using Xunit;
 

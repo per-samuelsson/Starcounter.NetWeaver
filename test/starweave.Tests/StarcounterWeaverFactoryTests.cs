@@ -1,5 +1,6 @@
 
 using Starcounter.Weaver;
+using Starcounter.Weaver.Runtime;
 using Xunit;
 
 namespace starweave.Weaver.Tests {
