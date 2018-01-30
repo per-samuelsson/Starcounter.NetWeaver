@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Starcounter.Weaver.Runtime.Abstractions {
     
     /// <summary>
-    /// Define the facade of a runtime weaver can weave against.
+    /// Define the runtime facade any weaver can weave against.
     /// </summary>
     public interface IAssemblyRuntimeFacade {
 
@@ -20,6 +20,8 @@ namespace Starcounter.Weaver.Runtime.Abstractions {
         // desired.
         //
         // TODO:
+
+        MethodInfo RuntimeTypeStateInitializerMethod { get; }
 
         Type DatabaseAttributeType { get; }
 
