@@ -1,5 +1,6 @@
 ﻿
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
 using SharedTestUtilities;
 using Starcounter.Weaver.Tests.ExternalCode;
 using System;
@@ -49,6 +50,16 @@ namespace Starcounter.Weaver.Tests {
     class ClassImplementingOne : IEmptyInterface { }
 
     class ClassImplementingTwoImplementingOneCommon : IInterfaceImplementingOne, IAnotherInterfaceImplementingOne { }
+
+    class ClassWithEmptyStaticConstructor {
+        static ClassWithEmptyStaticConstructor() {
+
+        }
+    }
+
+    class ClassWithoutStaticConstructor {
+
+    }
 
     public class CecilExtensionMethodsTests {
 
@@ -250,6 +261,26 @@ namespace Starcounter.Weaver.Tests {
             Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IEmptyInterface).MetadataToken);
             Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IInterfaceImplementingOne).MetadataToken);
             Assert.Contains(result, t => t.MetadataToken.ToInt32() == typeof(IAnotherInterfaceImplementingOne).MetadataToken);
+        }
+
+        [Fact]
+        public void CanFindDeclareStaticConstructor() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var type = module.DefinitionOf(typeof(ClassWithEmptyStaticConstructor));
+            Assert.NotNull(type.GetStaticConstructor());
+        }
+
+        [Fact]
+        public void CanEmitAndThenFindStaticConstructor() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var type = module.DefinitionOf(typeof(ClassWithoutStaticConstructor));
+
+            Assert.Null(type.GetStaticConstructor());
+
+            var cctor = CecilExtensionMethods.CreateStaticConstructorDefinition(module.TypeSystem);
+            type.Methods.Add(cctor);
+
+            Assert.NotNull(type.GetStaticConstructor());
         }
     }
 }
