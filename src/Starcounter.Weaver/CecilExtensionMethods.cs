@@ -85,10 +85,14 @@ namespace Starcounter.Weaver {
         }
 
         public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
-            module.TryGetTypeReference(typeof(object).FullName, out TypeReference tr);
+            return GetSingleReferencedMethod(module, typeof(object), ".ctor");
+        }
+        
+        public static MethodDefinition GetSingleReferencedMethod(this ModuleDefinition module, Type type, string methodName) {
+            module.TryGetTypeReference(type.FullName, out TypeReference tr);
 
-            var type = tr.Resolve();
-            return type.Methods.Single(m => m.Name.Equals(".ctor"));
+            var resolved = tr.Resolve();
+            return resolved.Methods.Single(m => m.Name.Equals(methodName));
         }
 
         public static MethodDefinition Clone(this MethodDefinition method, string newName = null) {
