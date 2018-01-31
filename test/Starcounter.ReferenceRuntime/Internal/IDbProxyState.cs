@@ -1,5 +1,5 @@
 ﻿
-namespace Starcounter2.Internal {
+namespace Starcounter.ReferenceRuntime.Internal {
     /// <summary>
     /// Provide what all routed interfaces will need in terms of state from
     /// the pass-through type (typed as this). Weaver will explicitly implement

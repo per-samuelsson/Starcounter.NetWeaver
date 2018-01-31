@@ -1,5 +1,5 @@
 ﻿
-using Starcounter2;
+using Starcounter.ReferenceRuntime;
 
 namespace ConsoleAppNetCoreSingleDbProperty {
 

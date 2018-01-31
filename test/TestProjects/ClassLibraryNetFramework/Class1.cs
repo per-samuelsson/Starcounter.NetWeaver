@@ -1,5 +1,5 @@
 ﻿using Ninject.Modules;
-using Starcounter2;
+using Starcounter.ReferenceRuntime;
 using System;
 using System.Collections.Generic;
 using System.Linq;

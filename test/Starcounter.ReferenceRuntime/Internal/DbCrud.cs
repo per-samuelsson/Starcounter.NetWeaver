@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Starcounter2.Internal {
+namespace Starcounter.ReferenceRuntime.Internal {
 
     public interface IObject {
 

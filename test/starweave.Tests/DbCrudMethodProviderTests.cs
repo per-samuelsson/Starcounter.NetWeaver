@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xunit;
 using System.Linq;
-using Starcounter2.Internal.Weaving;
+using Starcounter.ReferenceRuntime.Internal.Weaving;
 
 namespace starweave.Tests {
 

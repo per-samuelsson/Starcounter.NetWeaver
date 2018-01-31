@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Starcounter2.Internal.Weaving {
+namespace Starcounter.ReferenceRuntime.Internal.Weaving {
 
     public abstract class DbCrudMethodProvider {
 

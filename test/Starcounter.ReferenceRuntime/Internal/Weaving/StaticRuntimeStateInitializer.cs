@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Starcounter2.Internal.Weaving {
+namespace Starcounter.ReferenceRuntime.Internal.Weaving {
     
     public static class StaticRuntimeStateInitializer {
 

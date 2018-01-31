@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Starcounter2.Internal.Weaving {
+namespace Starcounter.ReferenceRuntime.Internal.Weaving {
 
     public class DefaultDbCrudMethodProvider : DbCrudMethodProvider {
         readonly static Dictionary<string, string> readMethods = new Dictionary<string, string>() {

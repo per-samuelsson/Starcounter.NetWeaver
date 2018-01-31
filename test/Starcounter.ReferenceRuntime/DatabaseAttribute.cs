@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Starcounter2 {
+namespace Starcounter.ReferenceRuntime {
 
     public class DatabaseAttribute : Attribute {
     }
