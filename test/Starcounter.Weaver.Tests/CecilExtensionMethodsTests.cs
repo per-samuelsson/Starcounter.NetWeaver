@@ -76,6 +76,13 @@ namespace Starcounter.Weaver.Tests {
         }
 
         [Fact]
+        public void CanGetReferenceToTypeGetTypeFromHandleMethod() {
+            var module = TestUtilities.GetModuleOfCurrentAssembly();
+            var getType = module.GetSingleReferencedMethod(typeof(Type), nameof(Type.GetTypeFromHandle));
+            Assert.NotNull(getType);
+        }
+
+        [Fact]
         public void ImplementInterfaceDetectInheritedScenarios() {
             var module = TestUtilities.GetModuleOfCurrentAssembly();
 
