@@ -24,6 +24,7 @@ namespace starweave.Tests {
         public abstract IEnumerable<string> SupportedDataTypes { get; }
         public abstract IEnumerable<RoutedInterfaceSpecification> RoutedInterfaces { get; }
         public abstract Type DbProxyStateInterfaceType { get; }
+        public abstract MethodInfo RuntimeTypeStateInitializerMethod { get; }
 
         public abstract MethodInfo GetReadMethod(string type);
         public abstract MethodInfo GetWriteMethod(string type);
@@ -41,6 +42,8 @@ namespace starweave.Tests {
         IEnumerable<RoutedInterfaceSpecification> IAssemblyRuntimeFacade.RoutedInterfaces => throw new NotImplementedException();
 
         Type IAssemblyRuntimeFacade.DbProxyStateInterfaceType => throw new NotImplementedException();
+
+        MethodInfo IAssemblyRuntimeFacade.RuntimeTypeStateInitializerMethod => throw new NotImplementedException();
 
         MethodInfo IAssemblyRuntimeFacade.GetReadMethod(string type) {
             throw new NotImplementedException();
@@ -65,6 +68,8 @@ namespace starweave.Tests {
         public IEnumerable<RoutedInterfaceSpecification> RoutedInterfaces => throw new NotImplementedException();
 
         public Type DbProxyStateInterfaceType => throw new NotImplementedException();
+
+        public MethodInfo RuntimeTypeStateInitializerMethod => throw new NotImplementedException();
 
         public MethodInfo GetReadMethod(string type) {
             throw new NotImplementedException();
