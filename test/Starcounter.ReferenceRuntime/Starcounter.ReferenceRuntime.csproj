@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\global-library.props" />
+  
+  <PropertyGroup>
+    <Description>Reference implementation of a target runtime</Description>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Starcounter.Weaver.Runtime\Starcounter.Weaver.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

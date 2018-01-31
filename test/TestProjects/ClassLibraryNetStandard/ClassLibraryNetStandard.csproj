@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj" />
+    <ProjectReference Include="..\..\Starcounter.ReferenceRuntime\Starcounter.ReferenceRuntime.csproj" />
   </ItemGroup>
   
   <Import Project="..\TestProjects.props" />

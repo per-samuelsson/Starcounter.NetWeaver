@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Starcounter2\Starcounter2.csproj">
+    <ProjectReference Include="..\..\Starcounter.ReferenceRuntime\Starcounter.ReferenceRuntime.csproj">
       <Project>{e9047c42-03cf-4b46-9a4d-62960c7259ed}</Project>
-      <Name>Starcounter2</Name>
+      <Name>Starcounter.ReferenceRuntime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

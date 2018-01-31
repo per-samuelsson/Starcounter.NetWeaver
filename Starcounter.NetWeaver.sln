@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver", "src\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave", "src\starweave\starweave.csproj", "{A6012A76-87BB-4077-99AA-8958DD172F6E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter2", "src\Starcounter2\Starcounter2.csproj", "{E9047C42-03CF-4B46-9A4D-62960C7259ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.ReferenceRuntime", "test\Starcounter.ReferenceRuntime\Starcounter.ReferenceRuntime.csproj", "{E9047C42-03CF-4B46-9A4D-62960C7259ED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Weaver.Tests", "test\Starcounter.Weaver.Tests\Starcounter.Weaver.Tests.csproj", "{96257A4E-C1F7-4D4C-A974-F5F8FFB79623}"
 EndProject

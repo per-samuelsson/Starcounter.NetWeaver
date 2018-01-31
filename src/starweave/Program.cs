@@ -62,7 +62,7 @@ namespace starweave {
 
             // Assemble the actual weaver engine
             
-            var weaverFactory = new StarcounterWeaverFactory("Starcounter.dll", new DatabaseTypeStateNames());
+            var weaverFactory = new StarcounterWeaverFactory("Starcounter.ReferenceRuntime.dll", new DatabaseTypeStateNames());
             
             // Create diagnostics
             var diagnosticFormatter = new MsBuildAdheringFormatter("starweave");
