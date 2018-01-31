@@ -84,6 +84,16 @@ namespace Starcounter.Weaver {
             return type.Methods.Where(m => m.IsConstructor && m.HasThis);
         }
 
+        public static MethodDefinition CreateStaticConstructorDefinition(TypeSystem typeSystem) {
+            var attributes = 
+                MethodAttributes.Static | 
+                MethodAttributes.SpecialName | 
+                MethodAttributes.RTSpecialName | 
+                MethodAttributes.Private | 
+                MethodAttributes.HideBySig;
+            return new MethodDefinition(".cctor", attributes, typeSystem.Void);
+        }
+
         public static MethodReference GetObjectConstructorReference(this ModuleDefinition module) {
             return GetSingleReferencedMethod(module, typeof(object), ".ctor");
         }
