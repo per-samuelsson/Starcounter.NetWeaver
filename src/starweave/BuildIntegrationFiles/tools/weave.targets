@@ -17,9 +17,10 @@
     <PropertyGroup>
       <debugSwitch Condition="( '$(DebugWeaver)' == 'True' )">--sc-debug</debugSwitch>
       <WeaverInputAssembly>$(TargetPath)</WeaverInputAssembly>
+      <WeaverToolRootDirectory Condition="( '$(WeaverToolRootDirectory)' == '' )">$(MSBuildThisFileDirectory)</WeaverToolRootDirectory>
       <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(MSBuildProjectDirectory)\$(IntermediateOutputPath).starcounter</WeaverOutputPath>
-      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">"$(MSBuildThisFileDirectory)/net461/starweave.exe"</WeaveCommand>
-      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'">dotnet "$(MSBuildThisFileDirectory)/netcoreapp2.0/starweave.dll"</WeaveCommand>
+      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">"$(WeaverToolRootDirectory)/net461/starweave.exe"</WeaveCommand>
+      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'">dotnet "$(WeaverToolRootDirectory)/netcoreapp2.0/starweave.dll"</WeaveCommand>
     </PropertyGroup>
 
     <ItemGroup>
