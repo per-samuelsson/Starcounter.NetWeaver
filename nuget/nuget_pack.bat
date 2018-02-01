@@ -41,3 +41,13 @@ FOR /d %%i IN (*weave*) DO (
     CD ..
 )
 POPD
+
+PUSHD ..\test
+FOR /d %%i IN (Starcounter.ReferenceRuntime*) DO (
+    CD %%~i
+    REM see https://github.com/NuGet/Home/issues/4337
+    dotnet restore /p:VersionSuffix=%VersionSuffix%
+    dotnet pack --output %NugetOutputPath% --include-symbols --configuration Debug --version-suffix %VersionSuffix%
+    CD ..
+)
+POPD
