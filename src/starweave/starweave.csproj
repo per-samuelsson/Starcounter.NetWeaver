@@ -17,14 +17,20 @@
   </ItemGroup>
   
   <ItemGroup Label="dotnet pack instructions">
-    <Content Include="BuildIntegrationFiles\net46\starweave.targets">
+    <Content Include="BuildIntegrationFiles\build\net461\starweave.targets">
       <Pack>true</Pack>
-      <PackagePath>build\net46</PackagePath>
+      <PackagePath>build\net461</PackagePath>
     </Content>
-    <Content Include="BuildIntegrationFiles\netstandard1.6\starweave.targets">
+    <Content Include="BuildIntegrationFiles\build\netstandard1.6\starweave.targets">
       <Pack>true</Pack>
       <PackagePath>build\netstandard1.6</PackagePath>
     </Content>
+    <Content Include="BuildIntegrationFiles\tools\weave.targets">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </Content>
   </ItemGroup>
+  
+  <Import Project="Publish.targets" />
 
 </Project>

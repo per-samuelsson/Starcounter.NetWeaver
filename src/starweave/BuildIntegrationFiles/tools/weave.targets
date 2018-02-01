@@ -18,7 +18,8 @@
       <debugSwitch Condition="( '$(DebugWeaver)' == 'True' )">--sc-debug</debugSwitch>
       <WeaverInputAssembly>$(TargetPath)</WeaverInputAssembly>
       <WeaverOutputPath Condition="( '$(WeaverOutputPath)' == '' )">$(MSBuildProjectDirectory)\$(IntermediateOutputPath).starcounter</WeaverOutputPath>
-      <WeaverToolPath Condition="( '$(WeaverToolPath)' == '' )">$(TargetDir)starweave.exe</WeaverToolPath>
+      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">"$(MSBuildThisFileDirectory)/net461/starweave.exe"</WeaveCommand>
+      <WeaveCommand Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' OR '$(TargetFrameworkIdentifier)' == '.NETStandard'">dotnet "$(MSBuildThisFileDirectory)/netcoreapp2.0/starweave.dll"</WeaveCommand>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,12 +27,11 @@
       <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).pdb" />
       <WeavedFiles Include="$(WeaverOutputPath)\$(AssemblyName).dll" />
     </ItemGroup>
-    
-    <Error Condition="!Exists('$(WeaverInputAssembly)')" Text="Weaver input assembly $(WeaverInputAssembly) does not exist" />
-    <Error Condition="!Exists('$(WeaverToolPath)')" Text="Weaver executable not found: $(WeaverToolPath)" />
 
-    <Message Text="WeaveProject: Weaving $(WeaverInputAssembly) using $(WeaverToolPath)" Importance="high" />
-    <Exec Command="$(WeaverToolPath) $(debugSwitch) $(WeaverInputAssembly) $(WeaverOutputPath)" />
+    <Error Condition="!Exists('$(WeaverInputAssembly)')" Text="Weaver input assembly $(WeaverInputAssembly) does not exist" />
+    
+    <Message Text="WeaveProject: Weaving $(WeaverInputAssembly) using $(WeaveCommand)" Importance="high" />
+    <Exec Command="$(WeaveCommand) $(debugSwitch) $(WeaverInputAssembly) $(WeaverOutputPath)" />
     
     <Copy 
       SourceFiles="@(WeavedFiles)" 

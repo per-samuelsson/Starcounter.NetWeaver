@@ -1,0 +1,26 @@
+<Project>
+
+  <!-- Courtesy of https://github.com/NuGet/Home/issues/6321#issuecomment-353511169 -->
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);GetMyPackageFiles</TargetsForTfmSpecificContentInPackage>
+    <!--
+    Due to https://github.com/NuGet/Home/issues/4687. Without disabling, we'll see NuGet produce warnings about
+    our published libs not being part of \lib (which is intentional)
+    -->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+  </PropertyGroup>
+  
+  <Target Name="GetMyPackageFiles" DependsOnTargets="Publish">
+    <ItemGroup>
+      <TfmSpecificPackageFiles Include="$(PublishDir)/**/*.*"/>
+    </ItemGroup>
+    <!--All published file in different tools/tfm-->
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(TfmSpecificPackageFiles)">
+        <PackagePath>tools/$(targetframework)/%(TfmSpecificPackageFiles.RecursiveDir)%(TfmSpecificPackageFiles.Filename)%(TfmSpecificPackageFiles.Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+  
+</Project>
