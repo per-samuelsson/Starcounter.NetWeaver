@@ -1,12 +1,16 @@
 ﻿
-using Starcounter.Hosting.Schema;
-using System;
+using Starcounter.Weaver.Runtime;
 
 namespace Starcounter.Weaver.Analysis {
 
     public static class AnalysisExtensionMethods {
+
+        // We should support this built-in in Starcounter.Weaver.Runtime
+        // TODO:
+
         public static DatabaseSchema MergeWith(this DatabaseSchema schema, DatabaseSchema other) {
-            throw new NotImplementedException();
+            // TODO:
+            return schema;
         }
     }
 }
