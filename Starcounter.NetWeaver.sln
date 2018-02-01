@@ -52,6 +52,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "starweave.Tests", "test\starweave.Tests\starweave.Tests.csproj", "{CF792F5A-97D4-4FA7-A339-3CDE83397F97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppNetCoreSingleDbProperty", "test\TestProjects\ConsoleAppNetCoreSingleDbProperty\ConsoleAppNetCoreSingleDbProperty.csproj", "{6216534D-CCD1-4103-B988-D921F827DE59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6012A76-87BB-4077-99AA-8958DD172F6E} = {A6012A76-87BB-4077-99AA-8958DD172F6E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SymbolFileWritten", "test\Prototypes\SymbolFileWritten\SymbolFileWritten.csproj", "{24F6C304-154D-4928-9BFE-5B63EEF1BD5C}"
 EndProject

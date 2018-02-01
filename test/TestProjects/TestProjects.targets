@@ -1,37 +1,31 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <Net46PropsPath>$(MSBuildThisFileDirectory)..\..\src\starweave\BuildIntegrationFiles\net46\starweave.targets</Net46PropsPath>
-    <Net46WeaverToolPath>$(MSBuildThisFileDirectory)..\..\src\starweave\bin\Debug\net461\starweave.exe</Net46WeaverToolPath>
-    <NetCorePropsPath>$(MSBuildThisFileDirectory)..\..\src\starweave\BuildIntegrationFiles\netstandard1.6\starweave.targets</NetCorePropsPath>
-    <NetCoreWeaverToolPath>$(MSBuildThisFileDirectory)..\..\src\starweave\bin\Debug\netcoreapp2.0\starweave.dll</NetCoreWeaverToolPath>
+    <Net46TargetsPath>$(MSBuildThisFileDirectory)..\..\src\starweave\BuildIntegrationFiles\build\net461\starweave.targets</Net46TargetsPath>
+    <NetCoreTargetsPath>$(MSBuildThisFileDirectory)..\..\src\starweave\BuildIntegrationFiles\build\netstandard1.6\starweave.targets</NetCoreTargetsPath>
+    <WeaverToolRootDirectory>$(MSBuildThisFileDirectory)..\..\src\starweave\bin\Debug</WeaverToolRootDirectory>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '' ">
-    <WeaverPropsPath>$(Net46PropsPath)</WeaverPropsPath>
-    <WeaverToolPath>$(Net46WeaverToolPath)</WeaverToolPath>
+    <WeaverTargetsPath>$(Net46TargetsPath)</WeaverTargetsPath>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461' ">
-    <WeaverPropsPath>$(Net46PropsPath)</WeaverPropsPath>
-    <WeaverToolPath>$(Net46WeaverToolPath)</WeaverToolPath>
+    <WeaverTargetsPath>$(Net46TargetsPath)</WeaverTargetsPath>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.6' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-    <WeaverToolPath>$(NetCoreWeaverToolPath)</WeaverToolPath>
+    <WeaverTargetsPath>$(NetCoreTargetsPath)</WeaverTargetsPath>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-    <WeaverToolPath>$(NetCoreWeaverToolPath)</WeaverToolPath>
+    <WeaverTargetsPath>$(NetCoreTargetsPath)</WeaverTargetsPath>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0' ">
-    <WeaverPropsPath>$(NetCorePropsPath)</WeaverPropsPath>
-    <WeaverToolPath>$(NetCoreWeaverToolPath)</WeaverToolPath>
+    <WeaverTargetsPath>$(NetCoreTargetsPath)</WeaverTargetsPath>
   </PropertyGroup>
   
-  <Import Project="$(WeaverPropsPath)" />
+  <Import Project="$(WeaverTargetsPath)" />
   
 </Project>
