@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+  
+  <Import Project="..\TestProjects.props" />
+  <Import Project="..\TestProjects.targets" />
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryNetStandard\ClassLibraryNetStandard.csproj" />
+  </ItemGroup>
+  
+</Project>
