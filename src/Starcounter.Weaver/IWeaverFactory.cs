@@ -24,6 +24,6 @@ namespace Starcounter.Weaver {
         /// <returns>A rewriter that will rewrite the source module of the
         /// given analysis result, or null of rewriting is not supported.
         /// </returns>
-        IAssemblyRewriter ProviderRewriter(AnalysisResult analysis);
+        IAssemblyRewriter ProvideRewriter(AnalysisResult analysis);
     }
 }

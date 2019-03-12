@@ -39,7 +39,7 @@ namespace Starcounter.Weaver {
 
             var analysisResult = analyzer.Analyze(module, assemblyAnalyzer);
             if (analysisResult != null) {
-                var rewriter = factory.ProviderRewriter(analysisResult);
+                var rewriter = factory.ProvideRewriter(analysisResult);
                 if (rewriter != null) {
                     var weavedModule = weaver.Weave(analysisResult, rewriter);
                     writer.Write(module);

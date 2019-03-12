@@ -24,7 +24,7 @@ namespace starweave.Weaver {
             return analyzer;
         }
 
-        IAssemblyRewriter IWeaverFactory.ProviderRewriter(AnalysisResult analysis) {
+        IAssemblyRewriter IWeaverFactory.ProvideRewriter(AnalysisResult analysis) {
             return new StarcounterAssemblyRewriter(host, analysis, analyzer.RuntimeFacade, names);
         }
     }
