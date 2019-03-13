@@ -36,7 +36,12 @@ namespace Starcounter.Weaver.Analysis {
 
                 ModuleDefinition m = null;
                 try {
-                    m = tref.Resolve().Module;
+                    m = tref.Resolve()?.Module;
+                    if (m == null)
+                    {
+                        throw new AssemblyResolutionException(
+                            new AssemblyNameReference(tref.Module?.Name ?? "Module of type +" + tref.Name, tref.Module?.Assembly?.Name?.Version ?? new Version(0, 0)));
+                    }
                 }
                 catch (AssemblyResolutionException ex) {
                     Trace($"Failed to resolve reference to type {tref.Name} from module {tref.Module?.Name}: defining assembly {ex.AssemblyReference?.FullName} not resolvable.");
